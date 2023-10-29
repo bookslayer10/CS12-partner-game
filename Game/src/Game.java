@@ -25,7 +25,10 @@ public class Game extends Canvas {
         private ArrayList removeEntities = new ArrayList(); // list of entities
                                                             // to remove this loop
         private Entity ship;  // the ship
-        private double moveSpeed = 600; // hor. vel. of ship (px/s)
+	
+        private final int SCREEN_WIDTH = 1920;
+	private final int SCREEN_HEIGHT = 1024;
+	private double moveSpeed = 600; // hor. vel. of ship (px/s)
         private long lastFire = 0; // time last shot fired
         private long firingInterval = 500; // interval between shots (ms)
         private int alienCount; // # of aliens left on screen
@@ -48,11 +51,11 @@ public class Game extends Canvas {
     		JPanel panel = (JPanel) container.getContentPane();
     
     		// set up the resolution of the game
-    		panel.setPreferredSize(new Dimension(800,600));
+    		panel.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
     		panel.setLayout(null);
     
     		// set up canvas size (this) and add to frame
-    		setBounds(0,0,800,600);
+    		setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     		panel.add(this);
     
     		// Tell AWT not to bother repainting canvas since that will
