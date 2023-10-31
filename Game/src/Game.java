@@ -26,7 +26,7 @@ public class Game extends Canvas {
                                                             // to remove this loop
         private Entity ship;  // the ship
 	
-        private final int SCREEN_WIDTH = 1920;
+        private final int SCREEN_WIDTH = 1856;
         private final int SCREEN_HEIGHT = 1024;
         private double moveSpeed = 600; // hor. vel. of ship (px/s)
         private long lastFire = 0; // time last shot fired
@@ -104,7 +104,7 @@ public class Game extends Canvas {
             grid = FileInput.getFileContents("src/grid.txt");
             // create a grid of map tiles
             for (int row = 0; row < 16; row++) {
-                for (int col = 0; col < 30; col++) {
+                for (int col = 0; col < 29; col++) {
                   Entity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64, row * 64);
                   entities.add(tile);
                 } // for
