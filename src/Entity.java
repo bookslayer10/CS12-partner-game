@@ -18,7 +18,9 @@ public abstract class Entity {
 	protected Sprite sprite; // this entity's sprite
 	protected double dx; // horizontal speed (px/s) + -> right
 	protected double dy; // vertical speed (px/s) + -> down
-
+	
+	private boolean isMoving = false;
+	
 	private Rectangle me = new Rectangle(); // bounding rectangle of
 											// this entity
 	private Rectangle him = new Rectangle(); // bounding rect. of other
@@ -73,7 +75,11 @@ public abstract class Entity {
 	public int getY() {
 		return (int) y;
 	} // getY
-
+	
+	public boolean getIsMoving() {
+		return isMoving;
+	}
+	
 	/*
 	 * Draw this entity to the graphics object provided at (x,y)
 	 */
