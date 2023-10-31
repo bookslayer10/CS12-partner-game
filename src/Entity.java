@@ -19,6 +19,9 @@
     protected double dx; // horizontal speed (px/s)  + -> right
     protected double dy; // vertical speed (px/s) + -> down
     
+    protected int width;
+    protected int height;
+    
     private Rectangle me = new Rectangle(); // bounding rectangle of
                                             // this entity
     private Rectangle him = new Rectangle(); // bounding rect. of other
@@ -32,6 +35,10 @@
        x = newX;
        y = newY;
        sprite = (SpriteStore.get()).getSprite(r);
+       
+       width = sprite.getWidth();
+       height = sprite.getHeight();
+       
      } // constructor
 
      /* move
@@ -84,15 +91,26 @@
      */
      public void doLogic() {}
      
+     // return width of image in pixels
+     public int getWidth() {
+        return width;
+     } // getWidth
+
+     // return height of image in pixels
+     public int getHeight() {
+        return height;
+     } // getHeight
+     
+     
      /* collidesWith
       * input: the other entity to check collision against
       * output: true if entities collide
       * purpose: check if this entity collides with the other.
       */
      public boolean collidesWith(Entity other) {
-       me.setBounds((int)x, (int)y, sprite.getWidth(), sprite.getHeight());
+       me.setBounds((int)x, (int)y, getWidth(), getHeight());
        him.setBounds(other.getX(), other.getY(), 
-                     other.sprite.getWidth(), other.sprite.getHeight());
+                     other.getWidth(), other.getHeight());
        return me.intersects(him);
      } // collidesWith
      

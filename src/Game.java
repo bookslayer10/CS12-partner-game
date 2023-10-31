@@ -277,7 +277,7 @@ public class Game extends Canvas {
             } // if
 
             // pause
-            try { Thread.sleep(100); } catch (Exception e) {}
+            try { Thread.sleep(10); } catch (Exception e) {}
 
           } // while
 
