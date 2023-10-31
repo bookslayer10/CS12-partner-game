@@ -100,7 +100,7 @@ public class Game extends Canvas {
          *          Each entity will be added to the array of entities in the game.
     	 */
     	private void initEntities() {
-    		String[] grid = new String[16];
+    	    String[] grid = new String[16];
             grid = FileInput.getFileContents("src/grid.txt");
             // create a block of aliens (5x12)
             for (int row = 0; row < 16; row++) {
