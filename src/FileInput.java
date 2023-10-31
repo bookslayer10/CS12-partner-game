@@ -6,25 +6,22 @@ import java.util.stream.Collectors;
 
 public class FileInput {
 
-     public static String[] getFileContents(String fileName){
-    	 String [] content = null;  
-    	 try {
-    		// Read the lines from the file and collect them into a list
-             List<String> lines = Files.lines(Paths.get(fileName))
-                     .collect(Collectors.toList());
+	public static String[] getFileContents(String fileName) {
+		String[] content = null;
+		try {
+			// Read the lines from the file and collect them into a list
+			List<String> lines = Files.lines(Paths.get(fileName)).collect(Collectors.toList());
 
-             // copy the lines from the list into a 1D array
-             content = lines.toArray(new String[0]);
+			// copy the lines from the list into a 1D array
+			content = lines.toArray(new String[0]);
 
-             
-         } catch (IOException e) {
-        	 System.out.println("File Read Error");
-             e.printStackTrace();
-         } // try-catch
-    	 
-        return content;
+		} catch (IOException e) {
+			System.out.println("File Read Error");
+			e.printStackTrace();
+		} // try-catch
 
-     } // getFileContents
+		return content;
 
+	} // getFileContents
 
-}  // FileInput
+} // FileInput
