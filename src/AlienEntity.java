@@ -13,7 +13,7 @@ public class AlienEntity extends Entity {
 	 * created r - the image representing the alien x, y - initial location of alien
 	 */
 	public AlienEntity(Game g, String r, int newX, int newY) {
-		super(r, newX, newY); // calls the constructor in Entity
+		super(r, newX, newY, false); // calls the constructor in Entity
 		game = g;
 		dx = -moveSpeed; // start off moving left
 	} // constructor
