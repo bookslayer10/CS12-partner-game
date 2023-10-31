@@ -15,9 +15,7 @@ public class Game extends Canvas {
 	private boolean waitingForKeyPress = true; // true if game held up until
 	// a key is pressed
 	private boolean makingMove = false;
-	private boolean leftPressed = false; // true if left arrow key currently pressed
-	private boolean rightPressed = false; // true if right arrow key currently pressed
-	private boolean firePressed = false; // true if firing
+	private char keyPressed;
 
 	private boolean gameRunning = true;
 	private ArrayList<Entity> entities = new ArrayList<Entity>(); // list of entities
@@ -253,21 +251,17 @@ public class Game extends Canvas {
 			// clear graphics and flip buffer
 			g.dispose();
 			strategy.show();
-
-			// ship should not move without user input
-			ship.setHorizontalMovement(0);
-
-			// respond to user moving ship
-			if ((leftPressed) && (!rightPressed)) {
-				ship.setHorizontalMovement(-moveSpeed);
-			} else if ((rightPressed) && (!leftPressed)) {
-				ship.setHorizontalMovement(moveSpeed);
-			} // else
-
-			// if spacebar pressed, try to fire
-			if (firePressed) {
-				tryToFire();
-			} // if
+			
+			if(!makingMove) {
+				// respond to user moving ship
+				if (keyPressed == 'w') {
+					 
+				} else if () {
+					
+				}
+			}
+			
+			
 
 			// pause
 			try {
@@ -290,9 +284,7 @@ public class Game extends Canvas {
 		initEntities();
 
 		// blank out any keyboard settings that might exist
-		leftPressed = false;
-		rightPressed = false;
-		firePressed = false;
+		keyPressed = '0';
 	} // startGame
 
 	/*
@@ -314,41 +306,9 @@ public class Game extends Canvas {
 				return;
 			} // if
 
-			// respond to move left, right or fire
-			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				leftPressed = true;
-			} // if
-
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-				rightPressed = true;
-			} // if
-
-			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				firePressed = true;
-			} // if
+			keyPressed = (char) e.getKeyCode();
 
 		} // keyPressed
-
-		public void keyReleased(KeyEvent e) {
-			// if waiting for keypress to start game, do nothing
-			if (waitingForKeyPress) {
-				return;
-			} // if
-
-			// respond to move left, right or fire
-			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				leftPressed = false;
-			} // if
-
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-				rightPressed = false;
-			} // if
-
-			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				firePressed = false;
-			} // if
-
-		} // keyReleased
 
 		public void keyTyped(KeyEvent e) {
 
