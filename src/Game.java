@@ -29,7 +29,7 @@ public class Game extends Canvas {
 	private double moveSpeed = 600; // hor. vel. of ship (px/s)
 	private long lastFire = 0; // time last shot fired
 	private long firingInterval = 500; // interval between shots (ms)
-	private int alienCount; // # of aliens left on screen
+	private int turnNumber; // # of turns elapsed
 
 	private String message = ""; // message to display while waiting
 	// for a key press
@@ -147,11 +147,11 @@ public class Game extends Canvas {
 	 * Notification than an alien has been killed
 	 */
 	public void notifyAlienKilled() {
-		alienCount--;
+		// alienCount--;
 
-		if (alienCount == 0) {
-			notifyWin();
-		} // if
+		// if (alienCount == 0) {
+		// notifyWin();
+		// } // if
 
 		// speed up existing aliens
 		for (int i = 0; i < entities.size(); i++) {
@@ -251,17 +251,19 @@ public class Game extends Canvas {
 			// clear graphics and flip buffer
 			g.dispose();
 			strategy.show();
-			
-			if(!makingMove) {
+
+			if (!makingMove) {
 				// respond to user moving ship
 				if (keyPressed == 'w') {
-					 
-				} else if () {
+					
+				} else if (keyPressed == 'a') {
+					
+				} else if (keyPressed == 's') {
+					
+				} else if (keyPressed == 'd') {
 					
 				}
 			}
-			
-			
 
 			// pause
 			try {
@@ -282,6 +284,8 @@ public class Game extends Canvas {
 		entities.clear();
 
 		initEntities();
+
+		turnNumber = 0;
 
 		// blank out any keyboard settings that might exist
 		keyPressed = '0';
@@ -322,12 +326,9 @@ public class Game extends Canvas {
 					pressCount++;
 				} // else
 			} // if waitingForKeyPress
-
-			// if escape is pressed, end game
-			if (e.getKeyChar() == 27) {
-				System.exit(0);
-			} // if escape pressed
-
+			
+			// escape with not quit game because that is bad UX
+			
 		} // keyTyped
 
 	} // class KeyInputHandler
