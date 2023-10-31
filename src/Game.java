@@ -1,5 +1,5 @@
 /* Game.java
- * CS12 Game - new change! v2
+ * CS12 Game - another change
  * 
  */
 
