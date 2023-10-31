@@ -106,7 +106,7 @@ public class Game extends Canvas {
 		} // outer for
 
 		// create the ship and put in the top right of screen
-		ship = new ShipEntity(this, "sprites/ship.gif", 64, 64);
+		ship = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
 		entities.add(ship);
 
 	} // initEntities
@@ -175,7 +175,7 @@ public class Game extends Canvas {
 		ShotEntity shot = new ShotEntity(this, "sprites/shot.gif", ship.getX() + 10, ship.getY() - 30);
 		entities.add(shot);
 	} // tryToFire
-	
+
 	public void gameLoop() {
 		long lastLoopTime = System.currentTimeMillis();
 		// keep loop running until game ends
@@ -248,13 +248,13 @@ public class Game extends Canvas {
 			if (!makingMove) {
 				// respond to user moving ship
 				if (keyPressed == 'w') {
-					
+
 				} else if (keyPressed == 'a') {
-					
+
 				} else if (keyPressed == 's') {
-					
+
 				} else if (keyPressed == 'd') {
-					
+
 				}
 			}
 
@@ -319,9 +319,9 @@ public class Game extends Canvas {
 					pressCount++;
 				} // else
 			} // if waitingForKeyPress
-			
+
 			// escape with not quit game because that is bad UX
-			
+
 		} // keyTyped
 
 	} // class KeyInputHandler
