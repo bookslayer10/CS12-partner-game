@@ -1,6 +1,6 @@
 /* Game.java
- * Space Invaders Main Program
- *
+ * CS12 Game - new change!
+ * 
  */
 
 import javax.swing.*;
