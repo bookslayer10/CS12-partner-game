@@ -111,7 +111,7 @@ public class Game extends Canvas {
             } // outer for
     		
               // create the ship and put in center of screen
-              ship = new ShipEntity(this, "sprites/ship.gif", 370, 550);
+              ship = new RobotEntity(this, "sprites/robot/robot_", 370, 550);
               entities.add(ship);
               
     	} // initEntities
@@ -193,6 +193,7 @@ public class Game extends Canvas {
 	 */
 	public void gameLoop() {
           long lastLoopTime = System.currentTimeMillis();
+          
 
           // keep loop running until game ends
           while (gameRunning) {

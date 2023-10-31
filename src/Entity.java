@@ -63,7 +63,11 @@
        return dy;
      } // getVerticalMovement
 
-     // get position
+     public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
+	// get position
      public int getX() {
        return (int) x;
      } // getX
