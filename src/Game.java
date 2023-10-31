@@ -110,8 +110,8 @@ public class Game extends Canvas {
                 } // for
             } // outer for
     		
-              // create the ship and put in center of screen
-              ship = new ShipEntity(this, "sprites/ship.gif", 370, 550);
+              // create the ship and put in the top right of screen
+              ship = new ShipEntity(this, "sprites/ship.gif", 64, 64);
               entities.add(ship);
               
     	} // initEntities
