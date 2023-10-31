@@ -102,7 +102,7 @@ public class Game extends Canvas {
     	private void initEntities() {
     	    String[] grid = new String[16];
             grid = FileInput.getFileContents("src/grid.txt");
-            // create a block of aliens (5x12)
+            // create a grid of map tiles
             for (int row = 0; row < 16; row++) {
                 for (int col = 0; col < 30; col++) {
                   Entity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64, row * 64);
