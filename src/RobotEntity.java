@@ -5,8 +5,9 @@
 public class RobotEntity extends Entity {
 
 	private Game game; // the game in which the ship exists
-	private Sprite[][] frames = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down, left) being a array of 4 frames
-	
+	private Sprite[][] frames = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
+													// left) being a array of 4 frames
+
 	/*
 	 * construct the player's ship input: game - the game in which the ship is being
 	 * created ref - a string with the name of the image associated to the sprite
@@ -14,13 +15,14 @@ public class RobotEntity extends Entity {
 	 */
 	public RobotEntity(Game g, String r, int newX, int newY) {
 		super(r + "0/robot_0.png", newX, newY); // calls the constructor in Entity
-		
+
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				frames[i][j] = (SpriteStore.get()).getSprite(r + String.valueOf(i) + "/robot_" + String.valueOf(j) + ".png");		
+				frames[i][j] = (SpriteStore.get())
+						.getSprite(r + String.valueOf(i) + "/robot_" + String.valueOf(j) + ".png");
 			}
 		}
-		
+
 		game = g;
 	} // constructor
 
@@ -36,11 +38,11 @@ public class RobotEntity extends Entity {
 		if ((dx > 0) && (x > 750)) {
 			return;
 		} // if
-		
+
 		int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
-		
+
 		sprite = frames[2][frameTime];
-		
+
 		super.move(delta); // calls the move method in Entity
 	} // move
 
