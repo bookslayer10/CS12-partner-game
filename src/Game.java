@@ -27,7 +27,7 @@ public class Game extends Canvas {
         private Entity ship;  // the ship
 	
         private final int SCREEN_WIDTH = 1856;
-        private final int SCREEN_HEIGHT = 1024;
+        private final int SCREEN_HEIGHT = 960;
         private double moveSpeed = 600; // hor. vel. of ship (px/s)
         private long lastFire = 0; // time last shot fired
         private long firingInterval = 500; // interval between shots (ms)
@@ -103,7 +103,7 @@ public class Game extends Canvas {
     	    String[] grid = new String[16];
             grid = FileInput.getFileContents("src/grid.txt");
             // create a grid of map tiles
-            for (int row = 0; row < 16; row++) {
+            for (int row = 0; row < 15; row++) {
                 for (int col = 0; col < 29; col++) {
                   Entity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64, row * 64);
                   entities.add(tile);
