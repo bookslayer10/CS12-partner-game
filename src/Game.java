@@ -22,7 +22,7 @@ public class Game extends Canvas {
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
-	private Entity ship; // the ship
+	private Entity robot; // the robot
 
 	private final int SCREEN_WIDTH = 1856;
 	private final int SCREEN_HEIGHT = 960;
@@ -106,8 +106,8 @@ public class Game extends Canvas {
 		} // outer for
 
 		// create the ship and put in the top right of screen
-		ship = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
-		entities.add(ship);
+		robot = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
+		entities.add(robot);
 
 	} // initEntities
 
@@ -165,14 +165,9 @@ public class Game extends Canvas {
 
 	/* Attempt to fire. */
 	public void tryToFire() {
-		// check that we've waited long enough to fire
-		if ((System.currentTimeMillis() - lastFire) < firingInterval) {
-			return;
-		} // if
 
-		// otherwise add a shot
-		lastFire = System.currentTimeMillis();
-		ShotEntity shot = new ShotEntity(this, "sprites/shot.gif", ship.getX() + 10, ship.getY() - 30);
+		// otherwise add a shot (MOVING STRAIGHT UP AT 64 SPD)
+		ShotEntity shot = new ShotEntity(this, "sprites/shot.gif", robot.getX(), robot.getY(), 0, -64);
 		entities.add(shot);
 	} // tryToFire
 
