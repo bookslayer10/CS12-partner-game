@@ -5,9 +5,17 @@
 /Game$KeyInputHandler.class
 /Game.class
 /ShipEntity.class
+<<<<<<< HEAD
+/grid.txt
+/sprites/
+=======
+>>>>>>> 32c1134228e00af92b2a800baf8d1e6ff23972cd
 /ShotEntity.class
 /Sprite.class
 /SpriteStore.class
 /TileEntity.class
+<<<<<<< HEAD
+=======
 /grid.txt
 /sprites/
+>>>>>>> 32c1134228e00af92b2a800baf8d1e6ff23972cd
