@@ -10,7 +10,9 @@ import java.awt.image.*;
 import java.util.ArrayList;
 
 public class Game extends Canvas {
-
+	
+	private static char NONE = '0';
+	
 	private BufferStrategy strategy; // take advantage of accelerated graphics
 	private boolean waitingForKeyPress = true; // true if game held up until
 	// a key is pressed
@@ -22,13 +24,11 @@ public class Game extends Canvas {
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
-	private Entity ship; // the ship
+	private Entity robot; // the robot
 
 	private final int SCREEN_WIDTH = 1856;
 	private final int SCREEN_HEIGHT = 960;
-	private double moveSpeed = 600; // hor. vel. of ship (px/s)
-	private long lastFire = 0; // time last shot fired
-	private long firingInterval = 500; // interval between shots (ms)
+	private double moveSpeed = 64; // hor. vel. of ship (pixels per turn)
 	private int turnNumber; // # of turns elapsed
 
 	private String message = ""; // message to display while waiting
@@ -106,8 +106,8 @@ public class Game extends Canvas {
 		} // outer for
 
 		// create the ship and put in the top right of screen
-		ship = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
-		entities.add(ship);
+		robot = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
+		entities.add(robot);
 
 	} // initEntities
 
@@ -165,14 +165,9 @@ public class Game extends Canvas {
 
 	/* Attempt to fire. */
 	public void tryToFire() {
-		// check that we've waited long enough to fire
-		if ((System.currentTimeMillis() - lastFire) < firingInterval) {
-			return;
-		} // if
 
-		// otherwise add a shot
-		lastFire = System.currentTimeMillis();
-		ShotEntity shot = new ShotEntity(this, "sprites/shot.gif", ship.getX() + 10, ship.getY() - 30);
+		// otherwise add a shot (MOVING STRAIGHT UP AT 64 SPD)
+		ShotEntity shot = new ShotEntity(this, "sprites/shot.gif", robot.getX(), robot.getY(), 0, -64);
 		entities.add(shot);
 	} // tryToFire
 
@@ -190,13 +185,15 @@ public class Game extends Canvas {
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
 			g.setColor(Color.black);
 			g.fillRect(0, 0, 800, 600);
-
+			
+			for (int i = 0; i < entities.size(); i++) {
+				Entity entity = (Entity) entities.get(i);
+				entity.move(delta);
+			} // for
+			
 			// move each entity
 			if (makingMove) {
-				for (int i = 0; i < entities.size(); i++) {
-					Entity entity = (Entity) entities.get(i);
-					entity.move(delta);
-				} // for
+				
 
 				// brute force collisions, compare every entity
 				// against every other entity. If any collisions
@@ -247,17 +244,17 @@ public class Game extends Canvas {
 
 			if (!makingMove) {
 				// respond to user moving ship
-				if (keyPressed == 'w') {
-
-				} else if (keyPressed == 'a') {
-
-				} else if (keyPressed == 's') {
-
-				} else if (keyPressed == 'd') {
-
+				if (keyPressed == 'W') {
+					takeTurn();
+				} else if (keyPressed == 'A') {
+					takeTurn();
+				} else if (keyPressed == 'S') {
+					takeTurn();
+				} else if (keyPressed == 'D') {
+					takeTurn();
 				}
 			}
-
+			
 			// pause
 			try {
 				Thread.sleep(10);
@@ -281,9 +278,20 @@ public class Game extends Canvas {
 		turnNumber = 0;
 
 		// blank out any keyboard settings that might exist
-		keyPressed = '0';
+		keyPressed = NONE;
 	} // startGame
-
+	
+	private void takeTurn() {
+		keyPressed = NONE;
+		makingMove = true;
+		
+		// set every enetity goal posiiton, make them start moving
+		for (int i = 0; i < entities.size(); i++) {
+			
+		} // for
+	}
+	
+	
 	/*
 	 * inner class KeyInputHandler handles keyboard input from the user
 	 */
