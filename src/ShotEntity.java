@@ -13,7 +13,7 @@ public class ShotEntity extends Entity {
 	 * ref - a string with the name of the image associated to the sprite for the
 	 * shot x, y - initial location of shot
 	 */
-	public ShotEntity(Game g, String r, int newX, int newY) {
+	public ShotEntity(Game g, String r, int newX, int newY, int dx, int dy) {
 		super(r, newX, newY, false); // calls the constructor in Entity
 		this.dx = dx;
 		this.dy = dy;
