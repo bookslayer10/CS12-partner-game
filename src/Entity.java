@@ -19,7 +19,10 @@ public abstract class Entity {
 	protected double dx; // horizontal speed (px/s) + -> right
 	protected double dy; // vertical speed (px/s) + -> down
 	
-	private boolean isMoving = false;
+	protected double tx;
+	protected double ty;
+	
+	static private final long TURN_LENGTH = 1000;
 	
 	private Rectangle me = new Rectangle(); // bounding rectangle of
 											// this entity
@@ -41,10 +44,26 @@ public abstract class Entity {
 	 * after a certain amout of time has passed, update the location
 	 */
 	public void move(long delta) {
-		// update location of entity based ov move speeds
-		x += (delta * dx) / 1000;
-		y += (delta * dy) / 1000;
+		
+		x += (delta * dx) / TURN_LENGTH;
+		if((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
+			x = tx;
+			dx = 0;
+		} // if
+		
+		y += (delta * dy) / TURN_LENGTH;
+		if((dy > 0 && y > ty) || (dy < 0 && y < ty)) {
+			y = ty;
+			dy = 0;
+		} // if
+		
 	} // move
+	
+	// calculates the velocity of dx and dy based on target x and y
+	public void calculateMove(double tx, double ty) {
+		dx = tx - x;
+		dy = ty - y;
+	}
 
 	// get and set velocities
 	public void setHorizontalMovement(double newDX) {
@@ -77,7 +96,7 @@ public abstract class Entity {
 	} // getY
 	
 	public boolean getIsMoving() {
-		return isMoving;
+		return dx == 0 && dy == 0;
 	}
 	
 	/*
