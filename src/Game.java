@@ -104,7 +104,7 @@ public class Game extends Canvas {
 				entities.add(tile);
 			} // for
 		} // outer for
-
+		
 		// create the ship and put in the top right of screen
 		robot = new RobotEntity(this, "sprites/robot/", 64, 64);
 		entities.add(robot);
@@ -213,8 +213,7 @@ public class Game extends Canvas {
 			} // if
 
 			// draw all entities
-			for (int i = 0; i < entities.size(); i++) {
-				Entity entity = (Entity) entities.get(i);
+			for (Entity entity : entities) {
 				entity.draw(g);
 			} // for
 
