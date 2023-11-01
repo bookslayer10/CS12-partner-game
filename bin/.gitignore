@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /AlienEntity.class
 /Entity.class
 /FileInput.class
@@ -10,4 +11,6 @@
 /SpriteStore.class
 /TileEntity.class
 /grid.txt
+=======
+>>>>>>> Stashed changes
 /sprites/
