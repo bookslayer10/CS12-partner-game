@@ -1,4 +1,3 @@
-/sprites/
 /AlienEntity.class
 /Entity.class
 /FileInput.class
@@ -10,3 +9,5 @@
 /Sprite.class
 /SpriteStore.class
 /TileEntity.class
+/grid.txt
+/sprites/
