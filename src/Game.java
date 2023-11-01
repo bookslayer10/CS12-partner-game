@@ -106,7 +106,7 @@ public class Game extends Canvas {
 		} // outer for
 
 		// create the ship and put in the top right of screen
-		robot = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
+		robot = new RobotEntity(this, "sprites/robot/", 64, 64);
 		entities.add(robot);
 
 	} // initEntities
