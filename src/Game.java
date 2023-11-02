@@ -10,9 +10,9 @@ import java.awt.image.*;
 import java.util.ArrayList;
 
 public class Game extends Canvas {
-	
+
 	private static char NONE = '0';
-	
+
 	private BufferStrategy strategy; // take advantage of accelerated graphics
 	private boolean waitingForKeyPress = true; // true if game held up until
 	// a key is pressed
@@ -25,7 +25,7 @@ public class Game extends Canvas {
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
-	private Entity robot; // the robot
+	private RobotEntity robot; // the robot
 
 	private final int SCREEN_WIDTH = 1856;
 	private final int SCREEN_HEIGHT = 960;
@@ -105,9 +105,9 @@ public class Game extends Canvas {
 				tiles.add(tile);
 			} // for
 		} // outer for
-		
+
 		// create the ship and put in the top right of screen
-		robot = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
+		robot = new RobotEntity(this, "sprites/robot/robot_", 64 * 10, 64 * 10);
 		entities.add(robot);
 	} // initEntities
 
@@ -186,31 +186,32 @@ public class Game extends Canvas {
 			g.setColor(Color.black);
 			g.fillRect(0, 0, 800, 600);
 			
+			// set making move to false, only continue if an entity in the for loop sets it to true
+			makingMove = false;
 			for (int i = 0; i < entities.size(); i++) {
 				Entity entity = (Entity) entities.get(i);
 				entity.move(delta);
+				if (entity.getIsMoving()) {
+					makingMove = true;
+				}
 			} // for
 			
-			// move each entity
-			if (makingMove) {
-				
+			// brute force collisions, compare every entity
+			// against every other entity. If any collisions
+			// are detected notify both entities that it has
+			// occurred
+			for (int i = 0; i < entities.size(); i++) {
+				for (int j = i + 1; j < entities.size(); j++) {
+					Entity me = (Entity) entities.get(i);
+					Entity him = (Entity) entities.get(j);
 
-				// brute force collisions, compare every entity
-				// against every other entity. If any collisions
-				// are detected notify both entities that it has
-				// occurred
-				for (int i = 0; i < entities.size(); i++) {
-					for (int j = i + 1; j < entities.size(); j++) {
-						Entity me = (Entity) entities.get(i);
-						Entity him = (Entity) entities.get(j);
-
-						if (me.collidesWith(him)) {
-							me.collidedWith(him);
-							him.collidedWith(me);
-						} // if
-					} // inner for
-				} // outer for
-			} // if
+					if (me.collidesWith(him)) {
+						me.collidedWith(him);
+						him.collidedWith(me);
+					} // if
+				} // inner for
+			} // outer for
+			
 
 			// draw tiles
 			for (TileEntity tile : tiles) {
@@ -218,7 +219,8 @@ public class Game extends Canvas {
 			} // for
 			
 			// draw all entities
-			for (Entity entity : entities) {
+			for (int i = 0; i < entities.size(); i++) {
+				Entity entity = (Entity) entities.get(i);
 				entity.draw(g);
 			} // for
 
@@ -245,25 +247,39 @@ public class Game extends Canvas {
 			// clear graphics and flip buffer
 			g.dispose();
 			strategy.show();
-
+			
 			if (!makingMove) {
+				
 				// respond to user moving ship
 				if (keyPressed == 'W') {
-					takeTurn();
+					if (robot.tryToMove(0, -64)) {
+						takeTurn();
+					} // if
+
 				} else if (keyPressed == 'A') {
-					takeTurn();
+					if (robot.tryToMove(-64, 0)) {
+						takeTurn();
+					} // if
+
 				} else if (keyPressed == 'S') {
-					takeTurn();
+					if (robot.tryToMove(0, 64)) {
+						takeTurn();
+					} // if
+
 				} else if (keyPressed == 'D') {
-					takeTurn();
-				}
+					if (robot.tryToMove(64, 0)) {
+						takeTurn();
+					} // if
+				} // else if
+			} else {
+				keyPressed = NONE;
 			}
-			
+
 			// pause
 			try {
 				Thread.sleep(10);
 			} catch (Exception e) {
-			}
+			} // catch
 
 		} // while
 
@@ -284,18 +300,17 @@ public class Game extends Canvas {
 		// blank out any keyboard settings that might exist
 		keyPressed = NONE;
 	} // startGame
-	
+
 	private void takeTurn() {
 		keyPressed = NONE;
 		makingMove = true;
-		
-		// set every enetity goal posiiton, make them start moving
+
+		// set every entity goal positon, make them start moving
 		for (int i = 0; i < entities.size(); i++) {
-			
+
 		} // for
 	}
-	
-	
+
 	/*
 	 * inner class KeyInputHandler handles keyboard input from the user
 	 */
@@ -331,9 +346,8 @@ public class Game extends Canvas {
 					pressCount++;
 				} // else
 			} // if waitingForKeyPress
-
-			// escape with not quit game because that is bad UX
-
+			
+			
 		} // keyTyped
 
 	} // class KeyInputHandler
