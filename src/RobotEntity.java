@@ -14,7 +14,7 @@ public class RobotEntity extends Entity {
 	 * for the ship x, y - initial location of ship
 	 */
 	public RobotEntity(Game g, String r, int newX, int newY) {
-		super(r + "0/robot_0.png", newX, newY); // calls the constructor in Entity
+		super(r + "0/robot_0.png", newX, newY, true); // calls the constructor in Entity
 
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {

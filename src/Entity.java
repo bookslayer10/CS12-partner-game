@@ -16,6 +16,8 @@ public abstract class Entity {
 	protected double x; // current x location
 	protected double y; // current y location
 	protected Sprite sprite; // this entity's sprite
+	private Sprite[][] sprites = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
+												   // left) being a array of 4 frames
 	protected double dx = 0; // horizontal speed (px/s) + -> right
 	protected double dy = 0; // vertical speed (px/s) + -> down
 	
@@ -33,7 +35,7 @@ public abstract class Entity {
 	 * Constructor input: reference to the image for this entity, initial x and y
 	 * location to be drawn at
 	 */
-	public Entity(String r, int newX, int newY) {
+	public Entity(String r, int newX, int newY, boolean isAnimated) {
 		x = newX;
 		y = newY;
 		if (!isAnimated) {
