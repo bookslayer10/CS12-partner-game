@@ -18,6 +18,9 @@ public abstract class Entity {
 	protected Sprite sprite; // this entity's sprite
 	private Sprite[][] sprites = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
 												   // left) being a array of 4 frames
+	protected boolean isAnimated;
+	protected byte direction;
+	
 	protected double dx = 0; // horizontal speed (px/s) + -> right
 	protected double dy = 0; // vertical speed (px/s) + -> down
 	
@@ -38,45 +41,66 @@ public abstract class Entity {
 	public Entity(String r, int newX, int newY, boolean isAnimated) {
 		x = newX;
 		y = newY;
+		this.isAnimated = isAnimated;
 		if (!isAnimated) {
 			sprite = (SpriteStore.get()).getSprite(r);
 		} // if
 		
 		else {
+			direction = 2;
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					sprites[i][j] = (SpriteStore.get())
 							.getSprite(r + i + "/robot_" + j + ".png");
 				} // for
 			} // for
-			sprite = sprites[0][0];
+			sprite = sprites[2][0];
 		} // else
 		
 	} // constructor
 
 	/*
 	 * move input: delta - the amount of time passed in ms output: none purpose:
-	 * after a certain amout of time has passed, update the location
+	 * after a certain amount of time has passed, update the location
 	 */
 	public void move(long delta) {
 		
 		// moves the sprite to its new x position
 		x += (delta * dx) / TURN_LENGTH;
 		
-		if((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
+		if ((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
 			x = tx;
 			dx = 0;
 		} // if
 		
 		y += (delta * dy) / TURN_LENGTH;
-		if((dy > 0 && y > ty) || (dy < 0 && y < ty)) {
+		if ((dy > 0 && y > ty) || (dy < 0 && y < ty)) {
 			y = ty;
 			dy = 0;
 		} // if
 		
-		//int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
-
-		//sprite = frames[2][frameTime];
+		if (isAnimated) {
+			
+			if (dx > 0) {
+				direction = 1;
+			} // if
+			
+			else if (dx < 0) {
+				direction = 3;
+			} // else if
+			
+			else if (dy > 0) {
+				direction = 2;
+			} // else if 
+			
+			else if (dy < 0){
+				direction = 0;
+			} // else if
+			
+			int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
+			sprite = sprites[direction][frameTime];
+			
+		} // if
 		
 		
 	} // move

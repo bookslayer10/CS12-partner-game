@@ -15,7 +15,7 @@ public class RobotEntity extends Entity {
 	 */
 	public RobotEntity(Game g, String r, int newX, int newY) {
 		super(r, newX, newY, true); // calls the constructor in Entity
-
+		direction = 2;
 		game = g;
 	} // constructor
 
