@@ -376,7 +376,12 @@ public class Game extends Canvas {
 
 		public void mousePressed(MouseEvent e) {
 			//System.out.println("Mouse pressed; position: " + e.getX() + " " + e.getY());
-
+			
+			// if waiting for keypress to start game, do nothing
+			if (waitingForKeyPress) {
+				return;
+			} // if
+			
 			keyPressed = MOUSE;
 		}
 
