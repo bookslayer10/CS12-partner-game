@@ -5,8 +5,6 @@
 public class RobotEntity extends Entity {
 
 	private Game game; // the game in which the ship exists
-	private Sprite[][] frames = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
-													// left) being a array of 4 frames
 
 	/*
 	 * construct the player's robot input: game - the game in which the ship is being
