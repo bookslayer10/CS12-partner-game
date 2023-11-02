@@ -4,7 +4,6 @@
  */
 public class RobotEntity extends Entity {
 
-	private Game game; // the game in which the ship exists
 	private Sprite[][] frames = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
 													// left) being a array of 4 frames
 
@@ -14,9 +13,14 @@ public class RobotEntity extends Entity {
 	 * for the ship x, y - initial location of ship
 	 */
 	public RobotEntity(Game g, String r, int newX, int newY) {
+<<<<<<< Updated upstream
 		super(r, newX, newY, true); // calls the constructor in Entity
 
 		game = g;
+=======
+		super(g, r, newX, newY, true); // calls the constructor in Entity
+		direction = 2;
+>>>>>>> Stashed changes
 	} // constructor
 
 	/*
@@ -36,20 +40,17 @@ public class RobotEntity extends Entity {
 	 * purpose: notification that the player's ship has collided with something
 	 */
 	public void collidedWith(Entity other) {
-		if (other instanceof AlienEntity) {
+		if (other instanceof EnemyEntity) {
 			game.notifyDeath();
 		} // if
 	} // collidedWith
 	
 	// takes the delta value of the movement, checks to see if it's possible, and if so it starts 
 	public boolean tryToMove(int gx, int gy) {
+	
+		calculateMove(x + gx, y + gy);		
 		
-		// insert code to check for collision with obstacle tiles, don't check for units
-		// return false;
-		
-		calculateMove(x + gx, y + gy);
-		
-		return true;
+		return getIsMoving();
 	}
 
 } // RobotEntity class

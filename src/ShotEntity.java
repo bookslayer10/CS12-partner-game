@@ -6,7 +6,6 @@ public class ShotEntity extends Entity {
 
 	private double moveSpeed = -300; // vert speed shot moves
 	private boolean used = false; // true if shot hits something
-	private Game game; // the game in which the ship exists
 	
 	private double ix;
 	private double iy;
@@ -17,8 +16,13 @@ public class ShotEntity extends Entity {
 	 * shot x, y - initial location of shot
 	 */
 	public ShotEntity(Game g, String r, int newX, int newY, int ix, int iy) {
+<<<<<<< Updated upstream
 		super(r, newX, newY, false); // calls the constructor in Entity
 		game = g;
+=======
+		super(g, r, newX, newY, true); // calls the constructor in Entity
+		
+>>>>>>> Stashed changes
 		this.ix = ix;
 		this.iy = iy;
 	} // constructor
@@ -38,10 +42,18 @@ public class ShotEntity extends Entity {
 	
 	
 	public void calculateMove() {
-		tx = x + ix;
-		ty = y + iy;
 		
-		super.calculateMove(tx, ty);
+		if (x < -100 || x > game.SCREEN_WIDTH + 100 || y < -100 || y > game.SCREEN_HEIGHT + 100) {
+			game.removeEntity(this);
+		} // if		
+		
+		turnTargetX = x + ix;
+		turnTargetY = y + iy;
+		
+		super.calculateMove(turnTargetX, turnTargetY);
+		if (!getIsMoving()) {
+			game.removeEntity(this);
+		}
 	}
 	
 	/*
@@ -55,7 +67,7 @@ public class ShotEntity extends Entity {
 		} // if
 
 		// if it has hit an alien, kill it!
-		if (other instanceof AlienEntity) {
+		if (other instanceof EnemyEntity) {
 			// remove affect entities from the Entity list
 			game.removeEntity(this);
 			game.removeEntity(other);

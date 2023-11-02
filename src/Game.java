@@ -21,16 +21,16 @@ public class Game extends Canvas {
 	private char keyPressed;
 
 	private boolean gameRunning = true;
-	private ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all tiles
+	protected ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all tiles
 	private ArrayList<Entity> entities = new ArrayList<Entity>(); // list of entities
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
 	private RobotEntity robot; // the robot
 
-	private final int SCREEN_WIDTH = 1856;
-	private final int SCREEN_HEIGHT = 960;
-	private double moveSpeed = 64; // hor. vel. of ship (pixels per turn)
+	public final int SCREEN_WIDTH = 1856;
+	public final int SCREEN_HEIGHT = 960;
+	public final int TILE_SIZE = 64; // hor. vel. of ship (pixels per turn)
 	private int turnNumber; // # of turns elapsed
 
 	private String message = ""; // message to display while waiting
@@ -45,7 +45,7 @@ public class Game extends Canvas {
 	 */
 	public Game() {
 		// create a frame to contain game
-		JFrame container = new JFrame("CS12 Game");
+		JFrame container = new JFrame("SUPERBOT");
 
 		// get hold the content of the frame
 		JPanel panel = (JPanel) container.getContentPane();
@@ -105,14 +105,21 @@ public class Game extends Canvas {
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
-				TileEntity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64,
-						row * 64);
+				TileEntity tile = new TileEntity(this, "sprites/background/map_" + grid[row].charAt(col) + ".png", col * TILE_SIZE,
+						row * TILE_SIZE);
 				tiles.add(tile);
 			} // for
 		} // outer for
-
+		
+		EnemyEntity[] enemies = new EnemyEntity[5];
+		for (int i = 0; i < 5; i++) {
+			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TILE_SIZE * (i + 3), TILE_SIZE * 3);
+			entities.add(enemies[i]);
+		}
+		
+		
 		// create the ship and put in the top right of screen
-		robot = new RobotEntity(this, "sprites/robot/robot_", 64 * 10, 64 * 10);
+		robot = new RobotEntity(this, "sprites/robot/robot_", TILE_SIZE * 10, TILE_SIZE * 10);
 		entities.add(robot);
 	} // initEntities
 
@@ -161,20 +168,20 @@ public class Game extends Canvas {
 		// speed up existing aliens
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
-			if (entity instanceof AlienEntity) {
+			if (entity instanceof EnemyEntity) {
 				// speed up by 2%
 				entity.setHorizontalMovement(entity.getHorizontalMovement() * 1.02);
 			} // if
 		} // for
 	} // notifyAlienKilled
 
-	/* Attempt to fire. */
-	public void tryToFire() {
-
-		// otherwise add a shot (MOVING STRAIGHT UP AT 64 SPD)
-		ShotEntity shot = new ShotEntity(this, "sprites/shot.gif", robot.getX(), robot.getY(), 0, -64);
-		entities.add(shot);
-	} // tryToFire
+//	/* Attempt to fire. */
+//	public void tryToFire() {
+//
+//		//  add a shot (MOVING STRAIGHT UP AT 64 SPD)
+//		ShotEntity shot = new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), 0, -TILE_SIZE);
+//		entities.add(shot);
+//	} // tryToFire
 
 	public void gameLoop() {
 		long lastLoopTime = System.currentTimeMillis();
@@ -201,7 +208,8 @@ public class Game extends Canvas {
 					makingMove = true;
 				}
 			} // for
-
+			
+			
 			// brute force collisions, compare every entity
 			// against every other entity. If any collisions
 			// are detected notify both entities that it has
@@ -211,7 +219,7 @@ public class Game extends Canvas {
 					Entity me = (Entity) entities.get(i);
 					Entity him = (Entity) entities.get(j);
 
-					if (me.collidesWith(him)) {
+					if (me.collidesWith(him, 0, 0)) {
 						me.collidedWith(him);
 						him.collidedWith(me);
 					} // if
@@ -219,8 +227,8 @@ public class Game extends Canvas {
 			} // outer for
 
 			// draw tiles
-			for (TileEntity tile : tiles) {
-				tile.draw(g);
+			for (int i = 0; i < tiles.size(); i++) {
+				tiles.get(i).draw(g);
 			} // for
 
 			// draw all entities
@@ -257,28 +265,28 @@ public class Game extends Canvas {
 
 				// respond to user moving ship
 				if (keyPressed == 'W') {
-					if (robot.tryToMove(0, -64)) {
+					if (robot.tryToMove(0, -TILE_SIZE)) {
 						takeTurn();
 					} // if
 
 				} else if (keyPressed == 'A') {
-					if (robot.tryToMove(-64, 0)) {
+					if (robot.tryToMove(-TILE_SIZE, 0)) {
 						takeTurn();
 					} // if
 
 				} else if (keyPressed == 'S') {
-					if (robot.tryToMove(0, 64)) {
+					if (robot.tryToMove(0, TILE_SIZE)) {
 						takeTurn();
 					} // if
 
 				} else if (keyPressed == 'D') {
-					if (robot.tryToMove(64, 0)) {
+					if (robot.tryToMove(TILE_SIZE, 0)) {
 						takeTurn();
 					} // if
 					
 				} else if (keyPressed == MOUSE) {
 					
-					entities.add(new ShotEntity(this, "sprites/shot.gif", robot.getX(), robot.getY(), 0, -64 * 2));
+					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX() + 16, robot.getY() + 6, 0, -TILE_SIZE * 2));
 					takeTurn();
 				}
 			} else {
@@ -314,10 +322,15 @@ public class Game extends Canvas {
 	private void takeTurn() {
 		keyPressed = NONE;
 
-		// set every entity goal positon, make them start moving
+		
+		// set every entity goal position, make them start moving
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
-
+			
+			if (entity instanceof EnemyEntity) {
+				entity.calculateMove();
+			}
+			
 			if (entity instanceof ShotEntity) {
 				entity.calculateMove();
 			}

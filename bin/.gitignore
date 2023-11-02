@@ -12,3 +12,5 @@
 /grid.txt
 /sprites/
 /Game$MouseInputHandler.class
+/EnemyEntity.class
+/MeleeEntity.class
