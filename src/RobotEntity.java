@@ -9,7 +9,7 @@ public class RobotEntity extends Entity {
 													// left) being a array of 4 frames
 
 	/*
-	 * construct the player's ship input: game - the game in which the ship is being
+	 * construct the player's robot input: game - the game in which the ship is being
 	 * created ref - a string with the name of the image associated to the sprite
 	 * for the ship x, y - initial location of ship
 	 */
