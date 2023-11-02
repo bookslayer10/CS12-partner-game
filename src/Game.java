@@ -20,6 +20,7 @@ public class Game extends Canvas {
 	private char keyPressed;
 
 	private boolean gameRunning = true;
+	private ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all tiles
 	private ArrayList<Entity> entities = new ArrayList<Entity>(); // list of entities
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
@@ -100,8 +101,8 @@ public class Game extends Canvas {
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
-				Entity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64, row * 64);
-				entities.add(tile);
+				TileEntity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64, row * 64);
+				tiles.add(tile);
 			} // for
 		} // outer for
 		
@@ -211,6 +212,11 @@ public class Game extends Canvas {
 				} // outer for
 			} // if
 
+			// draw tiles
+			for (TileEntity tile : tiles) {
+				tile.draw(g);
+			} // for
+			
 			// draw all entities
 			for (Entity entity : entities) {
 				entity.draw(g);
