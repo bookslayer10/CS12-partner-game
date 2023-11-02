@@ -16,13 +16,6 @@ public class RobotEntity extends Entity {
 	public RobotEntity(Game g, String r, int newX, int newY) {
 		super(r + "0/robot_0.png", newX, newY, true); // calls the constructor in Entity
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				frames[i][j] = (SpriteStore.get())
-						.getSprite(r + String.valueOf(i) + "/robot_" + String.valueOf(j) + ".png");
-			}
-		}
-
 		game = g;
 	} // constructor
 
