@@ -7,17 +7,20 @@ public class ShotEntity extends Entity {
 	private double moveSpeed = -300; // vert speed shot moves
 	private boolean used = false; // true if shot hits something
 	private Game game; // the game in which the ship exists
+	
+	private double ix;
+	private double iy;
 
 	/*
 	 * construct the shot input: game - the game in which the shot is being created
 	 * ref - a string with the name of the image associated to the sprite for the
 	 * shot x, y - initial location of shot
 	 */
-	public ShotEntity(Game g, String r, int newX, int newY, int dx, int dy) {
+	public ShotEntity(Game g, String r, int newX, int newY, int ix, int iy) {
 		super(r, newX, newY, false); // calls the constructor in Entity
 		game = g;
-		this.dx = dx;
-		this.dy = dy;
+		this.ix = ix;
+		this.iy = iy;
 	} // constructor
 
 	/*
@@ -32,7 +35,15 @@ public class ShotEntity extends Entity {
 		} // if
 
 	} // move
-
+	
+	
+	public void calculateMove() {
+		tx = x + ix;
+		ty = y + iy;
+		
+		super.calculateMove(tx, ty);
+	}
+	
 	/*
 	 * collidedWith input: other - the entity with which the shot has collided
 	 * purpose: notification that the shot has collided with something

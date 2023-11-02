@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class Game extends Canvas {
 
 	private static char NONE = '0';
+	private static char MOUSE = '9';
 
 	private BufferStrategy strategy; // take advantage of accelerated graphics
 	private boolean waitingForKeyPress = true; // true if game held up until
@@ -76,6 +77,9 @@ public class Game extends Canvas {
 		// add key listener to this canvas
 		addKeyListener(new KeyInputHandler());
 
+		// add mouse listener to this canvas
+		addMouseListener(new MouseInputHandler());
+
 		// request focus so key events are handled by this canvas
 		requestFocus();
 
@@ -101,7 +105,8 @@ public class Game extends Canvas {
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
-				TileEntity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64, row * 64);
+				TileEntity tile = new TileEntity(this, "sprites/tile" + grid[row].charAt(col) + ".png", col * 64,
+						row * 64);
 				tiles.add(tile);
 			} // for
 		} // outer for
@@ -185,8 +190,9 @@ public class Game extends Canvas {
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
 			g.setColor(Color.black);
 			g.fillRect(0, 0, 800, 600);
-			
-			// set making move to false, only continue if an entity in the for loop sets it to true
+
+			// set making move to false, only continue if an entity in the for loop sets it
+			// to true
 			makingMove = false;
 			for (int i = 0; i < entities.size(); i++) {
 				Entity entity = (Entity) entities.get(i);
@@ -195,7 +201,7 @@ public class Game extends Canvas {
 					makingMove = true;
 				}
 			} // for
-			
+
 			// brute force collisions, compare every entity
 			// against every other entity. If any collisions
 			// are detected notify both entities that it has
@@ -211,13 +217,12 @@ public class Game extends Canvas {
 					} // if
 				} // inner for
 			} // outer for
-			
 
 			// draw tiles
 			for (TileEntity tile : tiles) {
 				tile.draw(g);
 			} // for
-			
+
 			// draw all entities
 			for (int i = 0; i < entities.size(); i++) {
 				Entity entity = (Entity) entities.get(i);
@@ -247,9 +252,9 @@ public class Game extends Canvas {
 			// clear graphics and flip buffer
 			g.dispose();
 			strategy.show();
-			
+
 			if (!makingMove) {
-				
+
 				// respond to user moving ship
 				if (keyPressed == 'W') {
 					if (robot.tryToMove(0, -64)) {
@@ -270,7 +275,12 @@ public class Game extends Canvas {
 					if (robot.tryToMove(64, 0)) {
 						takeTurn();
 					} // if
-				} // else if
+					
+				} else if (keyPressed == MOUSE) {
+					
+					entities.add(new ShotEntity(this, "sprites/shot.gif", robot.getX(), robot.getY(), 0, -64 * 2));
+					takeTurn();
+				}
 			} else {
 				keyPressed = NONE;
 			}
@@ -307,11 +317,11 @@ public class Game extends Canvas {
 		// set every entity goal positon, make them start moving
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
-			
-			if(entity instanceof ShotEntity) {
-				entity.calculateMove(entity.getX(), entity.getY() + 64 * 2);
+
+			if (entity instanceof ShotEntity) {
+				entity.calculateMove();
 			}
-			
+
 		} // for
 	}
 
@@ -336,6 +346,10 @@ public class Game extends Canvas {
 
 			keyPressed = (char) e.getKeyCode();
 
+			// make sure not to activate mouse clicks when pressing 9
+			if (keyPressed == MOUSE) {
+				keyPressed = NONE;
+			}
 		} // keyPressed
 
 		public void keyTyped(KeyEvent e) {
@@ -350,9 +364,45 @@ public class Game extends Canvas {
 					pressCount++;
 				} // else
 			} // if waitingForKeyPress
-			
-			
+
 		} // keyTyped
+
+	} // class KeyInputHandler
+
+	/*
+	 * inner class KeyInputHandler handles keyboard input from the user
+	 */
+	private class MouseInputHandler implements MouseListener {
+
+		public void mousePressed(MouseEvent e) {
+			//System.out.println("Mouse pressed; position: " + e.getX() + " " + e.getY());
+
+			keyPressed = MOUSE;
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
 
 	} // class KeyInputHandler
 

@@ -88,7 +88,11 @@ public abstract class Entity {
 		//System.out.println("dx " + dx);
 		//System.out.println("dy " + dy);
 	}
-
+	
+	public void calculateMove() {
+		
+	}
+	
 	// get and set velocities
 	public void setHorizontalMovement(double newDX) {
 		dx = newDX;
