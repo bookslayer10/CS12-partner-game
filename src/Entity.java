@@ -24,7 +24,7 @@ public abstract class Entity {
 	protected double tx;
 	protected double ty;
 	
-	static private final long TURN_LENGTH = 1000;
+	static private final long TURN_LENGTH = 500;
 	
 	private Rectangle me = new Rectangle(); // bounding rectangle of
 											// this entity
