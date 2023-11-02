@@ -303,11 +303,15 @@ public class Game extends Canvas {
 
 	private void takeTurn() {
 		keyPressed = NONE;
-		makingMove = true;
 
 		// set every entity goal positon, make them start moving
 		for (int i = 0; i < entities.size(); i++) {
-
+			Entity entity = (Entity) entities.get(i);
+			
+			if(entity instanceof ShotEntity) {
+				entity.calculateMove(entity.getX(), entity.getY() + 64 * 2);
+			}
+			
 		} // for
 	}
 

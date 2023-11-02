@@ -60,11 +60,12 @@ public abstract class Entity {
 	 */
 	public void move(long delta) {
 		
+		// moves the sprite to its new x position
 		x += (delta * dx) / TURN_LENGTH;
+		
 		if((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
 			x = tx;
 			dx = 0;
-			
 		} // if
 		
 		y += (delta * dy) / TURN_LENGTH;
@@ -76,6 +77,7 @@ public abstract class Entity {
 	} // move
 	
 	// calculates the velocity of dx and dy based on target x and y
+	// makes move do something
 	public void calculateMove(double tx, double ty) {
 		this.tx = tx;
 		this.ty = ty;
