@@ -43,7 +43,7 @@ public class Game extends Canvas {
 	 */
 	public Game() {
 		// create a frame to contain game
-		JFrame container = new JFrame("Commodore 64 Space Invaders");
+		JFrame container = new JFrame("CS12 Game");
 
 		// get hold the content of the frame
 		JPanel panel = (JPanel) container.getContentPane();
@@ -106,9 +106,8 @@ public class Game extends Canvas {
 		} // outer for
 		
 		// create the ship and put in the top right of screen
-		robot = new RobotEntity(this, "sprites/robot/", 64, 64);
+		robot = new RobotEntity(this, "sprites/robot/robot_", 64, 64);
 		entities.add(robot);
-
 	} // initEntities
 
 	/*

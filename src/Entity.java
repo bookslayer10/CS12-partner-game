@@ -43,7 +43,7 @@ public abstract class Entity {
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					sprites[i][j] = (SpriteStore.get())
-							.getSprite(r + i + "/" + j + ".png");
+							.getSprite(r + i + "_" + j + ".png");
 				} // for
 			} // for
 			sprite = sprites[0][0];
@@ -54,10 +54,10 @@ public abstract class Entity {
 
 	/*
 	 * move input: delta - the amount of time passed in ms output: none purpose:
-	 * after a certain ammout of time has passed, update the location
+	 * after a certain amount of time has passed, update the location
 	 */
 	public void move(long delta) {
-		// update location of entity based ov move speeds
+		// update location of entity based on move speeds
 		x += (delta * dx) / 1000;
 		y += (delta * dy) / 1000;
 		
