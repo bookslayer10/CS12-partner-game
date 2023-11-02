@@ -4,23 +4,14 @@
  */
 public class RobotEntity extends Entity {
 
-	private Sprite[][] frames = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
-													// left) being a array of 4 frames
-
 	/*
 	 * construct the player's robot input: game - the game in which the ship is being
 	 * created ref - a string with the name of the image associated to the sprite
 	 * for the ship x, y - initial location of ship
 	 */
 	public RobotEntity(Game g, String r, int newX, int newY) {
-<<<<<<< Updated upstream
-		super(r, newX, newY, true); // calls the constructor in Entity
-
-		game = g;
-=======
 		super(g, r, newX, newY, true); // calls the constructor in Entity
 		direction = 2;
->>>>>>> Stashed changes
 	} // constructor
 
 	/*
