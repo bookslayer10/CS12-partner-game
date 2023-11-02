@@ -18,10 +18,13 @@ public abstract class Entity {
 	protected Sprite sprite; // this entity's sprite
 	private Sprite[][] sprites = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
 												   // left) being a array of 4 frames
-	protected double dx; // horizontal speed (px/s) + -> right
-	protected double dy; // vertical speed (px/s) + -> down
+	protected double dx = 0; // horizontal speed (px/s) + -> right
+	protected double dy = 0; // vertical speed (px/s) + -> down
 	
-	private boolean isMoving = false;
+	protected double tx;
+	protected double ty;
+	
+	static private final long TURN_LENGTH = 1000;
 	
 	private Rectangle me = new Rectangle(); // bounding rectangle of
 											// this entity
@@ -50,21 +53,39 @@ public abstract class Entity {
 		} // else
 		
 	} // constructor
-	
 
 	/*
 	 * move input: delta - the amount of time passed in ms output: none purpose:
-	 * after a certain amount of time has passed, update the location
+	 * after a certain amout of time has passed, update the location
 	 */
 	public void move(long delta) {
-		// update location of entity based on move speeds
-		x += (delta * dx) / 1000;
-		y += (delta * dy) / 1000;
 		
-		int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
-
-		sprite = sprites[2][frameTime];
+		x += (delta * dx) / TURN_LENGTH;
+		if((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
+			x = tx;
+			dx = 0;
+			
+		} // if
+		
+		y += (delta * dy) / TURN_LENGTH;
+		if((dy > 0 && y > ty) || (dy < 0 && y < ty)) {
+			y = ty;
+			dy = 0;
+		} // if
+		
 	} // move
+	
+	// calculates the velocity of dx and dy based on target x and y
+	public void calculateMove(double tx, double ty) {
+		this.tx = tx;
+		this.ty = ty;
+		
+		dx = tx - x;
+		dy = ty - y;
+		
+		//System.out.println("dx " + dx);
+		//System.out.println("dy " + dy);
+	}
 
 	// get and set velocities
 	public void setHorizontalMovement(double newDX) {
@@ -97,7 +118,7 @@ public abstract class Entity {
 	} // getY
 	
 	public boolean getIsMoving() {
-		return isMoving;
+		return dx != 0 || dy != 0;
 	}
 	
 	/*

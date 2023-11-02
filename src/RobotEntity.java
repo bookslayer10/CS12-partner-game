@@ -21,14 +21,10 @@ public class RobotEntity extends Entity {
 	 * move input: delta - time elapsed since last move (ms) purpose: move ship
 	 */
 	public void move(long delta) {
-		// stop at left side of screen
-		if ((dx < 0) && (x < 10)) {
-			return;
-		} // if
-			// stop at right side of screen
-		if ((dx > 0) && (x > 750)) {
-			return;
-		} // if
+
+		int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
+
+		sprite = frames[2][frameTime];
 
 		super.move(delta); // calls the move method in Entity
 	} // move
@@ -42,5 +38,16 @@ public class RobotEntity extends Entity {
 			game.notifyDeath();
 		} // if
 	} // collidedWith
+	
+	// takes the delta value of the movement, checks to see if it's possible, and if so it starts 
+	public boolean tryToMove(int gx, int gy) {
+		
+		// insert code to check for collision with obstacle tiles, don't check for units
+		// return false;
+		
+		calculateMove(x + gx, y + gy);
+		
+		return true;
+	}
 
 } // RobotEntity class

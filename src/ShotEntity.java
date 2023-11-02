@@ -15,9 +15,9 @@ public class ShotEntity extends Entity {
 	 */
 	public ShotEntity(Game g, String r, int newX, int newY, int dx, int dy) {
 		super(r, newX, newY, false); // calls the constructor in Entity
+		game = g;
 		this.dx = dx;
 		this.dy = dy;
-		game = g;
 	} // constructor
 
 	/*
