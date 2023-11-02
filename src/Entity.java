@@ -15,13 +15,16 @@ public abstract class Entity {
 
 	protected double x; // current x location
 	protected double y; // current y location
+	
 	protected Game game;
 	protected Sprite sprite; // this entity's sprite
 	private Sprite[][] sprites = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
 												   // left) being a array of 4 frames
+	protected boolean isAnimated;
+	
 	protected double dx = 0; // horizontal speed (px/s) + -> right
 	protected double dy = 0; // vertical speed (px/s) + -> down
-	
+	protected int direction;
 	protected double turnTargetX;
 	protected double turnTargetY;
 	
@@ -40,6 +43,8 @@ public abstract class Entity {
 		game = g;
 		x = newX;
 		y = newY;
+		this.isAnimated = isAnimated;
+		
 		if (!isAnimated) {
 			sprite = (SpriteStore.get()).getSprite(r);
 		} // if
