@@ -4,7 +4,7 @@ public class TileEntity extends Entity {
 	private Game game;
 
 	public TileEntity(Game game, String filename, int x, int y) {
-		super(filename, x, y, false);
+		super(filename, x, y);
 		this.game = game;
 	}
 
