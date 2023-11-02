@@ -5,11 +5,12 @@ public class TileEntity extends Entity {
 	public TileEntity(Game g, String r, int x, int y) {
 		super(g, r, x, y, false);
 		switch (r.charAt(r.length() - 5)) {
-		case '0':
-			collision = false;
-			break;
-		default:
-			collision = true;		
+			case '0':
+				collision = false;
+				break;
+			case '1':
+			case '2':
+				collision = true;
 		}
 	}
 
