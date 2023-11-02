@@ -23,11 +23,11 @@ public class RobotEntity extends Entity {
 	 * move input: delta - time elapsed since last move (ms) purpose: move ship
 	 */
 	public void move(long delta) {
-
+		/*
 		int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
 
 		sprite = frames[2][frameTime];
-
+		*/
 		super.move(delta); // calls the move method in Entity
 	} // move
 
