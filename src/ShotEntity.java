@@ -16,13 +16,8 @@ public class ShotEntity extends Entity {
 	 * shot x, y - initial location of shot
 	 */
 	public ShotEntity(Game g, String r, int newX, int newY, int ix, int iy) {
-<<<<<<< Updated upstream
-		super(r, newX, newY, false); // calls the constructor in Entity
-		game = g;
-=======
 		super(g, r, newX, newY, true); // calls the constructor in Entity
-		
->>>>>>> Stashed changes
+
 		this.ix = ix;
 		this.iy = iy;
 	} // constructor
