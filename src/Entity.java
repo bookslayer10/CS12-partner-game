@@ -58,36 +58,20 @@ public abstract class Entity {
 
 	/*
 	 * move input: delta - the amount of time passed in ms output: none purpose:
-<<<<<<< Updated upstream
-	 * after a certain amout of time has passed, update the location
-=======
 	 * after a certain amount of time has passed, update the location
 	 * changes sprite frame if it is animated
->>>>>>> Stashed changes
 	 */
+	
 	public void move(long delta) {
 		
 		// moves the sprite to its new x position
 		x += (delta * dx) / TURN_LENGTH;
-		
-<<<<<<< Updated upstream
-		if((dx > 0 && x > tx) || (dx < 0 && x < tx)) {
-			x = tx;
-=======
 		if ((dx > 0 && x > turnTargetX) || (dx < 0 && x < turnTargetX)) {
 			x = turnTargetX;
->>>>>>> Stashed changes
 			dx = 0;
 		} // if
 		
 		y += (delta * dy) / TURN_LENGTH;
-<<<<<<< Updated upstream
-		if((dy > 0 && y > ty) || (dy < 0 && y < ty)) {
-			y = ty;
-			dy = 0;
-		} // if
-		
-=======
 		if ((dy > 0 && y > turnTargetY) || (dy < 0 && y < turnTargetY)) {
 			y = turnTargetY;
 			dy = 0;
@@ -101,9 +85,6 @@ public abstract class Entity {
 			sprite = sprites[direction][frameTime];
 			
 		} // if
-		
-		
->>>>>>> Stashed changes
 	} // move
 	
 	// calculates the velocity of dx and dy based on target x and y
@@ -126,9 +107,7 @@ public abstract class Entity {
 			dy = 0;
 			dx = 0;
 		} // if
-		
-		//System.out.println("dx " + dx);
-		//System.out.println("dy " + dy);
+
 	}
 	
 	// for overrides
