@@ -74,6 +74,11 @@ public abstract class Entity {
 			dy = 0;
 		} // if
 		
+		//int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
+
+		//sprite = frames[2][frameTime];
+		
+		
 	} // move
 	
 	// calculates the velocity of dx and dy based on target x and y
