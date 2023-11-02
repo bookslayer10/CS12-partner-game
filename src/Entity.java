@@ -46,7 +46,7 @@ public abstract class Entity {
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 4; j++) {
 					sprites[i][j] = (SpriteStore.get())
-							.getSprite(r + i + "_" + j + ".png");
+							.getSprite(r + i + "/robot_" + j + ".png");
 				} // for
 			} // for
 			sprite = sprites[0][0];
