@@ -19,6 +19,9 @@ public class Game extends Canvas {
 	// a key is pressed
 	private boolean makingMove = false;
 	private char keyPressed;
+	private int mouseX;
+	private int mouseY;
+	private static int SHOTSPEED = 4;
 
 	private boolean gameRunning = true;
 	protected ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all tiles
@@ -265,28 +268,50 @@ public class Game extends Canvas {
 
 				// respond to user moving ship
 				if (keyPressed == 'W') {
-					if (robot.tryToMove(0, -TILE_SIZE)) {
-						takeTurn();
-					} // if
-
-				} else if (keyPressed == 'A') {
-					if (robot.tryToMove(-TILE_SIZE, 0)) {
-						takeTurn();
-					} // if
-
-				} else if (keyPressed == 'S') {
-					if (robot.tryToMove(0, TILE_SIZE)) {
+					if (robot.tryToMove(0)) {
 						takeTurn();
 					} // if
 
 				} else if (keyPressed == 'D') {
-					if (robot.tryToMove(TILE_SIZE, 0)) {
+					if (robot.tryToMove(1)) {
 						takeTurn();
 					} // if
+
+				} else if (keyPressed == 'S') {
+					if (robot.tryToMove(2)) {
+						takeTurn();
+					} // if
+
+				} else if (keyPressed == 'A') {
+					if (robot.tryToMove(3)) {
+						takeTurn();
+					} // if
+
 					
 				} else if (keyPressed == MOUSE) {
 					
-					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX() + 16, robot.getY() + 6, 0, -TILE_SIZE * 3));
+					mouseX -= robot.getX();
+					mouseY -= robot.getY();
+					
+					if(Math.abs(mouseX) > Math.abs(mouseY)) {
+						mouseY = 0;
+						
+						if(0 < mouseX) {
+							mouseX = TILE_SIZE * SHOTSPEED;
+						} else {
+							mouseX = TILE_SIZE * -SHOTSPEED;
+						}
+					} else {
+						mouseX = 0;
+						if(0 < mouseY) {
+							mouseY = TILE_SIZE * SHOTSPEED;
+						} else {
+							mouseY = TILE_SIZE * -SHOTSPEED;
+						}
+					}
+					
+					
+					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX() + 15, robot.getY() + 6, mouseX, mouseY));
 					takeTurn();
 				}
 			} else {
@@ -396,6 +421,8 @@ public class Game extends Canvas {
 			} // if
 			
 			keyPressed = MOUSE;
+			mouseX = e.getX();
+			mouseY = e.getY();
 		}
 
 		@Override
