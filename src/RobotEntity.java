@@ -41,6 +41,11 @@ public class RobotEntity extends Entity {
 	
 		calculateMove(x + gx, y + gy);		
 		
+		if (this.collidesWith(goalTile, (int)dx, (int)dy) && goalTile.getCollision()) {
+			dy = 0;
+			dx = 0;
+		} // if
+		
 		return getIsMoving();
 	}
 

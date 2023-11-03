@@ -286,7 +286,7 @@ public class Game extends Canvas {
 					
 				} else if (keyPressed == MOUSE) {
 					
-					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX() + 16, robot.getY() + 6, 0, -TILE_SIZE * 2));
+					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX() + 16, robot.getY() + 6, 0, -TILE_SIZE * 3));
 					takeTurn();
 				}
 			} else {

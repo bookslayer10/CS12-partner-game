@@ -28,27 +28,26 @@ public class ShotEntity extends Entity {
 	public void move(long delta) {
 		super.move(delta); // calls the move method in Entity
 
-		// if shot moves off top of screen, remove it from entity list
-		if (y < -100) {
+		if (x < -100 || x > game.SCREEN_WIDTH + 100 || y < -100 || y > game.SCREEN_HEIGHT + 100) {
 			game.removeEntity(this);
 		} // if
-
+		
+		for (int i = 0; i < game.tiles.size(); i++) {
+			if (game.tiles.get(i).getCollision() && this.collidesWith(game.tiles.get(i), 0, 0)) {
+				game.removeEntity(this);
+			} // if
+		}
+		
 	} // move
 	
 	
 	public void calculateMove() {
 		
-		if (x < -100 || x > game.SCREEN_WIDTH + 100 || y < -100 || y > game.SCREEN_HEIGHT + 100) {
-			game.removeEntity(this);
-		} // if		
-		
 		turnTargetX = x + ix;
 		turnTargetY = y + iy;
 		
 		super.calculateMove(turnTargetX, turnTargetY);
-		if (!getIsMoving()) {
-			game.removeEntity(this);
-		}
+		
 	}
 	
 	/*

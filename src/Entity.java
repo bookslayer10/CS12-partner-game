@@ -28,12 +28,13 @@ public abstract class Entity {
 	protected double turnTargetX;
 	protected double turnTargetY;
 	
-	static private final long TURN_LENGTH = 500;
+	protected static final long TURN_LENGTH = 500;
 	
 	private Rectangle me = new Rectangle(); // bounding rectangle of
 											// this entity
 	private Rectangle him = new Rectangle(); // bounding rect. of other
 												// entities
+	protected TileEntity goalTile;
 
 	/*
 	 * Constructor input: reference to the image for this entity, initial x and y
@@ -103,22 +104,17 @@ public abstract class Entity {
 		
 		calculateDirection();
 		
-		int goalTile = (((int) (y + dy) / game.TILE_SIZE) * 29 + (int) (x + dx) / game.TILE_SIZE);
-		if (goalTile < 0) {
-			goalTile = 0;
+		int goalTileIndex = (((int) (y + dy) / game.TILE_SIZE) * 29 + (int) (x + dx) / game.TILE_SIZE);
+		if (goalTileIndex < 0) {
+			goalTileIndex = 0;
 		}
 		
-		if (this.collidesWith(game.tiles.get(goalTile), (int)dx, (int)dy) && game.tiles.get(goalTile).getCollision()) {
-			dy = 0;
-			dx = 0;
-		} // if
-
+		goalTile = game.tiles.get(goalTileIndex);
+		
 	}
 	
 	// for overrides
-	public void calculateMove() {
-		
-	}
+	public void calculateMove() {}
 	
 	// get and set velocities
 	public void setHorizontalMovement(double newDX) {
