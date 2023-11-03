@@ -95,14 +95,9 @@ public abstract class Entity {
 	
 	// calculates the velocity of dx and dy based on target x and y
 	// makes move do something
-	public void calculateMove(double tx, double ty) {
-		turnTargetX = tx;
-		turnTargetY = ty;
-		
-		dx = tx - x;
-		dy = ty - y;
-		
-		calculateDirection();
+	public void calculateMove() {
+		turnTargetX = x + dx;
+		turnTargetY = y + dy;
 		
 		int goalTileIndex = (((int) (y + dy) / game.TILE_SIZE) * 29 + (int) (x + dx) / game.TILE_SIZE);
 		if (goalTileIndex < 0) {
@@ -112,9 +107,6 @@ public abstract class Entity {
 		goalTile = game.tiles.get(goalTileIndex);
 		
 	}
-	
-	// for overrides
-	public void calculateMove() {}
 	
 	// get and set velocities
 	public void setHorizontalMovement(double newDX) {

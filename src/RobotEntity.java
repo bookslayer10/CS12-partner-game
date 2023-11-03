@@ -37,9 +37,30 @@ public class RobotEntity extends Entity {
 	} // collidedWith
 	
 	// takes the delta value of the movement, checks to see if it's possible, and if so it starts 
-	public boolean tryToMove(int gx, int gy) {
-	
-		calculateMove(x + gx, y + gy);		
+	public boolean tryToMove(int direction) {
+		
+		this.direction = direction;
+		
+		switch (direction) {
+		case 0: // up
+			dx = 0;
+			dy = -64;
+			break;
+		case 1: // right
+			dx = 64;
+			dy = 0;
+			break;
+		case 2: // down
+			dx = 0;
+			dy = 64;
+			break;
+		case 3: // left
+			dx = -64;
+			dy = 0;
+			break;
+		} // switch
+		
+		calculateMove();
 		
 		if (this.collidesWith(goalTile, (int)dx, (int)dy) && goalTile.getCollision()) {
 			dy = 0;
