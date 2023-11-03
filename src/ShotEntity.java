@@ -3,7 +3,7 @@
  * Represents player's ship
  */
 public class ShotEntity extends Entity {
-
+	
 	private double moveSpeed = -300; // vert speed shot moves
 	private boolean used = false; // true if shot hits something
 	
@@ -43,11 +43,10 @@ public class ShotEntity extends Entity {
 	
 	public void calculateMove() {
 		
-		turnTargetX = x + ix;
-		turnTargetY = y + iy;
+		dx = ix;
+		dy = iy;
 		
-		super.calculateMove(turnTargetX, turnTargetY);
-		
+		super.calculateMove();
 	}
 	
 	/*

@@ -4,8 +4,6 @@
  */
 public class EnemyEntity extends Entity {
 
-	private int prototypeMove = 0;
-
 	/*
 	 * construct a new alien input: game - the game in which the alien is being
 	 * created r - the image representing the alien x, y - initial location of alien
@@ -28,22 +26,30 @@ public class EnemyEntity extends Entity {
 
 	public void calculateMove() {
 		
-		switch (prototypeMove) {
-		case 0:
-			calculateMove(x, y - 64);
-			break;
-		case 1:
-			calculateMove(x + 64, y);
-			break;
-		case 2:
-			calculateMove(x, y + 64);
-			break;
-		case 3:
-			calculateMove(x - 64, y);
-			break;
-		}
+		// where to put all the AI probably
 		
-		prototypeMove = (prototypeMove + 1) % 4;
+		direction = (direction + 1) % 4;
+		
+		switch (direction) {
+			case 0: // up
+				dx = 0;
+				dy = -64;
+				break;
+			case 1: // right
+				dx = 64;
+				dy = 0;
+				break;
+			case 2: // down
+				dx = 0;
+				dy = 64;
+				break;
+			case 3: // left
+				dx = -64;
+				dy = 0;
+				break;
+		} // switch
+		
+		super.calculateMove();
 	}
 	
 	/*
