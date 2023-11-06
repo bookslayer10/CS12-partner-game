@@ -273,17 +273,17 @@ public class Game extends Canvas {
 					} // if
 
 				} else if (keyPressed == 'D') {
-					if (robot.tryToMove(90)) {
+					if (robot.tryToMove(1)) {
 						takeTurn();
 					} // if
 
 				} else if (keyPressed == 'S') {
-					if (robot.tryToMove(180)) {
+					if (robot.tryToMove(2)) {
 						takeTurn();
 					} // if
 
 				} else if (keyPressed == 'A') {
-					if (robot.tryToMove(270)) {
+					if (robot.tryToMove(3)) {
 						takeTurn();
 					} // if
 
