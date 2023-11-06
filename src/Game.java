@@ -120,6 +120,7 @@ public class Game extends Canvas {
 			entities.add(enemies[i]);
 		}
 		
+		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0, 0);
 		
 		// create the ship and put in the top right of screen
 		robot = new RobotEntity(this, "sprites/robot/robot_", TILE_SIZE * 10, TILE_SIZE * 10);
@@ -201,33 +202,36 @@ public class Game extends Canvas {
 			g.setColor(Color.black);
 			g.fillRect(0, 0, 800, 600);
 
+			
 			// set making move to false, only continue if an entity in the for loop sets it
 			// to true
 			makingMove = false;
-			for (int i = 0; i < entities.size(); i++) {
-				Entity entity = (Entity) entities.get(i);
-				entity.move(delta);
-				if (entity.getIsMoving()) {
-					makingMove = true;
-				}
-			} // for
-			
-			
-			// brute force collisions, compare every entity
-			// against every other entity. If any collisions
-			// are detected notify both entities that it has
-			// occurred
-			for (int i = 0; i < entities.size(); i++) {
-				for (int j = i + 1; j < entities.size(); j++) {
-					Entity me = (Entity) entities.get(i);
-					Entity him = (Entity) entities.get(j);
+			if(!waitingForKeyPress) {
+				for (int i = 0; i < entities.size(); i++) {
+					Entity entity = (Entity) entities.get(i);
+					entity.move(delta);
+					if (entity.getIsMoving()) {
+						makingMove = true;
+					}
+				} // for
+				
+				// brute force collisions, compare every entity
+				// against every other entity. If any collisions
+				// are detected notify both entities that it has
+				// occurred
+				for (int i = 0; i < entities.size(); i++) {
+					for (int j = i + 1; j < entities.size(); j++) {
+						Entity me = (Entity) entities.get(i);
+						Entity him = (Entity) entities.get(j);
 
-					if (me.collidesWith(him, 0, 0)) {
-						me.collidedWith(him);
-						him.collidedWith(me);
-					} // if
-				} // inner for
-			} // outer for
+						if (me.collidesWith(him, 0, 0)) {
+							me.collidedWith(him);
+							him.collidedWith(me);
+						} // if
+					} // inner for
+				} // outer for
+			}
+
 
 			// draw tiles
 			for (int i = 0; i < tiles.size(); i++) {
@@ -293,23 +297,21 @@ public class Game extends Canvas {
 					mouseX -= robot.getX();
 					mouseY -= robot.getY();
 					
-					if(Math.abs(mouseX) > Math.abs(mouseY)) {
-						mouseY = 0;
-						
-						if(0 < mouseX) {
-							mouseX = TILE_SIZE * SHOTSPEED;
-						} else {
-							mouseX = TILE_SIZE * -SHOTSPEED;
-						}
-					} else {
-						mouseX = 0;
-						if(0 < mouseY) {
-							mouseY = TILE_SIZE * SHOTSPEED;
-						} else {
-							mouseY = TILE_SIZE * -SHOTSPEED;
-						}
+					// 0 to 180 to -0
+					double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
+					
+					directionOfShot += 90;
+					
+					// turn it into full 360
+					if(directionOfShot < 0) {
+						directionOfShot = 360 + directionOfShot;
 					}
 					
+					directionOfShot = directionOfShot / 360 * 8;
+					
+					directionOfShot = Math.round(directionOfShot) % 8;
+					
+					directionOfShot = directionOfShot * 360 / 8;
 					
 					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX() + 15, robot.getY() + 6, mouseX, mouseY));
 					takeTurn();
