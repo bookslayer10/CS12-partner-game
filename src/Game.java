@@ -116,7 +116,7 @@ public class Game extends Canvas {
 		
 		EnemyEntity[] enemies = new EnemyEntity[5];
 		for (int i = 0; i < 5; i++) {
-			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TILE_SIZE * (i + 3), TILE_SIZE * 3);
+			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TILE_SIZE * (i + 3), TILE_SIZE * 2);
 			entities.add(enemies[i]);
 		}
 		

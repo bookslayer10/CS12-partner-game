@@ -18,6 +18,7 @@ public class TileEntity extends Entity {
 			case '8':
 			case '9':
 			case 'a':
+			default:
 				collision = true;
 		}
 	}
