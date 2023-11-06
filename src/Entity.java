@@ -18,7 +18,7 @@ public abstract class Entity {
 	
 	protected Game game;
 	protected Sprite sprite; // this entity's sprite
-	private Sprite[][] sprites = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
+	protected Sprite[][] sprites = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
 												   // left) being a array of 4 frames
 	protected boolean isAnimated;
 	

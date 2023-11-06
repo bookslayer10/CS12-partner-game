@@ -12,3 +12,5 @@
 /SpriteStore.class
 /TileEntity.class
 /sprites/
+/Point.class
+/EnemyEntity$Point.class

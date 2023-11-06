@@ -34,6 +34,8 @@ public class Game extends Canvas {
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
 	public final int TILE_SIZE = 64; // hor. vel. of ship (pixels per turn)
+	
+	protected static int[][] grid;
 	private int turnNumber; // # of turns elapsed
 
 	private String message = ""; // message to display while waiting
@@ -103,13 +105,12 @@ public class Game extends Canvas {
 	 * entities in the game.
 	 */
 	private void initEntities() {
-		String[] grid = new String[16];
 		grid = FileInput.getFileContents("src/grid.txt");
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
-				TileEntity tile = new TileEntity(this, "sprites/background/map_" + grid[row].charAt(col) + ".png", col * TILE_SIZE,
-						row * TILE_SIZE);
+				TileEntity tile = new TileEntity(this, "sprites/background/map_"
+						+ grid[row][col] + ".png", col * TILE_SIZE, row * TILE_SIZE);
 				tiles.add(tile);
 			} // for
 		} // outer for
