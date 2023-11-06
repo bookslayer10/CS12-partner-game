@@ -144,15 +144,31 @@ public abstract class Entity {
 	
 	public void calculateDirection() {
 		if (dx > 0) {
-			direction = 1;
+			if (dy > 0) {
+				direction = 135;
+			}
+			else if (dy < 0) {
+				direction = 45;
+			}
+			else {
+				direction = 90;
+			}
 		} // if
 		
 		else if (dx < 0) {
-			direction = 3;
+			if (dy > 0) {
+				direction = 225;
+			}
+			else if (dy < 0) {
+				direction = 315;
+			}
+			else {
+				direction = 270;
+			}
 		} // else if
 		
 		else if (dy > 0) {
-			direction = 2;
+			direction = 180;
 		} // else if 
 		
 		else if (dy < 0){

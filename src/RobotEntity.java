@@ -11,7 +11,7 @@ public class RobotEntity extends Entity {
 	 */
 	public RobotEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
-		direction = 2;
+		direction = 180;
 	} // constructor
 
 	/*
@@ -46,15 +46,15 @@ public class RobotEntity extends Entity {
 			dx = 0;
 			dy = -64;
 			break;
-		case 1: // right
+		case 90: // right
 			dx = 64;
 			dy = 0;
 			break;
-		case 2: // down
+		case 180: // down
 			dx = 0;
 			dy = 64;
 			break;
-		case 3: // left
+		case 270: // left
 			dx = -64;
 			dy = 0;
 			break;
