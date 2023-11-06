@@ -10,7 +10,7 @@ public class EnemyEntity extends Entity {
 	 */
 	public EnemyEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
-		direction = 2;
+		direction = 180;
 	} // constructor
 
 	/*
@@ -28,22 +28,22 @@ public class EnemyEntity extends Entity {
 		
 		// where to put all the AI probably
 		
-		direction = (direction + 1) % 4;
+		direction = (direction + 90) % 360;
 		
 		switch (direction) {
 			case 0: // up
 				dx = 0;
 				dy = -64;
 				break;
-			case 1: // right
+			case 90: // right
 				dx = 64;
 				dy = 0;
 				break;
-			case 2: // down
+			case 180: // down
 				dx = 0;
 				dy = 64;
 				break;
-			case 3: // left
+			case 270: // left
 				dx = -64;
 				dy = 0;
 				break;

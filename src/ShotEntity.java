@@ -18,6 +18,16 @@ public class ShotEntity extends Entity {
 	public ShotEntity(Game g, String r, int newX, int newY, int ix, int iy) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
 
+		sprites = new Sprite[8][4];
+		
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 4; j++) {
+				sprites[i][j] = (SpriteStore.get())
+						.getSprite(r + i * 45 + "_" + j + ".png");
+			} // for
+		} // for
+		sprite = sprites[0][0];
+		
 		this.ix = ix;
 		this.iy = iy;
 	} // constructor
@@ -27,6 +37,9 @@ public class ShotEntity extends Entity {
 	 */
 	public void move(long delta) {
 		super.move(delta); // calls the move method in Entity
+	
+		int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
+		sprite = sprites[direction / 45][frameTime];
 
 		if (x < -100 || x > game.SCREEN_WIDTH + 100 || y < -100 || y > game.SCREEN_HEIGHT + 100) {
 			game.removeEntity(this);
