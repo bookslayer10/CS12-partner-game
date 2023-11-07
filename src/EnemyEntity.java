@@ -26,25 +26,10 @@ public class EnemyEntity extends Entity {
 	} // move
 
 	public void calculateMove() {
+		Point point = findPath(this, Game.robot);
+		dx = point.x - this.x;
+		dy = point.y - this.y;
 		
-		switch (direction) {
-			case 0: // up
-				dx = 0;
-				dy = -64;
-				break;
-			case 1: // right
-				dx = 64;
-				dy = 0;
-				break;
-			case 2: // down
-				dx = 0;
-				dy = 64;
-				break;
-			case 3: // left
-				dx = -64;
-				dy = 0;
-				break;
-		} // switch
 		
 		super.calculateMove();
 	} // calculate
@@ -65,9 +50,9 @@ public class EnemyEntity extends Entity {
 	} // doLogic
 	
     public static class Point {
-        public int x;
-        public int y;
-        public Point previous;
+        private int x;
+        private int y;
+        private Point previous;
 
         public Point(int x, int y, Point previous) {
             this.x = x;
@@ -90,59 +75,62 @@ public class EnemyEntity extends Entity {
         
     } // Point
 
-    private boolean IsWalkable(Point point) {
+    private boolean isWalkable(Point point) {
         if (point.y < 0 || point.y > Game.grid.length - 1) return false;
         if (point.x < 0 || point.x > Game.grid[0].length - 1) return false;
         return Game.grid[point.y][point.x] == 0;
     }
 
-    private List<Point> FindNeighbors(Point point) {
+    private List<Point> findNeighbours(Point point) {
         List<Point> neighbors = new ArrayList<>();
         Point up = point.offset(0,  1);
         Point down = point.offset(0,  -1);
         Point left = point.offset(-1, 0);
         Point right = point.offset(1, 0);
-        if (IsWalkable(up)) neighbors.add(up);
-        if (IsWalkable(down)) neighbors.add(down);
-        if (IsWalkable(left)) neighbors.add(left);
-        if (IsWalkable(right)) neighbors.add(right);
+        if (isWalkable(up)) neighbors.add(up);
+        if (isWalkable(down)) neighbors.add(down);
+        if (isWalkable(left)) neighbors.add(left);
+        if (isWalkable(right)) neighbors.add(right);
         return neighbors;
     }
 
-    private List<Point> FindPath(Point start, Point end) {
+    private Point findPath(Entity enemy, Entity robot) {
+    	Point start = new Point(enemy.getX() / 29, enemy.getY() / 15, null);
+    	Point end = new Point(robot.getX() / 29, robot.getY() / 15, null);
+
         boolean finished = false;
         List<Point> used = new ArrayList<>();
         used.add(start);
         while (!finished) {
             List<Point> newOpen = new ArrayList<>();
-            for(int i = 0; i < used.size(); ++i){
+            for (int i = 0; i < used.size(); ++i){
                 Point point = used.get(i);
-                for (Point neighbor : FindNeighbors(point)) {
+                for (Point neighbor : findNeighbours(point)) {
                     if (!used.contains(neighbor) && !newOpen.contains(neighbor)) {
                         newOpen.add(neighbor);
-                    }
-                }
-            }
+                    } // if
+                } // for
+            } // for
 
-            for(Point point : newOpen) {
+            for (Point point : newOpen) {
                 used.add(point);
                 if (end.equals(point)) {
                     finished = true;
                     break;
-                }
-            }
+                } // for
+            } // if
 
-            if (!finished && newOpen.isEmpty())
+            if (finished && newOpen.isEmpty())
                 return null;
-        }
+        } // while
 
         List<Point> path = new ArrayList<>();
         Point point = used.get(used.size() - 1);
-        while(point.previous != null) {
+        while (point.previous != null) {
             path.add(0, point);
             point = point.previous;
-        }
-        return path;
+        } // while
+        return path.get(0);
     }
 	
 	/*

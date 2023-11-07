@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileInput {
@@ -15,7 +13,7 @@ public class FileInput {
 			// copy the lines from the list into a 1D array
 			for (int i = 0; i < lines.length; i++) {
 				String[] line = lines[i].split(" ");
-				for (int j = 0; i < line[i].length(); j++) {
+				for (int j = 0; j < line.length; j++) {
 					content[i][j] = Integer.parseInt(line[j]);
 				} // for
 			} // for

@@ -29,7 +29,7 @@ public class Game extends Canvas {
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
-	private RobotEntity robot; // the robot
+	protected static RobotEntity robot; // the robot
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
@@ -115,10 +115,9 @@ public class Game extends Canvas {
 			} // for
 		} // outer for
 		
-		EnemyEntity[] enemies = new EnemyEntity[5];
 		for (int i = 0; i < 5; i++) {
-			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TILE_SIZE * (i + 3), TILE_SIZE * 2);
-			entities.add(enemies[i]);
+			Entity enemy = new MeleeEntity(this, "sprites/melee/melee_", TILE_SIZE * (i + 17), TILE_SIZE * 8);
+			entities.add(enemy);
 		}
 		
 		
