@@ -56,35 +56,35 @@ public class ShotEntity extends Entity {
 		switch (direction) {
 		case 0:
 			dx = 0;
-			dy = -SHOTSPEED * game.TILE_SIZE;
+			dy = -SHOTSPEED * TileEntity.TILE_SIZE;
 			break;
 		case 45:
-			dx = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
-			dy = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dx = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dy = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
 			break;
 		case 90:
-			dx = SHOTSPEED * game.TILE_SIZE;
+			dx = SHOTSPEED * TileEntity.TILE_SIZE;
 			dy = 0;
 			break;
 		case 135:
-			dx = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
-			dy = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dx = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dy = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
 			break;
 		case 180:
 			dx = 0;
-			dy = SHOTSPEED * game.TILE_SIZE;
+			dy = SHOTSPEED * TileEntity.TILE_SIZE;
 			break;
 		case 225:
-			dx = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
-			dy = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dx = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dy = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
 			break;
 		case 270:
-			dx = -SHOTSPEED * game.TILE_SIZE;
+			dx = -SHOTSPEED * TileEntity.TILE_SIZE;
 			dy = 0;
 			break;
 		case 315:
-			dx = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
-			dy = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dx = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dy = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
 			break;
 		}
 		
@@ -108,7 +108,8 @@ public class ShotEntity extends Entity {
 			game.removeEntity(other);
 
 			// notify the game that the alien is dead
-			game.notifyAlienKilled();
+			
+			game.notifyEnemyKilled();
 			used = true;
 		} // if
 

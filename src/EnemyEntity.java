@@ -3,7 +3,10 @@
  * Represents one of the aliens
  */
 public class EnemyEntity extends Entity {
-
+	
+	protected static int numEnemiesKilled;
+	protected static int numEnemiesActive;
+	
 	/*
 	 * construct a new alien input: game - the game in which the alien is being
 	 * created r - the image representing the alien x, y - initial location of alien
@@ -11,6 +14,7 @@ public class EnemyEntity extends Entity {
 	public EnemyEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
 		direction = 180;
+		numEnemiesActive++;
 	} // constructor
 
 	/*

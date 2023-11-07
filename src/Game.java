@@ -32,7 +32,6 @@ public class Game extends Canvas {
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
-	public final int TILE_SIZE = 64; // hor. vel. of ship (pixels per turn)
 	private int turnNumber; // # of turns elapsed
 
 	private String message = ""; // message to display while waiting
@@ -107,33 +106,25 @@ public class Game extends Canvas {
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
-				TileEntity tile = new TileEntity(this, "sprites/background/map_" + grid[row].charAt(col) + ".png", col * TILE_SIZE,
-						row * TILE_SIZE);
+				TileEntity tile = new TileEntity(this, "sprites/background/map_" + grid[row].charAt(col) + ".png", col * TileEntity.TILE_SIZE,
+						row * TileEntity.TILE_SIZE);
 				tiles.add(tile);
 			} // for
 		} // outer for
 		
 		EnemyEntity[] enemies = new EnemyEntity[5];
 		for (int i = 0; i < 5; i++) {
-			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TILE_SIZE * (i + 3), TILE_SIZE * 2);
+			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * (i + 3), TileEntity.TILE_SIZE * 2);
 			entities.add(enemies[i]);
 		}
 		
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
 		// create the ship and put in the top right of screen
-		robot = new RobotEntity(this, "sprites/robot/robot_", TILE_SIZE * 10, TILE_SIZE * 10);
+		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 10, TileEntity.TILE_SIZE * 10);
 		entities.add(robot);
 	} // initEntities
-
-	/*
-	 * Notification from a game entity that the logic of the game should be run at
-	 * the next opportunity
-	 */
-	public void updateLogic() {
-		logicRequiredThisLoop = true;
-	} // updateLogic
-
+	
 	/*
 	 * Remove an entity from the game. It will no longer be moved or drawn.
 	 */
@@ -151,31 +142,19 @@ public class Game extends Canvas {
 	} // notifyDeath
 
 	/*
-	 * Notification that the play has killed all aliens
-	 */
-	public void notifyWin() {
-		message = "You kicked some ALIEN BUTT!  You win!";
-		waitingForKeyPress = true;
-	} // notifyWin
-
-	/*
 	 * Notification than an alien has been killed
 	 */
-	public void notifyAlienKilled() {
-		// alienCount--;
-
-		// if (alienCount == 0) {
-		// notifyWin();
-		// } // if
-
-		// speed up existing aliens
+	public void notifyEnemyKilled() {
+		EnemyEntity.numEnemiesKilled++;
+		
+		// checks each enemy to see if an enemy is alive
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
-			if (entity instanceof EnemyEntity) {
-				// speed up by 2%
-				entity.setHorizontalMovement(entity.getHorizontalMovement() * 1.02);
-			} // if
+			if(entity instanceof EnemyEntity) {
+				
+			}
 		} // for
+		
 	} // notifyAlienKilled
 
 //	/* Attempt to fire. */
@@ -242,20 +221,11 @@ public class Game extends Canvas {
 				Entity entity = (Entity) entities.get(i);
 				entity.draw(g);
 			} // for
-
+			
 			// remove dead entities
 			entities.removeAll(removeEntities);
 			removeEntities.clear();
-
-			// run logic if required
-			if (logicRequiredThisLoop) {
-				for (int i = 0; i < entities.size(); i++) {
-					Entity entity = (Entity) entities.get(i);
-					entity.doLogic();
-				} // for
-				logicRequiredThisLoop = false;
-			} // if
-
+			
 			// if waiting for "any key press", draw message
 			if (waitingForKeyPress) {
 				g.setColor(Color.white);
@@ -293,8 +263,8 @@ public class Game extends Canvas {
 					
 				} else if (keyPressed == MOUSE) {
 					
-					mouseX -= robot.getX() + TILE_SIZE / 2;
-					mouseY -= robot.getY() + TILE_SIZE / 2;
+					mouseX -= robot.getX() + TileEntity.TILE_SIZE / 2;
+					mouseY -= robot.getY() + TileEntity.TILE_SIZE / 2;
 					
 					// 0 to 180 to -0
 					double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
@@ -339,6 +309,7 @@ public class Game extends Canvas {
 
 		initEntities();
 
+		EnemyEntity.numEnemiesKilled = 0;
 		turnNumber = 0;
 
 		// blank out any keyboard settings that might exist
@@ -347,7 +318,7 @@ public class Game extends Canvas {
 
 	private void takeTurn() {
 		keyPressed = NONE;
-
+		turnNumber++;
 		
 		// set every entity goal position, make them start moving
 		for (int i = 0; i < entities.size(); i++) {

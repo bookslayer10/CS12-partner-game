@@ -84,9 +84,6 @@ public abstract class Entity {
 		} // if
 		
 		if (isAnimated) {
-			
-			calculateDirection();
-			
 			int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
 			sprite = sprites[direction / 90][frameTime];
 			
@@ -99,7 +96,7 @@ public abstract class Entity {
 		turnTargetX = x + dx;
 		turnTargetY = y + dy;
 		
-		int goalTileIndex = (((int) (y + dy) / game.TILE_SIZE) * 29 + (int) (x + dx) / game.TILE_SIZE);
+		int goalTileIndex = (((int) (y + dy) / TileEntity.TILE_SIZE) * 29 + (int) (x + dx) / TileEntity.TILE_SIZE);
 		if (goalTileIndex < 0) {
 			goalTileIndex = 0;
 		}
@@ -140,43 +137,6 @@ public abstract class Entity {
 	
 	public boolean getIsMoving() {
 		return dx != 0 || dy != 0;
-	}
-	
-	public void calculateDirection() {
-		if (dx > 0) {
-			
-		if (dy > 0) {
-			direction = 135;
-		}
-		else if (dy < 0) {
-			direction = 45;
-		}
-		else {
-			direction = 90;
-		}
-		} // if
-		
-		else if (dx < 0) {
-		
-		if (dy > 0) {
-			direction = 225;
-		}
-		else if (dy < 0) {
-			direction = 315;
-		}
-		else {
-			direction = 270;
-		}
-		} // else if
-		
-		else if (dy > 0) {
-		
-		direction = 180;
-		} // else if 
-		
-		else if (dy < 0){
-			direction = 0;
-		} // else if
 	}
 	
 	/*
