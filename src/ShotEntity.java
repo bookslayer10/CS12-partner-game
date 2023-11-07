@@ -4,20 +4,18 @@
  */
 public class ShotEntity extends Entity {
 	
-	private double moveSpeed = -300; // vert speed shot moves
 	private boolean used = false; // true if shot hits something
-	
-	private double ix;
-	private double iy;
+	private static int SHOTSPEED = 4;
+	private static int DIAGONAL_SHOTSPEED = 3;
 
 	/*
 	 * construct the shot input: game - the game in which the shot is being created
 	 * ref - a string with the name of the image associated to the sprite for the
 	 * shot x, y - initial location of shot
 	 */
-	public ShotEntity(Game g, String r, int newX, int newY, int ix, int iy) {
+	public ShotEntity(Game g, String r, int newX, int newY, int direction) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
-
+		
 		sprites = new Sprite[8][4];
 		
 		for (int i = 0; i < 8; i++) {
@@ -28,8 +26,7 @@ public class ShotEntity extends Entity {
 		} // for
 		sprite = sprites[0][0];
 		
-		this.ix = ix;
-		this.iy = iy;
+		this.direction = direction;
 	} // constructor
 
 	/*
@@ -56,8 +53,40 @@ public class ShotEntity extends Entity {
 	
 	public void calculateMove() {
 		
-		dx = ix;
-		dy = iy;
+		switch (direction) {
+		case 0:
+			dx = 0;
+			dy = -SHOTSPEED * game.TILE_SIZE;
+			break;
+		case 45:
+			dx = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dy = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			break;
+		case 90:
+			dx = SHOTSPEED * game.TILE_SIZE;
+			dy = 0;
+			break;
+		case 135:
+			dx = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dy = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			break;
+		case 180:
+			dx = 0;
+			dy = SHOTSPEED * game.TILE_SIZE;
+			break;
+		case 225:
+			dx = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dy = DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			break;
+		case 270:
+			dx = -SHOTSPEED * game.TILE_SIZE;
+			dy = 0;
+			break;
+		case 315:
+			dx = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			dy = -DIAGONAL_SHOTSPEED * game.TILE_SIZE;
+			break;
+		}
 		
 		super.calculateMove();
 	}

@@ -21,7 +21,6 @@ public class Game extends Canvas {
 	private char keyPressed;
 	private int mouseX;
 	private int mouseY;
-	private static int SHOTSPEED = 4;
 
 	private boolean gameRunning = true;
 	protected ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all tiles
@@ -120,7 +119,7 @@ public class Game extends Canvas {
 			entities.add(enemies[i]);
 		}
 		
-		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0, 0);
+		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
 		// create the ship and put in the top right of screen
 		robot = new RobotEntity(this, "sprites/robot/robot_", TILE_SIZE * 10, TILE_SIZE * 10);
@@ -294,8 +293,8 @@ public class Game extends Canvas {
 					
 				} else if (keyPressed == MOUSE) {
 					
-					mouseX -= robot.getX();
-					mouseY -= robot.getY();
+					mouseX -= robot.getX() + TILE_SIZE / 2;
+					mouseY -= robot.getY() + TILE_SIZE / 2;
 					
 					// 0 to 180 to -0
 					double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
@@ -312,8 +311,8 @@ public class Game extends Canvas {
 					directionOfShot = Math.round(directionOfShot) % 8;
 					
 					directionOfShot = directionOfShot * 360 / 8;
-					
-					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX() + 15, robot.getY() + 6, mouseX, mouseY));
+					System.out.println(directionOfShot);
+					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
 					takeTurn();
 				}
 			} else {
