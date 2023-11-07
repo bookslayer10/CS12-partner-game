@@ -28,12 +28,8 @@ public abstract class Entity {
 	protected double turnTargetX;
 	protected double turnTargetY;
 	
-	protected static final long TURN_LENGTH = 500;
+	protected static final long TURN_LENGTH = 350;
 	
-	private Rectangle me = new Rectangle(); // bounding rectangle of
-											// this entity
-	private Rectangle him = new Rectangle(); // bounding rect. of other
-												// entities
 	protected TileEntity goalTile;
 
 	/*
@@ -158,11 +154,17 @@ public abstract class Entity {
 	 * if entities collide purpose: check if this entity collides with the other.
 	 */
 	public boolean collidesWith(Entity other, int shiftx, int shifty) {
-		me.setBounds((int) x + shiftx, (int) y + shifty, sprite.getWidth(), sprite.getHeight());
-		him.setBounds(other.getX(), other.getY(), other.sprite.getWidth(), other.sprite.getHeight());
-		return me.intersects(him);
+		return getHitbox(shiftx, shifty).intersects(other.getHitbox(0, 0));
 	} // collidesWith
-
+	
+	public Rectangle getHitbox(int shiftx, int shifty) {
+		Rectangle rect = new Rectangle();
+		
+		rect.setBounds((int) x + shiftx, (int) y + shifty, sprite.getWidth(), sprite.getHeight());
+		
+		return rect;
+	}
+	
 	/*
 	 * collidedWith input: the entity with which this has collided purpose:
 	 * notification that this entity collided with another Note: abstract methods

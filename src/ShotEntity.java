@@ -1,3 +1,5 @@
+import java.awt.Rectangle;
+
 /* ShotEntity.java
  * March 27, 2006
  * Represents player's ship
@@ -114,5 +116,13 @@ public class ShotEntity extends Entity {
 		} // if
 
 	} // collidedWith
+	
+	public Rectangle getHitbox(int shiftx, int shifty) {
+		Rectangle rect = new Rectangle();
+		
+		rect.setBounds((int) x + shiftx, (int) y + shifty, sprite.getWidth(), sprite.getHeight());
+		
+		return rect;
+	}
 
 } // RobotEntity class

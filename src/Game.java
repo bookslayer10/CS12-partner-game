@@ -36,11 +36,7 @@ public class Game extends Canvas {
 
 	private String message = ""; // message to display while waiting
 	// for a key press
-
-	private boolean logicRequiredThisLoop = false; // true if logic
-	// needs to be
-	// applied this loop
-
+	
 	/*
 	 * Construct our game and set it running.
 	 */
@@ -87,9 +83,8 @@ public class Game extends Canvas {
 		// create buffer strategy to take advantage of accelerated graphics
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
-
-		// initialize entities
-		initEntities();
+		
+		startGame();
 
 		// start the game
 		gameLoop();
@@ -116,8 +111,10 @@ public class Game extends Canvas {
 		for (int i = 0; i < 5; i++) {
 			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * (i + 3), TileEntity.TILE_SIZE * 2);
 			entities.add(enemies[i]);
+			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
 		}
 		
+		@SuppressWarnings("unused")
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
 		// create the ship and put in the top right of screen
@@ -137,7 +134,13 @@ public class Game extends Canvas {
 	 */
 
 	public void notifyDeath() {
-		message = "You DEAD!  Try again?";
+		message = "You have shut down. You survived " + turnNumber + " turns. You killed " + EnemyEntity.getKilled();
+		if(EnemyEntity.getKilled() == 1) {
+			message = message.concat(" enemy.");
+		} else {
+			message = message.concat(" enemies.");
+		} // else
+		
 		waitingForKeyPress = true;
 	} // notifyDeath
 
@@ -145,15 +148,11 @@ public class Game extends Canvas {
 	 * Notification than an alien has been killed
 	 */
 	public void notifyEnemyKilled() {
-		EnemyEntity.numEnemiesKilled++;
+		EnemyEntity.setKilled(EnemyEntity.getKilled() + 1);
+		EnemyEntity.setActive(EnemyEntity.getActive() - 1);
 		
-		// checks each enemy to see if an enemy is alive
-		for (int i = 0; i < entities.size(); i++) {
-			Entity entity = (Entity) entities.get(i);
-			if(entity instanceof EnemyEntity) {
-				
-			}
-		} // for
+		// award energy on a kill
+		robot.setEnergy(robot.getEnergy() + 20);
 		
 	} // notifyAlienKilled
 
@@ -232,7 +231,12 @@ public class Game extends Canvas {
 				g.drawString(message, (800 - g.getFontMetrics().stringWidth(message)) / 2, 250);
 				g.drawString("Press any key", (800 - g.getFontMetrics().stringWidth("Press any key")) / 2, 300);
 			} // if
-
+			
+			// if you run out of power, you die
+			if(robot.getEnergy() < 1) {
+				notifyDeath();
+			}
+			
 			// clear graphics and flip buffer
 			g.dispose();
 			strategy.show();
@@ -243,21 +247,25 @@ public class Game extends Canvas {
 				if (keyPressed == 'W') {
 					if (robot.tryToMove(0)) {
 						takeTurn();
+						robot.setEnergy(robot.getEnergy() - 1);
 					} // if
 
 				} else if (keyPressed == 'D') {
 					if (robot.tryToMove(90)) {
 						takeTurn();
+						robot.setEnergy(robot.getEnergy() - 1);
 					} // if
 
 				} else if (keyPressed == 'S') {
 					if (robot.tryToMove(180)) {
 						takeTurn();
+						robot.setEnergy(robot.getEnergy() - 1);
 					} // if
 
 				} else if (keyPressed == 'A') {
 					if (robot.tryToMove(270)) {
 						takeTurn();
+						robot.setEnergy(robot.getEnergy() - 1);
 					} // if
 
 					
@@ -284,6 +292,7 @@ public class Game extends Canvas {
 
 					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
 					takeTurn();
+					robot.setEnergy(robot.getEnergy() - 3);
 				}
 			} else {
 				keyPressed = NONE;
@@ -306,19 +315,22 @@ public class Game extends Canvas {
 	private void startGame() {
 		// clear out any existing entities and initalize a new set
 		entities.clear();
-
-		initEntities();
-
-		EnemyEntity.numEnemiesKilled = 0;
+		
+		EnemyEntity.setKilled(0);
+		EnemyEntity.setActive(0);
 		turnNumber = 0;
 
 		// blank out any keyboard settings that might exist
 		keyPressed = NONE;
+		
+		initEntities();
 	} // startGame
 
 	private void takeTurn() {
 		keyPressed = NONE;
 		turnNumber++;
+		
+		System.out.println(robot.getEnergy());
 		
 		// set every entity goal position, make them start moving
 		for (int i = 0; i < entities.size(); i++) {

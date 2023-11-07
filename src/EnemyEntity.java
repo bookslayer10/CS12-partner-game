@@ -4,8 +4,8 @@
  */
 public class EnemyEntity extends Entity {
 	
-	protected static int numEnemiesKilled;
-	protected static int numEnemiesActive;
+	private static int killed;
+	private static int active;
 	
 	/*
 	 * construct a new alien input: game - the game in which the alien is being
@@ -14,7 +14,6 @@ public class EnemyEntity extends Entity {
 	public EnemyEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
 		direction = 180;
-		numEnemiesActive++;
 	} // constructor
 
 	/*
@@ -78,5 +77,31 @@ public class EnemyEntity extends Entity {
 	public void collidedWith(Entity other) {
 		// collisions with aliens are handled in ShotEntity and RobotEntity
 	} // collidedWith
-
+	
+	public static void setKilled(int killed) {
+		if(killed < 0) {
+			System.out.println("Negative number of killed enemies!");
+			EnemyEntity.killed = 0;
+		} else {
+			EnemyEntity.killed = killed;
+		}
+	}
+	
+	public static void setActive(int active) {
+		if(active < 0) {
+			System.out.println("Negative number of active enemies!");
+			EnemyEntity.active = 0;
+		} else {
+			EnemyEntity.active = active;
+		}
+	}
+	
+	public static int getKilled() {
+		return killed;
+	}
+	
+	public static int getActive() {
+		return active;
+	}
+	
 } // AlienEntity class

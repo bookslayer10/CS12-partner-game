@@ -20,6 +20,5 @@ public class TileEntity extends Entity {
 	
 	public void collidedWith(Entity other) {
 		// TODO Auto-generated method stub
-
 	}
 }

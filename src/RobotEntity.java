@@ -4,6 +4,8 @@
  */
 public class RobotEntity extends Entity {
 
+	private int energy = 100;
+	
 	/*
 	 * construct the player's robot input: game - the game in which the ship is being
 	 * created ref - a string with the name of the image associated to the sprite
@@ -68,6 +70,14 @@ public class RobotEntity extends Entity {
 		} // if
 		
 		return getIsMoving();
+	}
+	
+	public int getEnergy() {
+		return energy;
+	}
+	
+	public void setEnergy(int energy) {
+		this.energy = energy;
 	}
 
 } // RobotEntity class
