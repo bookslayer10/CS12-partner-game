@@ -311,7 +311,7 @@ public class Game extends Canvas {
 					directionOfShot = Math.round(directionOfShot) % 8;
 					
 					directionOfShot = directionOfShot * 360 / 8;
-					System.out.println(directionOfShot);
+
 					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
 					takeTurn();
 				}
