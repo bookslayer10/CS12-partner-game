@@ -347,7 +347,6 @@ public class Game extends Canvas {
 	private void takeTurn() {
 		keyPressed = NONE;
 
-		
 		// set every entity goal position, make them start moving
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);

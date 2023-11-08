@@ -26,10 +26,10 @@ public class EnemyEntity extends Entity {
 	} // move
 
 	public void calculateMove() {
+		
 		Point point = findPath(this, Game.robot);
 		dx = point.x - this.x;
 		dy = point.y - this.y;
-		
 		
 		super.calculateMove();
 	} // calculate
@@ -60,8 +60,8 @@ public class EnemyEntity extends Entity {
             this.previous = previous;
         } // Point
 
-        public boolean equals(Object o) {
-            Point point = (Point) o;
+        public boolean equals(Point o) {
+            Point point = o;
             return x == point.x && y == point.y;
         } // equals
 
