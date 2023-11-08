@@ -115,6 +115,12 @@ public class Game extends Canvas {
 			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
 		}
 		
+		for (int i = 0; i < 5; i++) {
+			Entity enemy = new MeleeEntity(this, "sprites/ranged/ranged_", TileEntity.TILE_SIZE * (i + 17), TileEntity.TILE_SIZE * 9);
+			entities.add(enemy);
+			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
+		}
+		
 		@SuppressWarnings("unused")
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
