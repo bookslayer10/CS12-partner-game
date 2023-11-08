@@ -33,6 +33,7 @@ public class Game extends Canvas {
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
 	private int turnNumber; // # of turns elapsed
+	
 
 	private String message = ""; // message to display while waiting
 	// for a key press
@@ -163,6 +164,28 @@ public class Game extends Canvas {
 //		ShotEntity shot = new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), 0, -TILE_SIZE);
 //		entities.add(shot);
 //	} // tryToFire
+	
+	public void spawnEnemies() {
+		
+		double spawnChance = 0.1  + turnNumber * 0.005;
+		double rangedChance = -0.1 + turnNumber * 0.02;
+		
+		TileEntity[] spawnTiles = new TileEntity[10];
+		for (TileEntity tile: spawnTiles) {
+			if (Math.random() > 1 - spawnChance) {
+				entities.add(new MeleeEntity(this, "sprites/melee/melee_", tile.getX(), tile.getY()));
+				EnemyEntity.setActive(EnemyEntity.getActive() + 1);
+//				once ranged enemies are added
+//				
+//				if (Math.random() > 1 - rangedChance) {
+//					entities.add(new RangedEntity(this, "sprites/melee/melee_", tile.getX(), tile.getY()));
+//				}
+//				else {					
+//					entities.add(new MeleeEntity(this, "sprites/melee/melee_", tile.getX(), tile.getY()));
+//				}
+			} // if
+		} // for
+	} // spawnEnemies
 
 	public void gameLoop() {
 		long lastLoopTime = System.currentTimeMillis();
@@ -331,6 +354,9 @@ public class Game extends Canvas {
 		turnNumber++;
 		
 		System.out.println(robot.getEnergy());
+		
+		// spawn enemies on the entrance tiles
+		spawnEnemies();
 		
 		// set every entity goal position, make them start moving
 		for (int i = 0; i < entities.size(); i++) {
