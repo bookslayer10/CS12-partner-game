@@ -233,8 +233,9 @@ public class Game extends Canvas {
 			} // if
 			
 			// if you run out of power, you die
-			if(robot.getEnergy() < 1) {
+			if(robot.getEnergy() < 1 && !waitingForKeyPress) {
 				notifyDeath();
+				robot.setEnergy(40);
 			}
 			
 			// clear graphics and flip buffer
