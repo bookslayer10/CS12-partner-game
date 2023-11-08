@@ -152,7 +152,7 @@ public class Game extends Canvas {
 		EnemyEntity.setActive(EnemyEntity.getActive() - 1);
 		
 		// award energy on a kill
-		robot.setEnergy(robot.getEnergy() + 20);
+		robot.setEnergy(robot.getEnergy() + 10);
 		
 	} // notifyAlienKilled
 

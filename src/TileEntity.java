@@ -1,3 +1,4 @@
+import java.awt.Rectangle;
 
 public class TileEntity extends Entity {
 	private boolean collision;
@@ -13,7 +14,15 @@ public class TileEntity extends Entity {
 				collision = true;
 		}
 	}
-
+	
+	public Rectangle getHitbox(int shiftx, int shifty) {
+		Rectangle rect = new Rectangle();
+		
+		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y +  sprite.getHeight() / 4 + shifty, sprite.getWidth() / 2, sprite.getHeight() / 2);
+		
+		return rect;
+	}
+	
 	public boolean getCollision() {
 		return collision;
 	}

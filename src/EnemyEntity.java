@@ -1,3 +1,5 @@
+import java.awt.Rectangle;
+
 /* AlienEntity.java
  * March 27, 2006
  * Represents one of the aliens
@@ -77,6 +79,14 @@ public class EnemyEntity extends Entity {
 	public void collidedWith(Entity other) {
 		// collisions with aliens are handled in ShotEntity and RobotEntity
 	} // collidedWith
+	
+	public Rectangle getHitbox(int shiftx, int shifty) {
+		Rectangle rect = new Rectangle();
+		
+		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y +  sprite.getHeight() / 4 + shifty, sprite.getWidth() / 2, sprite.getHeight() / 2);
+		
+		return rect;
+	}
 	
 	public static void setKilled(int killed) {
 		if(killed < 0) {
