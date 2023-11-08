@@ -28,10 +28,14 @@ public class Game extends Canvas {
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
-	private RobotEntity robot; // the robot
+	protected static RobotEntity robot; // the robot
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
+
+	public final int TILE_SIZE = 64; // hor. vel. of ship (pixels per turn)
+	
+	protected static int[][] grid;
 	private int turnNumber; // # of turns elapsed
 
 	private String message = ""; // message to display while waiting
@@ -96,21 +100,19 @@ public class Game extends Canvas {
 	 * entities in the game.
 	 */
 	private void initEntities() {
-		String[] grid = new String[16];
 		grid = FileInput.getFileContents("src/grid.txt");
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
-				TileEntity tile = new TileEntity(this, "sprites/background/map_" + grid[row].charAt(col) + ".png", col * TileEntity.TILE_SIZE,
-						row * TileEntity.TILE_SIZE);
+				TileEntity tile = new TileEntity(this, "sprites/background/map_"
+						+ grid[row][col] + ".png", col * TILE_SIZE, row * TILE_SIZE);
 				tiles.add(tile);
 			} // for
 		} // outer for
 		
-		EnemyEntity[] enemies = new EnemyEntity[5];
 		for (int i = 0; i < 5; i++) {
-			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * (i + 3), TileEntity.TILE_SIZE * 2);
-			entities.add(enemies[i]);
+			Entity enemy = new MeleeEntity(this, "sprites/melee/melee_", TILE_SIZE * (i + 17), TILE_SIZE * 8);
+			entities.add(enemy);
 			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
 		}
 		
@@ -209,7 +211,6 @@ public class Game extends Canvas {
 				} // outer for
 			}
 
-
 			// draw tiles
 			for (int i = 0; i < tiles.size(); i++) {
 				tiles.get(i).draw(g);
@@ -267,7 +268,6 @@ public class Game extends Canvas {
 						takeTurn();
 						robot.setEnergy(robot.getEnergy() - 1);
 					} // if
-
 					
 				} else if (keyPressed == MOUSE) {
 					
@@ -331,7 +331,7 @@ public class Game extends Canvas {
 		turnNumber++;
 		
 		System.out.println(robot.getEnergy());
-		
+
 		// set every entity goal position, make them start moving
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
