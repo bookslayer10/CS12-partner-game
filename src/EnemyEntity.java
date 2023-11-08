@@ -39,21 +39,6 @@ public class EnemyEntity extends Entity {
 		super.calculateMove();
 	} // calculate
 	
-	/*
-	 * doLogic Updates the game logic related to the aliens, ie. move it down the
-	 * screen and change direction
-	 */
-	public void doLogic() {
-		// swap horizontal direction and move down screen 10 pixels
-		dx *= -1;
-		y += 10;
-
-		// if bottom of screen reached, player dies
-		if (y > 570) {
-			game.notifyDeath();
-		} // if
-	} // doLogic
-	
     public static class Point {
         private int x;
         private int y;
