@@ -98,7 +98,7 @@ public class RobotEntity extends Entity {
 	}
 	
 	public void setEnergy(int energy) {
-		this.energy = Math.max(energy, 0);
+		energy = Math.max(energy, 0);
 		this.energy = Math.min(energy, MAX_ENERGY);
 	}
 
