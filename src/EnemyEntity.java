@@ -45,7 +45,15 @@ public class EnemyEntity extends Entity {
 		Point point = findPath(this, Game.robot);
 		dx = point.x * 64 - this.x;
 		dy = point.y * 64 - this.y;
-		System.out.println(dx + "    " + dy);
+		if (dx > 0) {
+		    direction = 90;
+		} else if (dx < 0) {
+		    direction = 270;
+		} else if (dy > 0) {
+		    direction = 180;
+		} else if (dy < 0) {
+			direction = 0;
+		}
 		
 		super.calculateMove();
 	} // calculate
@@ -132,7 +140,6 @@ public class EnemyEntity extends Entity {
         
         while (!point.equals(start)) {
             path.add(0, point);
-            System.out.println(point.x + " " + point.y);
             point = point.previous;
         } // while
         
