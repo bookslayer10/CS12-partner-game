@@ -229,11 +229,6 @@ public class Game extends Canvas {
 			// get graphics context for the accelerated surface and make it black
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
 			
-			// if you run out of power, you die
-			if(robot.getEnergy() < 1 && !waitingForKeyPress) {
-				notifyDeath();
-			}
-			
 			// set making move to false, only continue if an entity in the for loop sets it
 			// to true
 			makingMove = false;
@@ -278,7 +273,7 @@ public class Game extends Canvas {
 			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
 			g.setColor(BATTERY);
 			double modifier = 320.0 / robot.MAX_ENERGY;
-	        g.fillRect((int) (robot.getEnergy() * modifier + 96), TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
+	        g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
 			
 			// remove dead entities
 			entities.removeAll(removeEntities);
@@ -296,7 +291,13 @@ public class Game extends Canvas {
 			strategy.show();
 
 			if (!makingMove) {
-
+				
+				// if you run out of power, you die
+				// only checks this when a turn is finished
+				if(robot.getEnergy() < 1 && !waitingForKeyPress) {
+					notifyDeath();
+				}
+				
 				// robot movement controls
 				if (keyPressed == 'W') {
 					if (robot.tryToMove(0)) {
@@ -351,7 +352,7 @@ public class Game extends Canvas {
 
 					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
 					takeTurn();
-					robot.useEnergy(6);
+					robot.useEnergy(4);
 				}
 			} else {
 				keyPressed = NONE;
