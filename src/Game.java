@@ -180,7 +180,7 @@ public class Game extends Canvas {
 		double spawnChance = 0.001  + turnNumber * 0.0002;
 		
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
-		double rangedChance = Math.min(-0.1 + turnNumber * 0.0002, 0.5);
+		double rangedChance = Math.min(turnNumber * 0.0004, 0.5);
 		
 		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
 		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!

@@ -96,6 +96,9 @@ public abstract class Entity {
 		if (goalTileIndex < 0) {
 			goalTileIndex = 0;
 		}
+		if (goalTileIndex > game.tiles.size() - 1) {
+			goalTileIndex = game.tiles.size() - 1;
+		}
 		
 		goalTile = game.tiles.get(goalTileIndex);
 		
