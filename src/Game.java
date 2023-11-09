@@ -177,7 +177,7 @@ public class Game extends Canvas {
 	public void spawnEnemies() {
 		
 		// chance for an individual tile to spawn an enemy, increases over time
-		double spawnChance = 0.001  + turnNumber * 0.0002;
+		double spawnChance = 0.05  + turnNumber * 0.0005;
 		
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
 		double rangedChance = Math.min(turnNumber * 0.0004, 0.5);
@@ -228,6 +228,7 @@ public class Game extends Canvas {
 
 			// get graphics context for the accelerated surface and make it black
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
+			
 			
 			// set making move to false, only continue if an entity in the for loop sets it
 			// to true
@@ -281,9 +282,14 @@ public class Game extends Canvas {
 			
 			// if waiting for "any key press", draw message
 			if (waitingForKeyPress) {
+				
+				g.setColor(BATTERY);
+				g.fillRect(SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT / 2 - 50, 400, 100);
+				
 				g.setColor(Color.white);
-				g.drawString(message, (800 - g.getFontMetrics().stringWidth(message)) / 2, 250);
-				g.drawString("Press any key", (800 - g.getFontMetrics().stringWidth("Press any key")) / 2, 300);
+				g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 10);
+				g.drawString("Press any key to continue.",
+						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 10);
 			} // if
 			
 			// clear graphics and flip buffer
