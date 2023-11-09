@@ -42,10 +42,18 @@ public class EnemyEntity extends Entity {
 	} // move
 
 	public void calculateMove() {
-
 		Point point = findPath(this, Game.robot);
-		dx = point.x - this.x;
-		dy = point.y - this.y;
+		dx = point.x * 64 - this.x;
+		dy = point.y * 64 - this.y;
+		if (dx > 0) {
+		    direction = 90;
+		} else if (dx < 0) {
+		    direction = 270;
+		} else if (dy > 0) {
+		    direction = 180;
+		} else if (dy < 0) {
+			direction = 0;
+		}
 		
 		super.calculateMove();
 	} // calculate
@@ -96,8 +104,9 @@ public class EnemyEntity extends Entity {
     }
 
     private Point findPath(Entity enemy, Entity robot) {
-    	Point start = new Point(enemy.getX() / 29, enemy.getY() / 15, null);
-    	Point end = new Point(robot.getX() / 29, robot.getY() / 15, null);
+    	Point start = new Point(enemy.getX() / TileEntity.TILE_SIZE, enemy.getY() / TileEntity.TILE_SIZE, null);
+    	Point end = new Point(robot.getX() / TileEntity.TILE_SIZE, robot.getY() / TileEntity.TILE_SIZE, null);
+    	System.out.println("[" + start.x + "][" + start.y + "]");
 
         boolean finished = false;
         List<Point> used = new ArrayList<>();
@@ -113,26 +122,30 @@ public class EnemyEntity extends Entity {
                 } // for
             } // for
 
-            for (Point point : newOpen) {
-                used.add(point);
-                if (end.equals(point)) {
+            for (int i = 0; i < newOpen.size(); i++) {
+                used.add(newOpen.get(i));
+                if (end.equals(newOpen.get(i))) {
                     finished = true;
                     break;
                 } // for
             } // if
 
-            if (finished && newOpen.isEmpty())
-                return null;
+            if (!finished && newOpen.isEmpty()) {
+            	return null;
+            }
         } // while
 
         List<Point> path = new ArrayList<>();
         Point point = used.get(used.size() - 1);
-        while (point.previous != null) {
+        
+        while (!point.equals(start)) {
             path.add(0, point);
             point = point.previous;
         } // while
+        
         return path.get(0);
-    }
+        
+    } // findPath
 	
 	/*
 	 * collidedWith input: other - the entity with which the alien has collided
