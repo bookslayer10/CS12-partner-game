@@ -28,6 +28,8 @@ public class Game extends Canvas {
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
 	protected static RobotEntity robot; // the robot
+	private Sprite battery; // shows remaining energy
+	private Color BATTERY = new Color(51, 55, 56);
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
@@ -118,10 +120,12 @@ public class Game extends Canvas {
 			} // for
 		} // outer for
 		
+		battery = (SpriteStore.get()).getSprite("sprites/battery.png");
+		
 		@SuppressWarnings("unused")
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
-		// create the ship and put in the top right of screen
+		// create the robot and put in the middle of screen
 		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
 		entities.add(robot);
 	} // initEntities
@@ -138,7 +142,12 @@ public class Game extends Canvas {
 	 */
 
 	public void notifyDeath() {
-		message = "You have shut down. You survived " + turnNumber + " turns. You killed " + EnemyEntity.getKilled();
+		if (robot.getEnergy() < 1) {
+			message = "You have shut down. ";
+		} else {
+			message = "You were defeated. ";
+		}
+		message = message.concat("You survived " + turnNumber + " turns. You killed " + EnemyEntity.getKilled());
 		if(EnemyEntity.getKilled() == 1) {
 			message = message.concat(" enemy.");
 		} else {
@@ -173,6 +182,11 @@ public class Game extends Canvas {
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
 		double rangedChance = Math.min(-0.1 + turnNumber * 0.0002, 0.5);
 		
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		rangedChance = 0; 
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
 		
 		for (TileEntity tile: spawnTiles) {
 			if (Math.random() > 1 - spawnChance) {
@@ -218,7 +232,6 @@ public class Game extends Canvas {
 			// if you run out of power, you die
 			if(robot.getEnergy() < 1 && !waitingForKeyPress) {
 				notifyDeath();
-				robot.setEnergy(40);
 			}
 			
 			// set making move to false, only continue if an entity in the for loop sets it
@@ -260,6 +273,12 @@ public class Game extends Canvas {
 				Entity entity = (Entity) entities.get(i);
 				entity.draw(g);
 			} // for
+			
+			// Draw full battery then cover up missing energy
+			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
+			g.setColor(BATTERY);
+			double modifier = 320.0 / robot.MAX_ENERGY;
+	        g.fillRect((int) (robot.getEnergy() * modifier + 96), TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
 			
 			// remove dead entities
 			entities.removeAll(removeEntities);
@@ -358,6 +377,7 @@ public class Game extends Canvas {
 		keyPressed = NONE;
 		
 		initEntities();
+		robot.setEnergy(robot.MAX_ENERGY);
 	} // startGame
 
 	private void takeTurn() {
@@ -371,9 +391,9 @@ public class Game extends Canvas {
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
 			
-//			if (entity instanceof EnemyEntity) {
-//				entity.calculateMove();
-//			}
+			if (entity instanceof EnemyEntity) {
+				entity.calculateMove();
+			}
 			
 			if (entity instanceof ShotEntity) {
 				entity.calculateMove();

@@ -14,7 +14,7 @@ public class TileEntity extends Entity {
 				break;
 			case "20":
 				spawnable = true;
-				collision = false;
+				collision = true;
 				break;
 			default:
 				spawnable = false;
