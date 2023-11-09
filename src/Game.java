@@ -195,7 +195,7 @@ public class Game extends Canvas {
 		} // for
 		
 		//adds an enemy on a random tile if none are on screen
-		if(EnemyEntity.getActive() == 0) {
+		if(EnemyEntity.getActive() <= 1) {
 			int tile = (int) (Math.random() * 10);
 			entities.add(randomEnemy(spawnTiles[tile].getX(), spawnTiles[tile].getY(), rangedChance));
 		} // if

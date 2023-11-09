@@ -72,8 +72,8 @@ public class EnemyEntity extends Entity {
             this.previous = previous;
         } // Point
 
-        public boolean equals(Point o) {
-            Point point = o;
+        public boolean equals(Object o) {
+            Point point = (Point) o;
             return x == point.x && y == point.y;
         } // equals
 
@@ -120,17 +120,9 @@ public class EnemyEntity extends Entity {
             for (int i = 0; i < used.size(); ++i){
                 Point point = used.get(i);
                 for (Point neighbor : findNeighbours(point)) {
-                	boolean contained = false;
-                	for (Point p: used) {
-                		if (p.equals(neighbor)) contained = true;
-                	}
-                	for (Point p: newOpen) {
-                		if (p.equals(neighbor)) contained = true;
-                	}	
-                	
-                	if (!contained) {
-                      newOpen.add(neighbor);
-                  } // if
+                	if (!used.contains(neighbor) && !newOpen.contains(neighbor)) {
+                        newOpen.add(neighbor);
+                    } // if
                 } // for
             } // for
 
