@@ -71,6 +71,16 @@ public class RobotEntity extends Entity {
 		return getIsMoving();
 	}
 	
+	public void setDirection(int degree) {
+		if (degree > 180 ) {
+			direction = 270;
+		} else if (degree > 0 && degree < 180) {
+			direction = 90;
+		} else {
+			direction = degree;
+		}
+	}
+	
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		

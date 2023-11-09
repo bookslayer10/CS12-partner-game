@@ -298,65 +298,71 @@ public class Game extends Canvas {
 					notifyDeath();
 				}
 				
-				// robot movement controls
-				if (keyPressed == 'W') {
-					if (robot.tryToMove(0)) {
-						takeTurn();
-						robot.useEnergy(2);
-					} // if
-
-				} else if (keyPressed == 'D') {
-					if (robot.tryToMove(90)) {
-						takeTurn();
-						robot.useEnergy(2);
-					} // if
-
-				} else if (keyPressed == 'S') {
-					if (robot.tryToMove(180)) {
-						takeTurn();
-						robot.useEnergy(2);
-					} // if
-
-				} else if (keyPressed == 'A') {
-					if (robot.tryToMove(270)) {
-						takeTurn();
-						robot.useEnergy(2);
-					} // if
+				switch (keyPressed) {
 				
-				// robot waits one turn
-				} else if (keyPressed == 'Q') {
-					takeTurn();
-					robot.useEnergy(1);
+					case 'W':
+						if (robot.tryToMove(0)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+					case 'D':
+						if (robot.tryToMove(90)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+					case 'S':
+						if (robot.tryToMove(180)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+					case 'A':
+						if (robot.tryToMove(270)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+						
+					// robot waits one turn
+					case 'Q':
+						takeTurn();
+						robot.useEnergy(1);
+						break;
+						
+					// shoots on click
+					case MOUSE:
+						
+						mouseX -= robot.getX() + TileEntity.TILE_SIZE / 2;
+						mouseY -= robot.getY() + TileEntity.TILE_SIZE / 2;
+						
+						// 0 to 180 to -0
+						double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
+						
+						directionOfShot += 90;
+						
+						// turn it into full 360
+						if(directionOfShot < 0) {
+							directionOfShot = 360 + directionOfShot;
+						}
+						
+						directionOfShot = directionOfShot / 360 * 8;
+						
+						directionOfShot = Math.round(directionOfShot) % 8;
+						
+						directionOfShot = directionOfShot * 360 / 8;
+	
+						entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
+						takeTurn();
+						robot.useEnergy(4);
+						robot.setDirection((int) directionOfShot);
+						break;
+					default:
+						keyPressed = NONE;
+				} // switch
 				
-				// shoots on click
-				} else if (keyPressed == MOUSE) {
-					
-					mouseX -= robot.getX() + TileEntity.TILE_SIZE / 2;
-					mouseY -= robot.getY() + TileEntity.TILE_SIZE / 2;
-					
-					// 0 to 180 to -0
-					double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
-					
-					directionOfShot += 90;
-					
-					// turn it into full 360
-					if(directionOfShot < 0) {
-						directionOfShot = 360 + directionOfShot;
-					}
-					
-					directionOfShot = directionOfShot / 360 * 8;
-					
-					directionOfShot = Math.round(directionOfShot) % 8;
-					
-					directionOfShot = directionOfShot * 360 / 8;
-
-					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
-					takeTurn();
-					robot.useEnergy(4);
-				}
-			} else {
-				keyPressed = NONE;
-			}
+			} // if (!makingMove
 
 			// pause
 			try {
