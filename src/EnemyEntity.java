@@ -43,8 +43,11 @@ public class EnemyEntity extends Entity {
 
 	public void calculateMove() {
 		Point point = findPath(this, Game.robot);
-		dx = point.x * 64 - this.x;
-		dy = point.y * 64 - this.y;
+		
+		if (point != null) {
+			dx = point.x * 64 - this.x;
+			dy = point.y * 64 - this.y;
+		}
 		if (dx > 0) {
 		    direction = 90;
 		} else if (dx < 0) {
@@ -112,13 +115,22 @@ public class EnemyEntity extends Entity {
         List<Point> used = new ArrayList<>();
         used.add(start);
         while (!finished) {
+        	System.out.println("Used: " + used.size());
             List<Point> newOpen = new ArrayList<>();
             for (int i = 0; i < used.size(); ++i){
                 Point point = used.get(i);
                 for (Point neighbor : findNeighbours(point)) {
-                    if (!used.contains(neighbor) && !newOpen.contains(neighbor)) {
-                        newOpen.add(neighbor);
-                    } // if
+                	boolean contained = false;
+                	for (Point p: used) {
+                		if (p.equals(neighbor)) contained = true;
+                	}
+                	for (Point p: newOpen) {
+                		if (p.equals(neighbor)) contained = true;
+                	}	
+                	
+                	if (!contained) {
+                      newOpen.add(neighbor);
+                  } // if
                 } // for
             } // for
 
