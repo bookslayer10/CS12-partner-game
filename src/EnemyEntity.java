@@ -11,6 +11,7 @@ public class EnemyEntity extends Entity {
 	
 	private static int killed;
 	private static int active;
+	private int health = 2;
 
 	/*
 	 * construct a new alien input: game - the game in which the alien is being
@@ -164,6 +165,12 @@ public class EnemyEntity extends Entity {
 	 * purpose: notification that the alien has collided with something
 	 */
 	public void collidedWith(Entity other) {
+		health -= 1;
+		
+		if(health < 1) {
+			game.removeEntity(this);
+			game.notifyEnemyKilled();
+		}
 		// collisions with aliens are handled in ShotEntity and RobotEntity
 	} // collidedWith
 	

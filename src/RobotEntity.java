@@ -6,8 +6,9 @@ import java.awt.Rectangle;
  */
 public class RobotEntity extends Entity {
 
-	protected final int MAX_ENERGY = 40;
+	protected final int MAX_ENERGY = 100;
 	private int energy;
+	private static final int MOVE_SPEED = 1 * TileEntity.TILE_SIZE;
 	
 	/*
 	 * construct the player's robot input: game - the game in which the ship is being
@@ -45,18 +46,18 @@ public class RobotEntity extends Entity {
 		switch (direction) {
 		case 0: // up
 			dx = 0;
-			dy = -64;
+			dy = -MOVE_SPEED;
 			break;
 		case 90: // right
-			dx = 64;
+			dx = MOVE_SPEED;
 			dy = 0;
 			break;
 		case 180: // down
 			dx = 0;
-			dy = 64;
+			dy = MOVE_SPEED;
 			break;
 		case 270: // left
-			dx = -64;
+			dx = -MOVE_SPEED;
 			dy = 0;
 			break;
 		} // switch

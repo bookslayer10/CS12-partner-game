@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 public class ShotEntity extends Entity {
 	
 	private boolean used = false; // true if shot hits something
-	private static int SHOTSPEED = 4;
-	private static int DIAGONAL_SHOTSPEED = 3;
+	private static double SHOTSPEED = 2 * TileEntity.TILE_SIZE;
+	private static double DIAGONAL_SHOTSPEED = 1.4 * TileEntity.TILE_SIZE;
 
 	/*
 	 * construct the shot input: game - the game in which the shot is being created
@@ -58,35 +58,35 @@ public class ShotEntity extends Entity {
 		switch (direction) {
 		case 0:
 			dx = 0;
-			dy = -SHOTSPEED * TileEntity.TILE_SIZE;
+			dy = -SHOTSPEED;
 			break;
 		case 45:
-			dx = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
-			dy = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dx = DIAGONAL_SHOTSPEED;
+			dy = -DIAGONAL_SHOTSPEED;
 			break;
 		case 90:
-			dx = SHOTSPEED * TileEntity.TILE_SIZE;
+			dx = SHOTSPEED;
 			dy = 0;
 			break;
 		case 135:
-			dx = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
-			dy = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dx = DIAGONAL_SHOTSPEED;
+			dy = DIAGONAL_SHOTSPEED;
 			break;
 		case 180:
 			dx = 0;
-			dy = SHOTSPEED * TileEntity.TILE_SIZE;
+			dy = SHOTSPEED;
 			break;
 		case 225:
-			dx = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
-			dy = DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dx = -DIAGONAL_SHOTSPEED;
+			dy = DIAGONAL_SHOTSPEED;
 			break;
 		case 270:
-			dx = -SHOTSPEED * TileEntity.TILE_SIZE;
+			dx = -SHOTSPEED;
 			dy = 0;
 			break;
 		case 315:
-			dx = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
-			dy = -DIAGONAL_SHOTSPEED * TileEntity.TILE_SIZE;
+			dx = -DIAGONAL_SHOTSPEED;
+			dy = -DIAGONAL_SHOTSPEED;
 			break;
 		}
 		
@@ -107,11 +107,7 @@ public class ShotEntity extends Entity {
 		if (other instanceof EnemyEntity) {
 			// remove affect entities from the Entity list
 			game.removeEntity(this);
-			game.removeEntity(other);
-
-			// notify the game that the alien is dead
 			
-			game.notifyEnemyKilled();
 			used = true;
 		} // if
 
@@ -120,7 +116,10 @@ public class ShotEntity extends Entity {
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
-		rect.setBounds((int) (x + sprite.getWidth() / 4 + shiftx), (int) (y +  sprite.getHeight() / 4 + shifty), (int) (sprite.getWidth() / 2), (int) (sprite.getHeight() / 2) );
+		rect.setBounds((int) (x + sprite.getWidth() / 4 + shiftx),
+				(int) (y +  sprite.getHeight() / 4 + shifty),
+				(int) (sprite.getWidth() / 2),
+				(int) (sprite.getHeight() / 2) );
 		
 		return rect;
 	}
