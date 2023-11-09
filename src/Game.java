@@ -118,18 +118,6 @@ public class Game extends Canvas {
 			} // for
 		} // outer for
 		
-		for (int i = 0; i < 5; i++) {
-			Entity enemy = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * (i + 17), TileEntity.TILE_SIZE * 8);
-			entities.add(enemy);
-			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
-		}
-		
-		for (int i = 0; i < 5; i++) {
-			Entity enemy = new MeleeEntity(this, "sprites/ranged/ranged_", TileEntity.TILE_SIZE * (i + 17), TileEntity.TILE_SIZE * 9);
-			entities.add(enemy);
-			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
-		}
-		
 		@SuppressWarnings("unused")
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
@@ -172,10 +160,19 @@ public class Game extends Canvas {
 		
 	} // notifyAlienKilled
 	
+	/* If there are no enemies in play, will spawn an enemy on a random valid 
+	 * tile. There is a chance to spawn an enemy of variable type on each tile 
+	 * in spawnTiles[]. The chance for additional enemies to spawn and the 
+	 * chance for a ranged enemy to spawn both increase as the game goes. 
+	 */
 	public void spawnEnemies() {
 		
-		double spawnChance = 0.01  + turnNumber * 0.001;
-		double rangedChance = -0.1 + turnNumber * 0.02;
+		// chance for an individual tile to spawn an enemy, increases over time
+		double spawnChance = 0.001  + turnNumber * 0.0002;
+		
+		// chance for ranged enemies to spawn, increases over time, capped at 50%
+		double rangedChance = Math.min(-0.1 + turnNumber * 0.0002, 0.5);
+		
 		
 		for (TileEntity tile: spawnTiles) {
 			if (Math.random() > 1 - spawnChance) {
@@ -191,11 +188,14 @@ public class Game extends Canvas {
 		
 	} // spawnEnemies
 	
-	// adds a enemy of either type to a given coordinate
+	/* takes x, y as a coordinate pair and a rangedChance as the double 
+	 * representative of the chance for a ranged enemy to spawn and creates 
+	 * an enemy of random type on the given location
+	 */
 	public EnemyEntity randomEnemy(int x, int y, double rangedChance) {
 		EnemyEntity.setActive(EnemyEntity.getActive() + 1);
-		if (Math.random() > 1 - (rangedChance * 0.5)) {
-			return new RangedEntity(this, "sprites/melee/melee_", x, y);
+		if (Math.random() > 1 - rangedChance) {
+			return new RangedEntity(this, "sprites/ranged/ranged_", x, y);
 		} // is
 		else {					
 			return new MeleeEntity(this, "sprites/melee/melee_", x, y);

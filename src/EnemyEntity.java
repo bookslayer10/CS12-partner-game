@@ -18,7 +18,18 @@ public class EnemyEntity extends Entity {
 	 */
 	public EnemyEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
-		direction = 180;
+		
+		// Sets direction based on which edge of the screen the enemy is at
+		if (x == g.SCREEN_WIDTH - TileEntity.TILE_SIZE) {
+			direction = 270;
+		} else if (x == 0) {
+			direction = 90;
+		} else if (y == g.SCREEN_HEIGHT - TileEntity.TILE_SIZE) {
+			direction = 0;
+		} else {
+			direction = 180;
+		} // else
+		
 	} // constructor
 
 	/*
