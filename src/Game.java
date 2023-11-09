@@ -297,31 +297,37 @@ public class Game extends Canvas {
 
 			if (!makingMove) {
 
-				// respond to user moving ship
+				// robot movement controls
 				if (keyPressed == 'W') {
 					if (robot.tryToMove(0)) {
 						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
+						robot.useEnergy(2);
 					} // if
 
 				} else if (keyPressed == 'D') {
 					if (robot.tryToMove(90)) {
 						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
+						robot.useEnergy(2);
 					} // if
 
 				} else if (keyPressed == 'S') {
 					if (robot.tryToMove(180)) {
 						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
+						robot.useEnergy(2);
 					} // if
 
 				} else if (keyPressed == 'A') {
 					if (robot.tryToMove(270)) {
 						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
+						robot.useEnergy(2);
 					} // if
-					
+				
+				// robot waits one turn
+				} else if (keyPressed == 'Q') {
+					takeTurn();
+					robot.useEnergy(1);
+				
+				// shoots on click
 				} else if (keyPressed == MOUSE) {
 					
 					mouseX -= robot.getX() + TileEntity.TILE_SIZE / 2;
@@ -345,7 +351,7 @@ public class Game extends Canvas {
 
 					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
 					takeTurn();
-					robot.setEnergy(robot.getEnergy() - 3);
+					robot.useEnergy(6);
 				}
 			} else {
 				keyPressed = NONE;

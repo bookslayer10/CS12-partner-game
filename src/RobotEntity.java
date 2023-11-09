@@ -6,7 +6,7 @@ import java.awt.Rectangle;
  */
 public class RobotEntity extends Entity {
 
-	protected final int MAX_ENERGY = 30;
+	protected final int MAX_ENERGY = 40;
 	private int energy;
 	
 	/*
@@ -81,6 +81,10 @@ public class RobotEntity extends Entity {
 	
 	public int getEnergy() {
 		return energy;
+	}
+	
+	public void useEnergy(int usedEnergy) {
+		setEnergy(getEnergy() - usedEnergy);
 	}
 	
 	public void setEnergy(int energy) {
