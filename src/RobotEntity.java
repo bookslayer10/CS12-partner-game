@@ -1,10 +1,12 @@
+import java.awt.Rectangle;
+
 /* RobotEntity.java
  * March 27, 2006
  * Represents player's ship
  */
 public class RobotEntity extends Entity {
 
-	private int energy = 100;
+	private int energy = 60;
 	
 	/*
 	 * construct the player's robot input: game - the game in which the ship is being
@@ -20,11 +22,6 @@ public class RobotEntity extends Entity {
 	 * move input: delta - time elapsed since last move (ms) purpose: move ship
 	 */
 	public void move(long delta) {
-		/*
-		int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
-
-		sprite = frames[2][frameTime];
-		*/
 		super.move(delta); // calls the move method in Entity
 	} // move
 
@@ -72,12 +69,20 @@ public class RobotEntity extends Entity {
 		return getIsMoving();
 	}
 	
+	public Rectangle getHitbox(int shiftx, int shifty) {
+		Rectangle rect = new Rectangle();
+		
+		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y +  sprite.getHeight() / 4 + shifty, sprite.getWidth() / 2, sprite.getHeight() / 2);
+		
+		return rect;
+	}
+	
 	public int getEnergy() {
 		return energy;
 	}
 	
 	public void setEnergy(int energy) {
-		this.energy = energy;
+		this.energy = Math.min(energy, 60);
 	}
 
 } // RobotEntity class

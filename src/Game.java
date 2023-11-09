@@ -11,8 +11,6 @@ import java.util.ArrayList;
 
 public class Game extends Canvas {
 
-	private static char NONE = '0';
-	private static char MOUSE = '9';
 
 	private BufferStrategy strategy; // take advantage of accelerated graphics
 	private boolean waitingForKeyPress = true; // true if game held up until
@@ -28,10 +26,15 @@ public class Game extends Canvas {
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
-	private RobotEntity robot; // the robot
+	protected static RobotEntity robot; // the robot
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
+
+	private final char NONE = '0';
+	private final char MOUSE = '9';
+	
+	protected static int[][] grid;
 	private int turnNumber; // # of turns elapsed
 	
 
@@ -97,21 +100,25 @@ public class Game extends Canvas {
 	 * entities in the game.
 	 */
 	private void initEntities() {
-		String[] grid = new String[16];
 		grid = FileInput.getFileContents("src/grid.txt");
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
-				TileEntity tile = new TileEntity(this, "sprites/background/map_" + grid[row].charAt(col) + ".png", col * TileEntity.TILE_SIZE,
-						row * TileEntity.TILE_SIZE);
+				TileEntity tile = new TileEntity(this, "sprites/background/map_"
+						+ grid[row][col] + ".png", col * TileEntity.TILE_SIZE, row * TileEntity.TILE_SIZE);
 				tiles.add(tile);
 			} // for
 		} // outer for
 		
-		EnemyEntity[] enemies = new EnemyEntity[5];
 		for (int i = 0; i < 5; i++) {
-			enemies[i] = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * (i + 3), TileEntity.TILE_SIZE * 2);
-			entities.add(enemies[i]);
+			Entity enemy = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * (i + 17), TileEntity.TILE_SIZE * 8);
+			entities.add(enemy);
+			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
+		}
+		
+		for (int i = 0; i < 5; i++) {
+			Entity enemy = new MeleeEntity(this, "sprites/ranged/ranged_", TileEntity.TILE_SIZE * (i + 17), TileEntity.TILE_SIZE * 9);
+			entities.add(enemy);
 			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
 		}
 		
@@ -119,7 +126,7 @@ public class Game extends Canvas {
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
 		// create the ship and put in the top right of screen
-		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 10, TileEntity.TILE_SIZE * 10);
+		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
 		entities.add(robot);
 	} // initEntities
 	
@@ -153,7 +160,7 @@ public class Game extends Canvas {
 		EnemyEntity.setActive(EnemyEntity.getActive() - 1);
 		
 		// award energy on a kill
-		robot.setEnergy(robot.getEnergy() + 20);
+		robot.setEnergy(robot.getEnergy() + 10);
 		
 	} // notifyAlienKilled
 
@@ -199,9 +206,12 @@ public class Game extends Canvas {
 
 			// get graphics context for the accelerated surface and make it black
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
-			g.setColor(Color.black);
-			g.fillRect(0, 0, 800, 600);
-
+			
+			// if you run out of power, you die
+			if(robot.getEnergy() < 1 && !waitingForKeyPress) {
+				notifyDeath();
+				robot.setEnergy(40);
+			}
 			
 			// set making move to false, only continue if an entity in the for loop sets it
 			// to true
@@ -232,7 +242,6 @@ public class Game extends Canvas {
 				} // outer for
 			}
 
-
 			// draw tiles
 			for (int i = 0; i < tiles.size(); i++) {
 				tiles.get(i).draw(g);
@@ -254,11 +263,6 @@ public class Game extends Canvas {
 				g.drawString(message, (800 - g.getFontMetrics().stringWidth(message)) / 2, 250);
 				g.drawString("Press any key", (800 - g.getFontMetrics().stringWidth("Press any key")) / 2, 300);
 			} // if
-			
-			// if you run out of power, you die
-			if(robot.getEnergy() < 1) {
-				notifyDeath();
-			}
 			
 			// clear graphics and flip buffer
 			g.dispose();
@@ -290,7 +294,6 @@ public class Game extends Canvas {
 						takeTurn();
 						robot.setEnergy(robot.getEnergy() - 1);
 					} // if
-
 					
 				} else if (keyPressed == MOUSE) {
 					
@@ -353,7 +356,13 @@ public class Game extends Canvas {
 		keyPressed = NONE;
 		turnNumber++;
 		
-		System.out.println(robot.getEnergy());
+		if(turnNumber % 5 == 4) {
+			spawnEnemy();
+		}
+		
+		if(EnemyEntity.getActive() == 0) {
+			spawnEnemy();
+		}
 		
 		// spawn enemies on the entrance tiles
 		spawnEnemies();
@@ -423,8 +432,6 @@ public class Game extends Canvas {
 	private class MouseInputHandler implements MouseListener {
 
 		public void mousePressed(MouseEvent e) {
-			//System.out.println("Mouse pressed; position: " + e.getX() + " " + e.getY());
-			
 			// if waiting for keypress to start game, do nothing
 			if (waitingForKeyPress) {
 				return;

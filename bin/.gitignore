@@ -1,3 +1,5 @@
+/grid.txt
+/sprites/
 /EnemyEntity.class
 /Entity.class
 /FileInput.class
@@ -11,5 +13,5 @@
 /Sprite.class
 /SpriteStore.class
 /TileEntity.class
-/sprites/
-/snippet/
+/EnemyEntity$Point.class
+/RangedEntity.class
