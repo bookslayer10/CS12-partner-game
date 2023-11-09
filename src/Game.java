@@ -22,6 +22,7 @@ public class Game extends Canvas {
 
 	private boolean gameRunning = true;
 	protected ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all tiles
+	private TileEntity[] spawnTiles = new TileEntity[10]; // tiles enemies can appear on
 	private ArrayList<Entity> entities = new ArrayList<Entity>(); // list of entities
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
@@ -101,12 +102,19 @@ public class Game extends Canvas {
 	 */
 	private void initEntities() {
 		grid = FileInput.getFileContents("src/grid.txt");
+		int st = 0; // index of next spawnable tile
+		
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
 				TileEntity tile = new TileEntity(this, "sprites/background/map_"
 						+ grid[row][col] + ".png", col * TileEntity.TILE_SIZE, row * TileEntity.TILE_SIZE);
 				tiles.add(tile);
+				
+				if (tile.isSpawnable()) {
+					spawnTiles[st++] = tile;
+				} // if
+
 			} // for
 		} // outer for
 		
@@ -163,36 +171,36 @@ public class Game extends Canvas {
 		robot.setEnergy(robot.getEnergy() + 10);
 		
 	} // notifyAlienKilled
-
-//	/* Attempt to fire. */
-//	public void tryToFire() {
-//
-//		//  add a shot (MOVING STRAIGHT UP AT 64 SPD)
-//		ShotEntity shot = new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), 0, -TILE_SIZE);
-//		entities.add(shot);
-//	} // tryToFire
 	
 	public void spawnEnemies() {
 		
-		double spawnChance = 0.1  + turnNumber * 0.005;
+		double spawnChance = 0.01  + turnNumber * 0.001;
 		double rangedChance = -0.1 + turnNumber * 0.02;
 		
-		TileEntity[] spawnTiles = new TileEntity[10];
 		for (TileEntity tile: spawnTiles) {
 			if (Math.random() > 1 - spawnChance) {
-				entities.add(new MeleeEntity(this, "sprites/melee/melee_", tile.getX(), tile.getY()));
-				EnemyEntity.setActive(EnemyEntity.getActive() + 1);
-//				once ranged enemies are added
-//				
-//				if (Math.random() > 1 - rangedChance) {
-//					entities.add(new RangedEntity(this, "sprites/melee/melee_", tile.getX(), tile.getY()));
-//				}
-//				else {					
-//					entities.add(new MeleeEntity(this, "sprites/melee/melee_", tile.getX(), tile.getY()));
-//				}
+				entities.add(randomEnemy(tile.getX(), tile.getY(), rangedChance));
 			} // if
 		} // for
+		
+		//adds an enemy on a random tile if none are on screen
+		if(EnemyEntity.getActive() == 0) {
+			int tile = (int) (Math.random() * 10);
+			entities.add(randomEnemy(spawnTiles[tile].getX(), spawnTiles[tile].getY(), rangedChance));
+		} // if
+		
 	} // spawnEnemies
+	
+	// adds a enemy of either type to a given coordinate
+	public EnemyEntity randomEnemy(int x, int y, double rangedChance) {
+		EnemyEntity.setActive(EnemyEntity.getActive() + 1);
+		if (Math.random() > 1 - (rangedChance * 0.5)) {
+			return new RangedEntity(this, "sprites/melee/melee_", x, y);
+		} // is
+		else {					
+			return new MeleeEntity(this, "sprites/melee/melee_", x, y);
+		} // else
+	} // EnemyEntity
 
 	public void gameLoop() {
 		long lastLoopTime = System.currentTimeMillis();
@@ -356,14 +364,6 @@ public class Game extends Canvas {
 		keyPressed = NONE;
 		turnNumber++;
 		
-		if(turnNumber % 5 == 4) {
-			spawnEnemy();
-		}
-		
-		if(EnemyEntity.getActive() == 0) {
-			spawnEnemy();
-		}
-		
 		// spawn enemies on the entrance tiles
 		spawnEnemies();
 		
@@ -371,9 +371,9 @@ public class Game extends Canvas {
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
 			
-			if (entity instanceof EnemyEntity) {
-				entity.calculateMove();
-			}
+//			if (entity instanceof EnemyEntity) {
+//				entity.calculateMove();
+//			}
 			
 			if (entity instanceof ShotEntity) {
 				entity.calculateMove();

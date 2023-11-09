@@ -12,7 +12,7 @@ public class FileInput {
 			String[] lines = Files.lines(Paths.get(fileName)).collect(Collectors.toList()).toArray(new String[0]);
 			// copy the lines from the list into a 1D array
 			for (int i = 0; i < lines.length; i++) {
-				String[] line = lines[i].split(" ");
+				String[] line = lines[i].split("\s+");
 				for (int j = 0; j < line.length; j++) {
 					content[i][j] = Integer.parseInt(line[j]);
 				} // for
