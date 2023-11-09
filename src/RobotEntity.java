@@ -6,7 +6,8 @@ import java.awt.Rectangle;
  */
 public class RobotEntity extends Entity {
 
-	private int energy = 60;
+	protected final int MAX_ENERGY = 40;
+	private int energy;
 	
 	/*
 	 * construct the player's robot input: game - the game in which the ship is being
@@ -16,6 +17,7 @@ public class RobotEntity extends Entity {
 	public RobotEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
 		direction = 180;
+		energy = MAX_ENERGY;
 	} // constructor
 
 	/*
@@ -69,6 +71,16 @@ public class RobotEntity extends Entity {
 		return getIsMoving();
 	}
 	
+	public void setDirection(int degree) {
+		if (degree > 180 ) {
+			direction = 270;
+		} else if (degree > 0 && degree < 180) {
+			direction = 90;
+		} else {
+			direction = degree;
+		}
+	}
+	
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
@@ -81,8 +93,13 @@ public class RobotEntity extends Entity {
 		return energy;
 	}
 	
+	public void useEnergy(int usedEnergy) {
+		setEnergy(getEnergy() - usedEnergy);
+	}
+	
 	public void setEnergy(int energy) {
-		this.energy = Math.min(energy, 60);
+		energy = Math.max(energy, 0);
+		this.energy = Math.min(energy, MAX_ENERGY);
 	}
 
 } // RobotEntity class

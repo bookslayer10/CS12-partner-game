@@ -22,11 +22,14 @@ public class Game extends Canvas {
 
 	private boolean gameRunning = true;
 	protected ArrayList<TileEntity> tiles = new ArrayList<TileEntity>(); // all tiles
+	private TileEntity[] spawnTiles = new TileEntity[10]; // tiles enemies can appear on
 	private ArrayList<Entity> entities = new ArrayList<Entity>(); // list of entities
 	// in game
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
 	protected static RobotEntity robot; // the robot
+	private Sprite battery; // shows remaining energy
+	private Color BATTERY = new Color(51, 55, 56);
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
@@ -36,6 +39,7 @@ public class Game extends Canvas {
 	
 	protected static int[][] grid;
 	private int turnNumber; // # of turns elapsed
+	
 
 	private String message = ""; // message to display while waiting
 	// for a key press
@@ -100,25 +104,28 @@ public class Game extends Canvas {
 	 */
 	private void initEntities() {
 		grid = FileInput.getFileContents("src/grid.txt");
+		int st = 0; // index of next spawnable tile
+		
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
 			for (int col = 0; col < 29; col++) {
 				TileEntity tile = new TileEntity(this, "sprites/background/map_"
 						+ grid[row][col] + ".png", col * TileEntity.TILE_SIZE, row * TileEntity.TILE_SIZE);
 				tiles.add(tile);
+				
+				if (tile.isSpawnable()) {
+					spawnTiles[st++] = tile;
+				} // if
+
 			} // for
 		} // outer for
 		
-		for (int i = 0; i < 5; i++) {
-			Entity enemy = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * (i + 17), TileEntity.TILE_SIZE * 8);
-			entities.add(enemy);
-			EnemyEntity.setActive(EnemyEntity.getActive() + 1);
-		}
+		battery = (SpriteStore.get()).getSprite("sprites/battery.png");
 		
 		@SuppressWarnings("unused")
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
 		
-		// create the ship and put in the top right of screen
+		// create the robot and put in the middle of screen
 		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
 		entities.add(robot);
 	} // initEntities
@@ -135,7 +142,12 @@ public class Game extends Canvas {
 	 */
 
 	public void notifyDeath() {
-		message = "You have shut down. You survived " + turnNumber + " turns. You killed " + EnemyEntity.getKilled();
+		if (robot.getEnergy() < 1) {
+			message = "You have shut down. ";
+		} else {
+			message = "You were defeated. ";
+		}
+		message = message.concat("You survived " + turnNumber + " turns. You killed " + EnemyEntity.getKilled());
 		if(EnemyEntity.getKilled() == 1) {
 			message = message.concat(" enemy.");
 		} else {
@@ -156,12 +168,53 @@ public class Game extends Canvas {
 		robot.setEnergy(robot.getEnergy() + 10);
 		
 	} // notifyAlienKilled
-
-	public void spawnEnemy() {
-		Entity enemy = new MeleeEntity(this, "sprites/melee/melee_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 0);
-		entities.add(enemy);
+	
+	/* If there are no enemies in play, will spawn an enemy on a random valid 
+	 * tile. There is a chance to spawn an enemy of variable type on each tile 
+	 * in spawnTiles[]. The chance for additional enemies to spawn and the 
+	 * chance for a ranged enemy to spawn both increase as the game goes. 
+	 */
+	public void spawnEnemies() {
+		
+		// chance for an individual tile to spawn an enemy, increases over time
+		double spawnChance = 0.001  + turnNumber * 0.0002;
+		
+		// chance for ranged enemies to spawn, increases over time, capped at 50%
+		double rangedChance = Math.min(-0.1 + turnNumber * 0.0002, 0.5);
+		
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		rangedChance = 0; 
+		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		
+		for (TileEntity tile: spawnTiles) {
+			if (Math.random() > 1 - spawnChance) {
+				entities.add(randomEnemy(tile.getX(), tile.getY(), rangedChance));
+			} // if
+		} // for
+		
+		//adds an enemy on a random tile if none are on screen
+		if(EnemyEntity.getActive() == 0) {
+			int tile = (int) (Math.random() * 10);
+			entities.add(randomEnemy(spawnTiles[tile].getX(), spawnTiles[tile].getY(), rangedChance));
+		} // if
+		
+	} // spawnEnemies
+	
+	/* takes x, y as a coordinate pair and a rangedChance as the double 
+	 * representative of the chance for a ranged enemy to spawn and creates 
+	 * an enemy of random type on the given location
+	 */
+	public EnemyEntity randomEnemy(int x, int y, double rangedChance) {
 		EnemyEntity.setActive(EnemyEntity.getActive() + 1);
-	}
+		if (Math.random() > 1 - rangedChance) {
+			return new RangedEntity(this, "sprites/ranged/ranged_", x, y);
+		} // is
+		else {					
+			return new MeleeEntity(this, "sprites/melee/melee_", x, y);
+		} // else
+	} // EnemyEntity
 
 	public void gameLoop() {
 		long lastLoopTime = System.currentTimeMillis();
@@ -175,12 +228,6 @@ public class Game extends Canvas {
 
 			// get graphics context for the accelerated surface and make it black
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
-			
-			// if you run out of power, you die
-			if(robot.getEnergy() < 1 && !waitingForKeyPress) {
-				notifyDeath();
-				robot.setEnergy(40);
-			}
 			
 			// set making move to false, only continue if an entity in the for loop sets it
 			// to true
@@ -222,6 +269,12 @@ public class Game extends Canvas {
 				entity.draw(g);
 			} // for
 			
+			// Draw full battery then cover up missing energy
+			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
+			g.setColor(BATTERY);
+			double modifier = 320.0 / robot.MAX_ENERGY;
+	        g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
+			
 			// remove dead entities
 			entities.removeAll(removeEntities);
 			removeEntities.clear();
@@ -238,60 +291,78 @@ public class Game extends Canvas {
 			strategy.show();
 
 			if (!makingMove) {
-
-				// respond to user moving ship
-				if (keyPressed == 'W') {
-					if (robot.tryToMove(0)) {
-						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
-					} // if
-
-				} else if (keyPressed == 'D') {
-					if (robot.tryToMove(90)) {
-						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
-					} // if
-
-				} else if (keyPressed == 'S') {
-					if (robot.tryToMove(180)) {
-						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
-					} // if
-
-				} else if (keyPressed == 'A') {
-					if (robot.tryToMove(270)) {
-						takeTurn();
-						robot.setEnergy(robot.getEnergy() - 1);
-					} // if
-					
-				} else if (keyPressed == MOUSE) {
-					
-					mouseX -= robot.getX() + TileEntity.TILE_SIZE / 2;
-					mouseY -= robot.getY() + TileEntity.TILE_SIZE / 2;
-					
-					// 0 to 180 to -0
-					double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
-					
-					directionOfShot += 90;
-					
-					// turn it into full 360
-					if(directionOfShot < 0) {
-						directionOfShot = 360 + directionOfShot;
-					}
-					
-					directionOfShot = directionOfShot / 360 * 8;
-					
-					directionOfShot = Math.round(directionOfShot) % 8;
-					
-					directionOfShot = directionOfShot * 360 / 8;
-
-					entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
-					takeTurn();
-					robot.setEnergy(robot.getEnergy() - 3);
+				
+				// if you run out of power, you die
+				// only checks this when a turn is finished
+				if(robot.getEnergy() < 1 && !waitingForKeyPress) {
+					notifyDeath();
 				}
-			} else {
-				keyPressed = NONE;
-			}
+				
+				switch (keyPressed) {
+				
+					case 'W':
+						if (robot.tryToMove(0)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+					case 'D':
+						if (robot.tryToMove(90)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+					case 'S':
+						if (robot.tryToMove(180)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+					case 'A':
+						if (robot.tryToMove(270)) {
+							takeTurn();
+							robot.useEnergy(2);
+						} // if
+						break;
+						
+					// robot waits one turn
+					case 'Q':
+						takeTurn();
+						robot.useEnergy(1);
+						break;
+						
+					// shoots on click
+					case MOUSE:
+						
+						mouseX -= robot.getX() + TileEntity.TILE_SIZE / 2;
+						mouseY -= robot.getY() + TileEntity.TILE_SIZE / 2;
+						
+						// 0 to 180 to -0
+						double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
+						
+						directionOfShot += 90;
+						
+						// turn it into full 360
+						if(directionOfShot < 0) {
+							directionOfShot = 360 + directionOfShot;
+						}
+						
+						directionOfShot = directionOfShot / 360 * 8;
+						
+						directionOfShot = Math.round(directionOfShot) % 8;
+						
+						directionOfShot = directionOfShot * 360 / 8;
+	
+						entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
+						takeTurn();
+						robot.useEnergy(4);
+						robot.setDirection((int) directionOfShot);
+						break;
+					default:
+						keyPressed = NONE;
+				} // switch
+				
+			} // if (!makingMove
 
 			// pause
 			try {
@@ -319,19 +390,15 @@ public class Game extends Canvas {
 		keyPressed = NONE;
 		
 		initEntities();
+		robot.setEnergy(robot.MAX_ENERGY);
 	} // startGame
 
 	private void takeTurn() {
 		keyPressed = NONE;
 		turnNumber++;
 		
-		if(turnNumber % 5 == 4) {
-			spawnEnemy();
-		}
-		
-		if(EnemyEntity.getActive() == 0) {
-			spawnEnemy();
-		}
+		// spawn enemies on the entrance tiles
+		spawnEnemies();
 		
 		// set every entity goal position, make them start moving
 		for (int i = 0; i < entities.size(); i++) {

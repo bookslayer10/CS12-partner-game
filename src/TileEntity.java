@@ -2,19 +2,30 @@ import java.awt.Rectangle;
 
 public class TileEntity extends Entity {
 	private boolean collision;
+	private boolean spawnable;
 	public static final int TILE_SIZE = 64; // hor. vel. of ship (pixels per turn)
 	
 	public TileEntity(Game g, String r, int x, int y) {
 		super(g, r, x, y, false);
-		switch (r.charAt(r.length() - 5)) {
-			case '0':
+		switch (r.substring(23, r.length() - 4)) {		
+			case "0":
+				spawnable = false;
 				collision = false;
 				break;
-			default:
+			case "20":
+				spawnable = true;
 				collision = true;
-		}
+				break;
+			default:
+				spawnable = false;
+				collision = true;
+		} // switch
 	}
 	
+	public boolean isSpawnable() {
+		return spawnable;
+	}
+
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
