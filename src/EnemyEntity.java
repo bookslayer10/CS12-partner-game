@@ -11,7 +11,7 @@ public class EnemyEntity extends Entity {
 	
 	private static int killed;
 	private static int active;
-	private int health = 2;
+	private int health;
 
 	/*
 	 * construct a new alien input: game - the game in which the alien is being
@@ -157,13 +157,7 @@ public class EnemyEntity extends Entity {
 	 * purpose: notification that the alien has collided with something
 	 */
 	public void collidedWith(Entity other) {
-		health -= 1;
-		
-		if(health < 1) {
-			game.removeEntity(this);
-			game.notifyEnemyKilled();
-		}
-		// collisions with aliens are handled in ShotEntity and RobotEntity
+		// handled in other classes
 	} // collidedWith
 	
 	public Rectangle getHitbox(int shiftx, int shifty) {
@@ -198,6 +192,18 @@ public class EnemyEntity extends Entity {
 	
 	public static int getActive() {
 		return active;
+	}
+	
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+	
+	public void addHealth(int healthChange) {
+		setHealth( getHealth() + healthChange );
 	}
 	
 } // EnemyEntity class

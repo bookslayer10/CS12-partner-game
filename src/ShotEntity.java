@@ -108,6 +108,13 @@ public class ShotEntity extends Entity {
 			// remove affect entities from the Entity list
 			game.removeEntity(this);
 			
+			((EnemyEntity) other).addHealth(-1);
+			
+			if(((EnemyEntity) other).getHealth() < 1) {
+				game.removeEntity(this);
+				game.notifyEnemyKilled();
+			} // if
+			
 			used = true;
 		} // if
 
