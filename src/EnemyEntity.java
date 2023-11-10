@@ -8,7 +8,7 @@ import java.util.Objects;
  * Represents one of the aliens
  */
 public class EnemyEntity extends Entity {
-	
+
 	private static int killed;
 	private static int active;
 	private int health;
@@ -19,7 +19,7 @@ public class EnemyEntity extends Entity {
 	 */
 	public EnemyEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
-		
+
 		// Sets direction based on which edge of the screen the enemy is at
 		if (x == g.SCREEN_WIDTH - TileEntity.TILE_SIZE) {
 			direction = 270;
@@ -30,128 +30,134 @@ public class EnemyEntity extends Entity {
 		} else {
 			direction = 180;
 		} // else
-		
+
 	} // constructor
 
 	/*
 	 * move input: delta - time elapsed since last move (ms) purpose: move alien
 	 */
 	public void move(long delta) {
-		
+
 		// proceed with normal move
 		super.move(delta);
 	} // move
 
 	public void calculateMove() {
 		Point point = findPath(this, Game.robot);
-		
+
 		if (point != null) {
 			dx = point.x * 64 - this.x;
 			dy = point.y * 64 - this.y;
 		}
 		if (dx > 0) {
-		    direction = 90;
+			direction = 90;
 		} else if (dx < 0) {
-		    direction = 270;
+			direction = 270;
 		} else if (dy > 0) {
-		    direction = 180;
+			direction = 180;
 		} else if (dy < 0) {
 			direction = 0;
 		}
-		
+
 		super.calculateMove();
 	} // calculate
-	
-    public static class Point {
-        private int x;
-        private int y;
-        private Point previous;
 
-        public Point(int x, int y, Point previous) {
-            this.x = x;
-            this.y = y;
-            this.previous = previous;
-        } // Point
+	public static class Point {
+		private int x;
+		private int y;
+		private Point previous;
 
-        public boolean equals(Object o) {
-            Point point = (Point) o;
-            return x == point.x && y == point.y;
-        } // equals
+		public Point(int x, int y, Point previous) {
+			this.x = x;
+			this.y = y;
+			this.previous = previous;
+		} // Point
 
-        public int hashCode() {
-        	return Objects.hash(x, y);
-        } // hashCode
+		public boolean equals(Object o) {
+			Point point = (Point) o;
+			return x == point.x && y == point.y;
+		} // equals
 
-        public Point offset(int ox, int oy) {
-        	return new Point(x + ox, y + oy, this);
-        } // offset
-        
-    } // Point
+		public int hashCode() {
+			return Objects.hash(x, y);
+		} // hashCode
 
-    private boolean isWalkable(Point point) {
-        if (point.y < 0 || point.y > Game.grid.length - 1) return false;
-        if (point.x < 0 || point.x > Game.grid[0].length - 1) return false;
-        return Game.grid[point.y][point.x] == 0;
-    }
+		public Point offset(int ox, int oy) {
+			return new Point(x + ox, y + oy, this);
+		} // offset
 
-    private List<Point> findNeighbours(Point point) {
-        List<Point> neighbors = new ArrayList<>();
-        Point up = point.offset(0,  1);
-        Point down = point.offset(0,  -1);
-        Point left = point.offset(-1, 0);
-        Point right = point.offset(1, 0);
-        if (isWalkable(up)) neighbors.add(up);
-        if (isWalkable(down)) neighbors.add(down);
-        if (isWalkable(left)) neighbors.add(left);
-        if (isWalkable(right)) neighbors.add(right);
-        return neighbors;
-    }
+	} // Point
 
-    private Point findPath(Entity enemy, Entity robot) {
-    	Point start = new Point(enemy.getX() / TileEntity.TILE_SIZE, enemy.getY() / TileEntity.TILE_SIZE, null);
-    	Point end = new Point(robot.getX() / TileEntity.TILE_SIZE, robot.getY() / TileEntity.TILE_SIZE, null);
-    	System.out.println("[" + start.x + "][" + start.y + "]");
+	private boolean isWalkable(Point point) {
+		if (point.y < 0 || point.y > Game.grid.length - 1)
+			return false;
+		if (point.x < 0 || point.x > Game.grid[0].length - 1)
+			return false;
+		return Game.grid[point.y][point.x] == 0;
+	}
 
-        boolean finished = false;
-        List<Point> used = new ArrayList<>();
-        used.add(start);
-        while (!finished) {
-        	System.out.println("Used: " + used.size());
-            List<Point> newOpen = new ArrayList<>();
-            for (int i = 0; i < used.size(); ++i){
-                Point point = used.get(i);
-                for (Point neighbor : findNeighbours(point)) {
-                	if (!used.contains(neighbor) && !newOpen.contains(neighbor)) {
-                        newOpen.add(neighbor);
-                    } // if
-                } // for
-            } // for
+	private List<Point> findNeighbours(Point point) {
+		List<Point> neighbors = new ArrayList<>();
+		Point up = point.offset(0, 1);
+		Point down = point.offset(0, -1);
+		Point left = point.offset(-1, 0);
+		Point right = point.offset(1, 0);
+		if (isWalkable(up))
+			neighbors.add(up);
+		if (isWalkable(down))
+			neighbors.add(down);
+		if (isWalkable(left))
+			neighbors.add(left);
+		if (isWalkable(right))
+			neighbors.add(right);
+		return neighbors;
+	}
 
-            for (int i = 0; i < newOpen.size(); i++) {
-                used.add(newOpen.get(i));
-                if (end.equals(newOpen.get(i))) {
-                    finished = true;
-                    break;
-                } // for
-            } // if
+	private Point findPath(Entity enemy, Entity robot) {
+		Point start = new Point(enemy.getX() / TileEntity.TILE_SIZE, enemy.getY() / TileEntity.TILE_SIZE, null);
+		Point end = new Point(robot.getX() / TileEntity.TILE_SIZE, robot.getY() / TileEntity.TILE_SIZE, null);
+		// System.out.println("[" + start.x + "][" + start.y + "]");
 
-            if (!finished && newOpen.isEmpty()) {
-            	return null;
-            }
-        } // while
+		boolean finished = false;
+		List<Point> used = new ArrayList<>();
+		used.add(start);
+		while (!finished) {
+			// System.out.println("Used: " + used.size());
+			List<Point> newOpen = new ArrayList<>();
+			for (int i = 0; i < used.size(); ++i) {
+				Point point = used.get(i);
+				for (Point neighbor : findNeighbours(point)) {
+					if (!used.contains(neighbor) && !newOpen.contains(neighbor)) {
+						newOpen.add(neighbor);
+					} // if
+				} // for
+			} // for
 
-        List<Point> path = new ArrayList<>();
-        Point point = used.get(used.size() - 1);
-        
-        while (!point.equals(start)) {
-            path.add(0, point);
-            point = point.previous;
-        } // while
-        
-        return path.get(0);
-        
-    } // findPath
-	
+			for (int i = 0; i < newOpen.size(); i++) {
+				used.add(newOpen.get(i));
+				if (end.equals(newOpen.get(i))) {
+					finished = true;
+					break;
+				} // for
+			} // if
+
+			if (!finished && newOpen.isEmpty()) {
+				return null;
+			}
+		} // while
+
+		List<Point> path = new ArrayList<>();
+		Point point = used.get(used.size() - 1);
+
+		while (!point.equals(start)) {
+			path.add(0, point);
+			point = point.previous;
+		} // while
+
+		return path.get(0);
+
+	} // findPath
+
 	/*
 	 * collidedWith input: other - the entity with which the alien has collided
 	 * purpose: notification that the alien has collided with something
@@ -159,51 +165,52 @@ public class EnemyEntity extends Entity {
 	public void collidedWith(Entity other) {
 		// handled in other classes
 	} // collidedWith
-	
+
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
-		
-		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y +  sprite.getHeight() / 4 + shifty, sprite.getWidth() / 2, sprite.getHeight() / 2);
-		
+
+		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y + sprite.getHeight() / 4 + shifty,
+				sprite.getWidth() / 2, sprite.getHeight() / 2);
+
 		return rect;
 	}
-	
+
 	public static void setKilled(int killed) {
-		if(killed < 0) {
+		if (killed < 0) {
 			System.out.println("Negative number of killed enemies!");
 			EnemyEntity.killed = 0;
 		} else {
 			EnemyEntity.killed = killed;
 		}
 	}
-	
+
 	public static void setActive(int active) {
-		if(active < 0) {
+		if (active < 0) {
 			System.out.println("Negative number of active enemies!");
 			EnemyEntity.active = 0;
 		} else {
 			EnemyEntity.active = active;
 		}
 	}
-	
+
 	public static int getKilled() {
 		return killed;
 	}
-	
+
 	public static int getActive() {
 		return active;
 	}
-	
+
 	public void setHealth(int health) {
 		this.health = health;
 	}
-	
+
 	public int getHealth() {
 		return health;
 	}
-	
+
 	public void addHealth(int healthChange) {
-		setHealth( getHealth() + healthChange );
+		setHealth(getHealth() + healthChange);
 	}
-	
+
 } // EnemyEntity class
