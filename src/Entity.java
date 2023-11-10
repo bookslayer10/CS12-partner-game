@@ -146,13 +146,6 @@ public abstract class Entity {
 	} // draw
 
 	/*
-	 * Do the logic associated with this entity. This method will be called
-	 * periodically based on game events.
-	 */
-	public void doLogic() {
-	}
-
-	/*
 	 * collidesWith input: the other entity to check collision against output: true
 	 * if entities collide purpose: check if this entity collides with the other.
 	 */

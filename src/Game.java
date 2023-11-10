@@ -163,11 +163,12 @@ public class Game extends Canvas {
 	public void notifyEnemyKilled() {
 		EnemyEntity.setKilled(EnemyEntity.getKilled() + 1);
 		EnemyEntity.setActive(EnemyEntity.getActive() - 1);
-		
-		// award energy on a kill
-		robot.setEnergy(robot.getEnergy() + 10);
-		
 	} // notifyAlienKilled
+	
+	// award energy on a kill with a shot
+	public void awardEnergy() {
+		robot.useEnergy(-10);
+	} // awardEnergy
 	
 	/* If there are no enemies in play, will spawn an enemy on a random valid 
 	 * tile. There is a chance to spawn an enemy of variable type on each tile 

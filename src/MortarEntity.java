@@ -1,42 +1,49 @@
+import java.awt.Rectangle;
 
 public class MortarEntity extends Entity {
 	
-	private boolean used = false; // true if shot hits something
+	private boolean detonating = false;
+	private int countdown = 3;
+	
 	
 	public MortarEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, false); // calls the constructor in Entity
 	}
-
+	
 	@Override
-	public void collidedWith(Entity other) {
-		// prevents double kills
-		if (used) {
-			return;
-		} // if
-
-		// if it has hit an alien, kill it!
-		if (other instanceof EnemyEntity) {
-			// remove affect entities from the Entity list
-			game.removeEntity(this);
-			
-			// remove affect entities from the Entity list
-			game.removeEntity(this);
-			
-			((EnemyEntity) other).addHealth(-3);
-			
-			if(((EnemyEntity) other).getHealth() < 1) {
-				game.removeEntity(this);
-				game.notifyEnemyKilled();
-			} // if
-			
-			used = true;
-		} // if
-
+	public void calculateMove() {
+		countdown--;
+		
+		if(countdown < 1) {
+			detonating = true;
+		}
 	}
 	
+	@Override
+	public Rectangle getHitbox(int shiftx, int shifty) {
+		Rectangle rect = new Rectangle();
+		
+		rect.setBounds((int) x + shiftx, (int) y + shifty, sprite.getWidth(), sprite.getHeight());
+		
+		return rect;
+	}
 	
-	
-	
-	
-	
-}
+	@Override
+	public void collidedWith(Entity other) {
+		if (!detonating) {
+			// when the shot detonates, remove it next frame
+			game.removeEntity(this);
+			
+			// if it has hit an alien, kill it!
+			if (other instanceof EnemyEntity) {
+				
+				((EnemyEntity) other).addHealth(-3);
+				
+				if(((EnemyEntity) other).getHealth() < 1) {
+					game.removeEntity(this);
+					game.notifyEnemyKilled();
+				} // if
+			} // if
+		} // if
+	} // collidedWith
+} // MortarEntity

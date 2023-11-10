@@ -163,9 +163,13 @@ public class EnemyEntity extends Entity {
 	 * purpose: notification that the alien has collided with something
 	 */
 	public void collidedWith(Entity other) {
-		// handled in other classes
+		if(other instanceof EnemyEntity) {
+			game.removeEntity(this);
+			game.notifyEnemyKilled();
+		}
 	} // collidedWith
 
+	@Override
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 

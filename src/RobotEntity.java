@@ -82,6 +82,7 @@ public class RobotEntity extends Entity {
 		}
 	}
 	
+	@Override
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		

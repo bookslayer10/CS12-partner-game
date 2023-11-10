@@ -111,8 +111,11 @@ public class ShotEntity extends Entity {
 			((EnemyEntity) other).addHealth(-1);
 			
 			if(((EnemyEntity) other).getHealth() < 1) {
-				game.removeEntity(this);
+				game.removeEntity(other);
 				game.notifyEnemyKilled();
+				
+				// award energy on a kill
+				game.awardEnergy();
 			} // if
 			
 			used = true;
@@ -120,6 +123,7 @@ public class ShotEntity extends Entity {
 
 	} // collidedWith
 	
+	@Override
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
