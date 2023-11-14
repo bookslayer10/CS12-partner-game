@@ -37,7 +37,7 @@ public class EnemyEntity extends Entity {
 	 * move input: delta - time elapsed since last move (ms) purpose: move alien
 	 */
 	public void move(long delta) {
-
+		
 		// proceed with normal move
 		super.move(delta);
 	} // move
