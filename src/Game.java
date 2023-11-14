@@ -30,6 +30,8 @@ public class Game extends Canvas {
 	protected static RobotEntity robot; // the robot
 	private Sprite battery; // shows remaining energy
 	private Color BATTERY = new Color(51, 55, 56);
+	private Color BACKGROUND = new Color(51, 55, 56, 127);
+
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
@@ -121,10 +123,7 @@ public class Game extends Canvas {
 		} // outer for
 		
 		battery = (SpriteStore.get()).getSprite("sprites/battery.png");
-		
-		@SuppressWarnings("unused")
-		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
-		
+				
 		// create the robot and put in the middle of screen
 		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
 		entities.add(robot);
@@ -271,11 +270,6 @@ public class Game extends Canvas {
 				entity.draw(g);
 			} // for
 			
-			// Draw full battery then cover up missing energy
-			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
-			g.setColor(BATTERY);
-			double modifier = 320.0 / robot.MAX_ENERGY;
-	        g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
 			
 			// remove dead entities
 			entities.removeAll(removeEntities);
@@ -284,14 +278,20 @@ public class Game extends Canvas {
 			// if waiting for "any key press", draw message
 			if (waitingForKeyPress) {
 				
-				g.setColor(BATTERY);
-				g.fillRect(SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT / 2 - 50, 400, 100);
+				g.setColor(BACKGROUND);
+				g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 				
 				g.setColor(Color.white);
 				g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 10);
 				g.drawString("Press any key to continue.",
 						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 10);
 			} // if
+			
+			// Draw full battery then cover up missing energy
+			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
+			g.setColor(BATTERY);
+			double modifier = 320.0 / robot.MAX_ENERGY;
+	        g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
 			
 			// clear graphics and flip buffer
 			g.dispose();
