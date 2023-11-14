@@ -102,7 +102,7 @@ public abstract class Entity {
 		
 		goalTile = game.tiles.get(goalTileIndex);
 		
-	}
+	} // calculateMove
 	
 	// get and set velocities
 	public void setHorizontalMovement(double newDX) {

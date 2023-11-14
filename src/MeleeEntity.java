@@ -3,10 +3,9 @@ public class MeleeEntity extends EnemyEntity {
 	
 	boolean isDamaged = false;
 	public MeleeEntity(Game g, String r, int newX, int newY) {
-		super(g, r, newX, newY);
-		setHealth(2);
+		super(g, r, newX, newY, 2);
 	}
-	
+
 	public void move(long delta) {
 		
 		if(getHealth() < 2 && !isDamaged) {
