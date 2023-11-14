@@ -2,6 +2,7 @@ import java.awt.Rectangle;
 
 public class MortarEntity extends Entity {
 	
+	private static final int BLAST_DIAMETER = 120;
 	private boolean detonating = false;
 	private int countdown = 3;
 	
@@ -23,7 +24,7 @@ public class MortarEntity extends Entity {
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
-		rect.setBounds((int) x + shiftx, (int) y + shifty, sprite.getWidth(), sprite.getHeight());
+		rect.setBounds((int) x - BLAST_DIAMETER + shiftx, (int) y + BLAST_DIAMETER + shifty, BLAST_DIAMETER, BLAST_DIAMETER);
 		
 		return rect;
 	}
