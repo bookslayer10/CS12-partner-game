@@ -113,8 +113,6 @@ public class Game extends Canvas {
 		} // outer for
 		
 		// create the robot and put in the middle of screen
-		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
-		entities.add(robot);
 		
 		battery = (SpriteStore.get()).getSprite("sprites/battery.png");
 
@@ -281,9 +279,7 @@ public class Game extends Canvas {
 				
 				g.setColor(Color.white);
 				g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 10);
-<<<<<<< Updated upstream
-				g.drawString("Press any key to continue.",
-						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 10);
+
 			} else {
 				// 0 to 180 to -0
 				directionOfShot = Math.toDegrees(Math.atan2(	(double) mouseY - (robot.getY() + TileEntity.TILE_SIZE / 2),
@@ -379,15 +375,12 @@ public class Game extends Canvas {
 				} // if (!makingMove
 				
 			} // else
-=======
-			} // if
->>>>>>> Stashed changes
 			
 			// Draw full battery then cover up missing energy
 			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
 			g.setColor(BATTERY);
 			double modifier = 320.0 / robot.MAX_ENERGY;
-	        g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
+	        	g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
 			
 			// clear graphics and flip buffer
 			g.dispose();
@@ -410,6 +403,8 @@ public class Game extends Canvas {
 	private void startGame() {
 		// clear out any existing entities and initalize a new set
 		entities.clear();
+		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
+		entities.add(robot);
 		
 		EnemyEntity.setKilled(0);
 		EnemyEntity.setActive(0);
