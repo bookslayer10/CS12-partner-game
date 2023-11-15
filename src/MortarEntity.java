@@ -19,10 +19,8 @@ public class MortarEntity extends Entity {
 			game.removeEntity(this);
 		} else if(countdown < 1) {
 			detonating = true;
-		}
-		
-		
-	}
+		} // else if
+	} // calculateMove
 	
 	@Override
 	public Rectangle getHitbox(int shiftx, int shifty) {
@@ -33,7 +31,7 @@ public class MortarEntity extends Entity {
 						BLAST_DIAMETER, BLAST_DIAMETER);
 		
 		return rect;
-	}
+	} // getHitbox
 	
 	@Override
 	public void collidedWith(Entity other) {
@@ -52,7 +50,7 @@ public class MortarEntity extends Entity {
 			
 			if (other instanceof RobotEntity) {
 				game.notifyDeath();
-			}
+			} // if
 			
 		} // if
 	} // collidedWith

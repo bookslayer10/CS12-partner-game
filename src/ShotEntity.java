@@ -115,7 +115,7 @@ public class ShotEntity extends Entity {
 				game.notifyEnemyKilled();
 				
 				// award energy on a kill
-				game.awardEnergy(15);
+				game.awardEnergy(10);
 			} // if
 			
 			used = true;
@@ -133,6 +133,6 @@ public class ShotEntity extends Entity {
 				(int) (sprite.getHeight() / 2) );
 		
 		return rect;
-	}
+	} // getHitbox
 
-} // RobotEntity class
+} // ShotEntity

@@ -40,7 +40,7 @@ public class EnemyEntity extends Entity {
 		if (point != null) {
 			dx = point.x * 64 - this.x;
 			dy = point.y * 64 - this.y;
-		}
+		} // if
 		
 		if (dx > 0) {
 			direction = 90;
@@ -50,7 +50,7 @@ public class EnemyEntity extends Entity {
 			direction = 180;
 		} else if (dy < 0) {
 			direction = 0;
-		}
+		} // if
 
 		super.calculateMove();
 	} // calculate
@@ -170,7 +170,7 @@ public class EnemyEntity extends Entity {
 				sprite.getWidth() / 2, sprite.getHeight() / 2);
 
 		return rect;
-	}
+	} // getHitbox
 
 	public static void setKilled(int killed) {
 		if (killed < 0) {
@@ -178,8 +178,8 @@ public class EnemyEntity extends Entity {
 			EnemyEntity.killed = 0;
 		} else {
 			EnemyEntity.killed = killed;
-		}
-	}
+		} // else
+	} // setKilled
 
 	public static void setActive(int active) {
 		if (active < 0) {
@@ -187,27 +187,27 @@ public class EnemyEntity extends Entity {
 			EnemyEntity.active = 0;
 		} else {
 			EnemyEntity.active = active;
-		}
-	}
+		} // else 
+	} // setActive
 
 	public static int getKilled() {
 		return killed;
-	}
+	} // getKilled
 
 	public static int getActive() {
 		return active;
-	}
+	} // getActive
 
 	public void setHealth(int health) {
 		this.health = health;
-	}
+	} // setHealth
 
 	public int getHealth() {
 		return health;
-	}
+	} // getHealth
 
 	public void addHealth(int healthChange) {
 		setHealth(getHealth() + healthChange);
-	}
+	} // addHealth
 
 } // EnemyEntity class

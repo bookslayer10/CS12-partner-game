@@ -4,7 +4,7 @@ public class MeleeEntity extends EnemyEntity {
 	boolean isDamaged = false;
 	public MeleeEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, 2);
-	}
+	} // constructor
 
 	public void move(long delta) {
 		
@@ -18,9 +18,9 @@ public class MeleeEntity extends EnemyEntity {
 				} // for
 			} // for
 			sprite = sprites[0][0];
-		}
+		} // if
 		
 		// proceed with normal move
 		super.move(delta);
 	} // move
-}
+} // MeleeEntity
