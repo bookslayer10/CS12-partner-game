@@ -2,9 +2,9 @@ import java.awt.Rectangle;
 
 public class MortarEntity extends Entity {
 	
-	private static final int BLAST_DIAMETER = 120;
+	private static final int BLAST_DIAMETER = 170;
 	private boolean detonating = false;
-	private int countdown = 3;
+	private int countdown = 4;
 	
 	
 	public MortarEntity(Game g, String r, int newX, int newY) {
@@ -15,36 +15,45 @@ public class MortarEntity extends Entity {
 	public void calculateMove() {
 		countdown--;
 		
-		if(countdown < 1) {
+		if(detonating) {
+			game.removeEntity(this);
+		} else if(countdown < 1) {
 			detonating = true;
 		}
+		
+		
 	}
 	
 	@Override
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
-		rect.setBounds((int) x - BLAST_DIAMETER + shiftx, (int) y + BLAST_DIAMETER + shifty, BLAST_DIAMETER, BLAST_DIAMETER);
+		rect.setBounds(	(int) x - BLAST_DIAMETER / 2 + TileEntity.TILE_SIZE / 2,
+						(int) y - BLAST_DIAMETER / 2 + TileEntity.TILE_SIZE / 2,
+						BLAST_DIAMETER, BLAST_DIAMETER);
 		
 		return rect;
 	}
 	
 	@Override
 	public void collidedWith(Entity other) {
-		if (!detonating) {
-			// when the shot detonates, remove it next frame
-			game.removeEntity(this);
-			
+		if (detonating) {
 			// if it has hit an alien, kill it!
 			if (other instanceof EnemyEntity) {
 				
 				((EnemyEntity) other).addHealth(-3);
 				
 				if(((EnemyEntity) other).getHealth() < 1) {
-					game.removeEntity(this);
+					game.removeEntity(other);
 					game.notifyEnemyKilled();
+					game.awardEnergy(5);
 				} // if
 			} // if
+			
+			if (other instanceof RobotEntity) {
+				game.notifyDeath();
+			}
+			
 		} // if
 	} // collidedWith
 } // MortarEntity
