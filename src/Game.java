@@ -176,8 +176,8 @@ public class Game extends Canvas {
 	} // notifyAlienKilled
 	
 	// award energy on a kill with a shot
-	public void awardEnergy() {
-		robot.useEnergy(-10);
+	public void awardEnergy(int energy) {
+		robot.useEnergy(-energy);
 	} // awardEnergy
 	
 	/* If there are no enemies in play, will spawn an enemy on a random valid 
@@ -384,6 +384,9 @@ public class Game extends Canvas {
 							takeTurn();
 							robot.useEnergy(10);
 							robot.setDirection((int) directionOfShot);
+							
+							//g.fillRect(mortarX - 58, mortarY - 58, 180, 180);
+							
 							break;
 							
 						default:
@@ -452,7 +455,7 @@ public class Game extends Canvas {
 
 		} // for
 	}
-
+	
 	/*
 	 * inner class KeyInputHandler handles keyboard input from the user
 	 */
