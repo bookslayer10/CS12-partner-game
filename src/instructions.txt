@@ -1,0 +1,69 @@
+Welcome to SUPERBOT!
+
+You are a manufacturer of Battle-Optimized Technology (BOT)!
+Your products are top-of-the-line!
+They’re so good, in fact, that your competitors want your secrets.
+They really want your secrets.
+They want them so much that they constantly invade your facilities to get them!
+But their products are bad.
+So defend your facilities against these cheap knockoffs using your far superior BOT!
+
+
+Press Any Key to Continue
+1/5
+%%
+Controls:
+
+WASD to move
+Q to wait
+
+Aim & Left-Click to shoot
+Aim & Right-Click to Deploy a mortar
+
+
+
+
+Press Any Key to Continue
+2/5
+%%
+Each action takes some energy
+Regain energy by defeating enemy BOTs
+
+Each action takes one turn
+When you take your turn… so do the enemies
+
+
+
+
+
+
+Press Any Key to Continue
+3/5
+%%
+The enemies:
+
+Melee BOT
+- Has pizza saws for hands
+- Chases after you with undepletable vigor (until you shoot it)
+
+Ranged BOT
+- Armed with cool lasers
+- Scuttles around with its long legs until it gets a clear shot
+
+
+Press Any Key to Continue
+4/5
+%%
+BOTs are fragile… 
+Your BOT can only take one hit
+
+
+So be careful, and prove your products are the best!
+
+
+
+
+
+
+Press Any Key to START
+5/5

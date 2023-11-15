@@ -31,7 +31,7 @@ public class Game extends Canvas {
 	private Sprite battery; // shows remaining energy
 	private Color BATTERY = new Color(51, 55, 56);
 	private Color BACKGROUND = new Color(51, 55, 56, 127);
-
+	private int introSlidesLeft = 5;
 
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
@@ -40,6 +40,7 @@ public class Game extends Canvas {
 	private final char MOUSE = '9';
 	
 	protected static int[][] grid;
+	protected static String[][] instructions;
 	private int turnNumber; // # of turns elapsed
 	
 
@@ -105,8 +106,10 @@ public class Game extends Canvas {
 	 * entities in the game.
 	 */
 	private void initEntities() {
-		grid = FileInput.getFileContents("src/grid.txt");
+		grid = FileInput.getMapContents("src/grid.txt");
 		int st = 0; // index of next spawnable tile
+		
+		instructions = FileInput.getInstructions("src/instructions.txt");
 		
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
@@ -135,6 +138,27 @@ public class Game extends Canvas {
 	public void removeEntity(Entity entity) {
 		removeEntities.add(entity);
 	} // removeEntity
+	
+	
+	public void drawInstructions(Graphics2D g, int slide) {	
+		
+		g.setColor(BATTERY);
+		g.fillRect(500, 200, SCREEN_WIDTH - 1000, SCREEN_HEIGHT - 400);
+		
+		g.setColor(Color.white);
+		
+		for (int i = 0; i < instructions[5 - slide].length; i++) {
+			String line = instructions[5 - slide][i];
+			
+			
+			
+			if (line == null) {
+				line = "";
+			}
+			g.drawString(line, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(line)) / 2, 300 + i * 20);
+		}
+	}
+	
 
 	/*
 	 * Notification that the player has died.
@@ -257,7 +281,7 @@ public class Game extends Canvas {
 						} // if
 					} // inner for
 				} // outer for
-			}
+			} // if(!waitingForKeyPress)
 
 			// draw tiles
 			for (int i = 0; i < tiles.size(); i++) {
@@ -281,10 +305,17 @@ public class Game extends Canvas {
 				g.setColor(BACKGROUND);
 				g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 				
-				g.setColor(Color.white);
-				g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 10);
-				g.drawString("Press any key to continue.",
+				if (introSlidesLeft > 0) {
+					drawInstructions(g, introSlidesLeft);
+				} else {
+					
+					g.setColor(Color.white);
+					
+					g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 10);
+					g.drawString("Press any key to continue.",
 						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 10);
+				}
+													
 			} // if
 			
 			// Draw full battery then cover up missing energy
@@ -453,6 +484,12 @@ public class Game extends Canvas {
 
 			// if waiting for key press to start game
 			if (waitingForKeyPress) {
+				
+				introSlidesLeft -= 1;
+				if (introSlidesLeft > 0) {
+					return;
+				}
+				
 				if (pressCount == 1) {
 					waitingForKeyPress = false;
 					startGame();
@@ -474,6 +511,7 @@ public class Game extends Canvas {
 		public void mousePressed(MouseEvent e) {
 			// if waiting for keypress to start game, do nothing
 			if (waitingForKeyPress) {
+				
 				return;
 			} // if
 			
