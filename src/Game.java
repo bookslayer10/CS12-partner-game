@@ -281,6 +281,7 @@ public class Game extends Canvas {
 				
 				g.setColor(Color.white);
 				g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 10);
+<<<<<<< Updated upstream
 				g.drawString("Press any key to continue.",
 						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 10);
 			} else {
@@ -378,6 +379,9 @@ public class Game extends Canvas {
 				} // if (!makingMove
 				
 			} // else
+=======
+			} // if
+>>>>>>> Stashed changes
 			
 			// Draw full battery then cover up missing energy
 			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
@@ -415,6 +419,7 @@ public class Game extends Canvas {
 		keyPressed = NONE;
 		
 		robot.setEnergy(robot.MAX_ENERGY);
+		message = "Press any key to continue.";
 	} // startGame
 
 	private void takeTurn() {
