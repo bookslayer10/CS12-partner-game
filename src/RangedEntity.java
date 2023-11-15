@@ -18,7 +18,7 @@ public class RangedEntity extends EnemyEntity{
 		
 	} // calculateMove
 	
-	private void shootLaser() {
+	private void shootLaser(int distance, int direction) {
 		
 	} // shootLaser
 	
