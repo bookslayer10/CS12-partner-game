@@ -183,10 +183,14 @@ public class Game extends Canvas {
 		}
 		message = message.concat("You survived " + turnNumber + " turns. You killed " + EnemyEntity.getKilled());
 		if(EnemyEntity.getKilled() == 1) {
-			message = message.concat(" enemy.");
+			message = message.concat(" enemy. ");
 		} else {
-			message = message.concat(" enemies.");
+			message = message.concat(" enemies. ");
 		} // else
+		
+		int score = turnNumber * 3 + EnemyEntity.getKilled() * 2;
+		
+		message = message.concat("Your score was: " + score);
 		
 		waitingForKeyPress = true;
 	} // notifyDeath
@@ -212,10 +216,10 @@ public class Game extends Canvas {
 	public void spawnEnemies() {
 		
 		// chance for an individual tile to spawn an enemy, increases over time
-		double spawnChance = 0.02  + turnNumber * 0.0002;
+		double spawnChance = 0.002  + turnNumber * 0.0002;
 		
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
-		double rangedChance = 1; //Math.min(turnNumber * 0.005, 0.5);
+		double rangedChance = Math.min(turnNumber * 0.005, 0.5);
 		
 		for (TileEntity tile: spawnTiles) {
 			if (Math.random() > 1 - spawnChance) {
