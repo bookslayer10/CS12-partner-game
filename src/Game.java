@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Game extends Canvas {
 
 
-	private BufferStrategy strategy; // take advantage of accelerated graphics
+	protected BufferStrategy strategy; // take advantage of accelerated graphics
 	private boolean waitingForKeyPress = true; // true if game held up until
 	// a key is pressed
 	private boolean makingMove = false;
@@ -471,18 +471,10 @@ public class Game extends Canvas {
 		for (int i = 0; i < entities.size(); i++) {
 			Entity entity = (Entity) entities.get(i);
 			
-			if (entity instanceof EnemyEntity) {
+			if (!(entity instanceof RobotEntity)) {
 				entity.calculateMove();
 			}
 			
-			if (entity instanceof ShotEntity) {
-				entity.calculateMove();
-			}
-			
-			if (entity instanceof MortarEntity) {
-				entity.calculateMove();
-			}
-
 		} // for
 	}
 	

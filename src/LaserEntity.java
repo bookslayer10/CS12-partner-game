@@ -1,4 +1,6 @@
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 public class LaserEntity extends Entity {
@@ -6,6 +8,7 @@ public class LaserEntity extends Entity {
 	private int magX;
 	private int magY;
 	private int limit;
+	private int countdown = 1;
 	
 	public LaserEntity(Game g, String r, int newX, int newY, int direction, int magX, int magY) {
 		super(g, r, newX, newY, true);
@@ -14,7 +17,7 @@ public class LaserEntity extends Entity {
 		this.direction = direction;
 
 		for (limit = 0; ; limit++) {
-			int goalTileIndex = (((int) (y + magY * limit) / TileEntity.TILE_SIZE) * 29 + (int) (x + magX * limit) / TileEntity.TILE_SIZE);
+			int goalTileIndex = (((int) (y / TileEntity.TILE_SIZE) + magY * limit)* 29 + (int) (x / TileEntity.TILE_SIZE + magX * limit));
 			if (goalTileIndex < 0) {
 				goalTileIndex = 0;
 			}
@@ -26,8 +29,14 @@ public class LaserEntity extends Entity {
 				return;
 			}
 		}
+		
 	} // LaserEntity
 	
+	public void calculateMove() {
+		if (countdown-- == 0) {
+			game.removeEntity(this);
+		}
+	}
 	
 	public void draw(Graphics g) {
 		for (int i = 0; i < limit; i++) {
@@ -37,9 +46,8 @@ public class LaserEntity extends Entity {
 	
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
-		
-		rect.setBounds((int) x + Math.min(0, limit * magX),
-				(int) y + Math.min(0, limit * magY),
+		rect.setBounds((int) x + Math.min(0, (limit - 1) * TileEntity.TILE_SIZE * magX),
+				(int) y + Math.min(0, (limit - 1) * TileEntity.TILE_SIZE * magY),
 				sprite.getWidth() * Math.max(1, Math.abs(magX) * limit),
 				sprite.getHeight() * Math.max(1, Math.abs(magY) * limit));
 		
