@@ -115,7 +115,7 @@ public class ShotEntity extends Entity {
 				game.notifyEnemyKilled();
 				
 				// award energy on a kill
-				game.awardEnergy(10);
+				game.awardEnergy(12);
 			} // if
 			
 			used = true;

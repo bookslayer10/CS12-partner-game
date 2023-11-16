@@ -55,7 +55,14 @@ public class RangedEntity extends EnemyEntity{
 		highlight.die();
 	}
 	
-	private void shootLaser(int direction, boolean isHighlight) {
+	public void collidedWith(Entity other) {
+		if(other instanceof EnemyEntity) {
+			game.removeEntity(this);
+			game.notifyEnemyKilled();
+		}
+	} // collidedWith
+	
+	private void shootLaser(int direction, boolean highlight) {
 		int magX;
 		int magY;
 		switch(direction) {

@@ -1,5 +1,3 @@
-/grid.txt
-/instructions.txt
 /sprites/
 /EnemyEntity$Point.class
 /EnemyEntity.class
@@ -10,6 +8,8 @@
 /Game$MouseInputHandler.class
 /Game$MouseMotionHandler.class
 /Game.class
+/HighlightEntity.class
+/LaserEntity.class
 /MeleeEntity.class
 /MortarEntity.class
 /RangedEntity.class
@@ -18,5 +18,3 @@
 /Sprite.class
 /SpriteStore.class
 /TileEntity.class
-/HighlightEntity.class
-/LaserEntity.class
