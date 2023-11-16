@@ -57,7 +57,7 @@ public class MortarEntity extends Entity {
 				if(((EnemyEntity) other).getHealth() < 1) {
 					game.removeEntity(other);
 					game.notifyEnemyKilled();
-					game.awardEnergy(5);
+					game.awardEnergy(12);
 				} // if
 			} // if
 			

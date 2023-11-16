@@ -381,7 +381,7 @@ public class Game extends Canvas {
 						// robot waits one turn
 						case 'Q':
 							takeTurn();
-							robot.useEnergy(1);
+							robot.useEnergy(0);
 							break;
 							
 						// shoots shot on left click
@@ -404,7 +404,7 @@ public class Game extends Canvas {
 							
 							entities.add(new MortarEntity(this, "sprites/mortar/crosshair_1.png", mortarX, mortarY));
 							takeTurn();
-							robot.useEnergy(8);
+							robot.useEnergy(16);
 							robot.setDirection((int) directionOfShot);
 							
 							//g.fillRect(mortarX - 58, mortarY - 58, 180, 180);

@@ -23,4 +23,11 @@ public class MeleeEntity extends EnemyEntity {
 		// proceed with normal move
 		super.move(delta);
 	} // move
+	
+	public void collidedWith(Entity other) {
+		if(other instanceof MeleeEntity) {
+			game.removeEntity(this);
+			game.notifyEnemyKilled();
+		}
+	} // collidedWith
 } // MeleeEntity
