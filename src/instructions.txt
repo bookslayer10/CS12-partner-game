@@ -9,18 +9,22 @@ But their products are bad.
 So defend your facilities against these cheap knockoffs using your far superior BOT!
 
 
+
+
 Press Any Key to Continue
 1/5
 %%
 Controls:
 
-WASD to move
-Q to wait
+WASD to move                                       Q to wait
+costs 2 energy                                        costs 1 energy
+your standard move                              stay in place to conserve power
 
-Aim & Left-Click to shoot
-Aim & Right-Click to Deploy a mortar
-
-
+Left-Click to shoot your blaster            Right-Click to drop a mortar
+costs 4 energy                                        costs 10 energy
+originates from robot                             can be dropped anywhere
+small bullet                                             3x3 explosion
+moves 2 tiles a turn                               takes 4 turns to land
 
 
 Press Any Key to Continue
@@ -28,6 +32,8 @@ Press Any Key to Continue
 %%
 Each action takes some energy
 Regain energy by defeating enemy BOTs
+
+
 
 Each action takes one turn
 When you take your turn… so do the enemies
@@ -51,6 +57,8 @@ Ranged BOT
 - Scuttles around with its long legs until it gets a clear shot
 
 
+
+
 Press Any Key to Continue
 4/5
 %%
@@ -59,6 +67,8 @@ Your BOT can only take one hit
 
 
 So be careful, and prove your products are the best!
+
+
 
 
 

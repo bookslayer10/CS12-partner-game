@@ -3,7 +3,7 @@ import java.awt.Rectangle;
 
 public class MortarEntity extends Entity {
 	
-	private static final int BLAST_DIAMETER = 170;
+	private static final int BLAST_DIAMETER = 130;
 	private boolean detonating = false;
 	private int countdown;
 	

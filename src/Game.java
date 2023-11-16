@@ -159,7 +159,7 @@ public class Game extends Canvas {
 			if (line == null) {
 				line = "";
 			}
-			g.drawString(line, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(line)) / 2, 300 + i * 20);
+			g.drawString(line, (SCREEN_WIDTH - (i < 13 ? 456 : g.getFontMetrics().stringWidth(line))) / 2, 320 + i * 25);
 		}
 	}
 	
