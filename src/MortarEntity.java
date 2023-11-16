@@ -43,7 +43,7 @@ public class MortarEntity extends Entity {
 	
 	@Override
 	public void draw(Graphics g) {
-		sprite.draw(g, (int) x - 64, (int) y - 64);
+		sprite.draw(g, (int) x - TileEntity.TILE_SIZE, (int) y - TileEntity.TILE_SIZE);
 	} // draw
 	
 	@Override

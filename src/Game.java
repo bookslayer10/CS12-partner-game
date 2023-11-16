@@ -137,6 +137,13 @@ public class Game extends Canvas {
 	} // constructor
 	
 	/*
+	 * Add an entity to the game. It will be moved and drawn.
+	 */
+	public void addEntity(Entity entity) {
+		entities.add(entity);
+	} // addEntity
+	
+	/*
 	 * Remove an entity from the game. It will no longer be moved or drawn.
 	 */
 	public void removeEntity(Entity entity) {
@@ -208,7 +215,7 @@ public class Game extends Canvas {
 		double spawnChance = 0.02  + turnNumber * 0.0002;
 		
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
-		double rangedChance = Math.min(turnNumber * 0.005, 0.5);
+		double rangedChance = 1; //Math.min(turnNumber * 0.005, 0.5);
 		
 		for (TileEntity tile: spawnTiles) {
 			if (Math.random() > 1 - spawnChance) {
