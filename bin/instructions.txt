@@ -46,7 +46,7 @@ When you take your turn… so do the enemies
 Right-Click to Go Back, Left-Click to Continue
 3/5
 %%
-The enemies:
+Enemies:
 
 Melee BOT
 - Has pizza saws for hands

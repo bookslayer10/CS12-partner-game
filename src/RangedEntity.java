@@ -62,7 +62,7 @@ public class RangedEntity extends EnemyEntity{
 		}
 	} // collidedWith
 	
-	private void shootLaser(int direction, boolean highlight) {
+	private void shootLaser(int direction, boolean isHighlight) {
 		int magX;
 		int magY;
 		switch(direction) {
