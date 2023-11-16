@@ -1,29 +1,38 @@
 
 public class RangedEntity extends EnemyEntity{
 	
-	private int shooting;
+	private int shooting; // the direction in which this will shoot
 	private boolean shot;
 	private LaserEntity laser;
 	private HighlightEntity highlight;
 	
 	public RangedEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, 1);
-		shooting = -1;
+		shooting = -1; // -1 is sentinel value for when it is not shooting
 	} // RangedEntity
 	
+	
+	/* 
+	 * 
+	 */
 	public void calculateMove() {
 		super.calculateMove();
 		
+		// if this is shooting, creates a laserEntity
 		if (shooting != -1) {
 			shootLaser(shooting, false);
 			shooting = -1;
 			dx = 0;
 			dy = 0;
 			shot = true;
+			
+		// if this shot last turn, keeps it in place for one more turn
 		} else if (shot) {
 			dx = 0;
 			dy = 0;
 			shot = false;
+			
+		// if this is in line with the robot, 
 		} else if ((x / TileEntity.TILE_SIZE == Game.robot.x / TileEntity.TILE_SIZE
 				&& super.findPath(this, Game.robot).size() == Math.abs(y / TileEntity.TILE_SIZE - Game.robot.y / TileEntity.TILE_SIZE))
 				|| (y / TileEntity.TILE_SIZE == Game.robot.y / TileEntity.TILE_SIZE
@@ -50,10 +59,10 @@ public class RangedEntity extends EnemyEntity{
 	} // calculateMove
 	
 	public void die() {
-		super.die();
-		laser.die();
-		highlight.die();
-	}
+		game.removeEntity(this);
+		game.removeEntity(laser);
+		game.removeEntity(highlight);
+	} // die
 	
 	public void collidedWith(Entity other) {
 		if(other instanceof EnemyEntity) {
@@ -62,6 +71,10 @@ public class RangedEntity extends EnemyEntity{
 		}
 	} // collidedWith
 	
+	/* Either shoots a laser or highlights the space where the laser is to be shot
+	 * direction: the direction from the rangedEntity it is to be fired
+	 * isHighlight : true if the rangedEntity is not shooting yet, merely telegraphing its next turn
+	 */
 	private void shootLaser(int direction, boolean isHighlight) {
 		int magX;
 		int magY;

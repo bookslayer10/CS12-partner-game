@@ -155,7 +155,9 @@ public abstract class Entity {
 	} // draw
 
 	public void die() {
-		game.removeEntity(this);
+		if (this != null) {
+			game.removeEntity(this);
+		}
 	}
 	
 	

@@ -234,7 +234,7 @@ public class Game extends Canvas {
 		double spawnChance = 0.002  + turnNumber * 0.0004;
 		
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
-		double rangedChance = Math.min(turnNumber * 0.005, 0.5);
+		double rangedChance = 1;// Math.min(turnNumber * 0.005, 0.5);
 		
 		for (TileEntity tile: spawnTiles) {
 			if (Math.random() > 1 - spawnChance) {
