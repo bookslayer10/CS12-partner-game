@@ -154,6 +154,11 @@ public abstract class Entity {
 		sprite.draw(g, (int) x, (int) y);
 	} // draw
 
+	public void die() {
+		game.removeEntity(this);
+	}
+	
+	
 	/*
 	 * collidesWith input: the other entity to check collision against output: true
 	 * if entities collide purpose: check if this entity collides with the other.

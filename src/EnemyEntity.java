@@ -156,8 +156,8 @@ public class EnemyEntity extends Entity {
 	 * purpose: notification that the alien has collided with something
 	 */
 	public void collidedWith(Entity other) {
-		if(other instanceof EnemyEntity) {
-			game.removeEntity(this);
+		if(other instanceof MeleeEntity) {
+			this.die();
 			game.notifyEnemyKilled();
 		}
 	} // collidedWith

@@ -41,12 +41,12 @@ public class ShotEntity extends Entity {
 		sprite = sprites[direction / 45][frameTime];
 
 		if (x < -100 || x > game.SCREEN_WIDTH + 100 || y < -100 || y > game.SCREEN_HEIGHT + 100) {
-			game.removeEntity(this);
+			this.die();
 		} // if
 		
 		for (int i = 0; i < game.tiles.size(); i++) {
 			if (game.tiles.get(i).getCollision() && this.collidesWith(game.tiles.get(i), 0, 0)) {
-				game.removeEntity(this);
+				this.die();
 			} // if
 		}
 		
@@ -106,12 +106,12 @@ public class ShotEntity extends Entity {
 		// if it has hit an alien, kill it!
 		if (other instanceof EnemyEntity) {
 			// remove affect entities from the Entity list
-			game.removeEntity(this);
+			this.die();
 			
 			((EnemyEntity) other).addHealth(-1);
 			
 			if(((EnemyEntity) other).getHealth() < 1) {
-				game.removeEntity(other);
+				other.die();
 				game.notifyEnemyKilled();
 				
 				// award energy on a kill

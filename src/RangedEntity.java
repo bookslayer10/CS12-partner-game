@@ -3,6 +3,8 @@ public class RangedEntity extends EnemyEntity{
 	
 	private int shooting;
 	private boolean shot;
+	private LaserEntity laser;
+	private HighlightEntity highlight;
 	
 	public RangedEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, 1);
@@ -47,7 +49,13 @@ public class RangedEntity extends EnemyEntity{
 		
 	} // calculateMove
 	
-	private void shootLaser(int direction, boolean highlight) {
+	public void die() {
+		super.die();
+		laser.die();
+		highlight.die();
+	}
+	
+	private void shootLaser(int direction, boolean isHighlight) {
 		int magX;
 		int magY;
 		switch(direction) {
@@ -68,10 +76,13 @@ public class RangedEntity extends EnemyEntity{
 				magY = 0;
 		} // switch
 		
-		if (highlight) {
-			game.addEntity(new HighlightEntity(game, "sprites/laser/laser_", (int) x + magX * TileEntity.TILE_SIZE, (int) y + magY * TileEntity.TILE_SIZE, direction, magX, magY));
+		
+		if (isHighlight) {
+			highlight = new HighlightEntity(game, "sprites/laser/laser_", (int) x + magX * TileEntity.TILE_SIZE, (int) y + magY * TileEntity.TILE_SIZE, direction, magX, magY);
+			game.addEntity(highlight);
 		} else {
-		game.addEntity(new LaserEntity(game, "sprites/laser/laser_", (int) x + magX * TileEntity.TILE_SIZE, (int) y + magY * TileEntity.TILE_SIZE, direction, magX, magY));
+			laser = new LaserEntity(game, "sprites/laser/laser_", (int) x + magX * TileEntity.TILE_SIZE, (int) y + magY * TileEntity.TILE_SIZE, direction, magX, magY);
+			game.addEntity(laser);
 		}
 	} // shootLaser
 	

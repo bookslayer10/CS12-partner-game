@@ -35,7 +35,8 @@ public class Game extends Canvas {
 	private final Color BACKGROUND = new Color(51, 55, 56, 127);
 	public final Color LASER = new Color(188, 241, 247, 50);
 	private int introSlidesLeft = 5;
-
+	Font instructionsFont = new Font( "Monospaced",  Font.PLAIN, 18);
+	Font headerFont = new Font( "Monospaced", Font.BOLD, 30);
 	private Sprite[] arrows = new Sprite[8];
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
@@ -155,19 +156,32 @@ public class Game extends Canvas {
 	public void drawInstructions(Graphics2D g, int slide) {	
 		
 		g.setColor(BATTERY);
-		g.fillRect(500, 200, SCREEN_WIDTH - 1000, SCREEN_HEIGHT - 400);
+		g.fillRect(300, 200, SCREEN_WIDTH - 600, SCREEN_HEIGHT - 400);
 		
 		g.setColor(Color.white);
+		
+		int maxLineWidth = 0;
+		
+		for (String line : instructions[5 - slide]) {
+			maxLineWidth = Math.max(maxLineWidth, g.getFontMetrics().stringWidth(line));
+		} // for
 		
 		for (int i = 0; i < instructions[5 - slide].length; i++) {
 			String line = instructions[5 - slide][i];
 			
-			
+				
+			if (i == 0) {
+				g.setFont(headerFont);
+			} else {
+				g.setFont(instructionsFont);
+			} // else
 			
 			if (line == null) {
 				line = "";
 			}
-			g.drawString(line, (SCREEN_WIDTH - (i < 13 && i > 0 ? 456 : g.getFontMetrics().stringWidth(line))) / 2, 320 + i * 25);
+			
+			g.drawString(line, (SCREEN_WIDTH - (i < 13 && i > 0 ? maxLineWidth : g.getFontMetrics().stringWidth(line))) / 2, 320 + i * 25);
+			g.setFont(instructionsFont);
 		}
 	}
 	
@@ -314,16 +328,22 @@ public class Game extends Canvas {
 				
 				g.setColor(BACKGROUND);
 				g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+				g.setFont(instructionsFont);
+				
 				
 				if (introSlidesLeft > 0) {
 					drawInstructions(g, introSlidesLeft);
 				} else {
 					
-					g.setColor(Color.white);
 					
-					g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 10);
+					g.setColor(BATTERY);
+					g.fillRect(100, 400, SCREEN_WIDTH - 200, SCREEN_HEIGHT - 800);
+					
+					g.setColor(Color.white);
+					g.setFont(headerFont);
+					g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 20);
 					g.drawString("Press any key to continue.",
-						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 10);
+						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 20);
 				}
 														
 			} else {
@@ -536,7 +556,7 @@ public class Game extends Canvas {
 			if (waitingForKeyPress) {
 				
 				// goes backwards in instructions on right-click
-				if ((char) e.getButton() == (char) MouseEvent.BUTTON3) {
+				if ((char) e.getButton() == (char) MouseEvent.BUTTON3 && introSlidesLeft > 0) {
 					introSlidesLeft += 1;
 					if (introSlidesLeft > 5) {
 						introSlidesLeft = 5;

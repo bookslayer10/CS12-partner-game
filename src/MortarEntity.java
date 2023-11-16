@@ -18,7 +18,7 @@ public class MortarEntity extends Entity {
 		countdown--;
 		
 		if(detonating) {
-			game.removeEntity(this);		
+			this.die();		
 		} else if(countdown <= 0) {
 			detonating = true;
 			sprites = new Sprite[1][4];
@@ -55,7 +55,7 @@ public class MortarEntity extends Entity {
 				((EnemyEntity) other).addHealth(-3);
 				
 				if(((EnemyEntity) other).getHealth() < 1) {
-					game.removeEntity(other);
+					other.die();
 					game.notifyEnemyKilled();
 					game.awardEnergy(5);
 				} // if
