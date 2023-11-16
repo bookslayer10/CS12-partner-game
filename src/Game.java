@@ -166,7 +166,7 @@ public class Game extends Canvas {
 			if (line == null) {
 				line = "";
 			}
-			g.drawString(line, (SCREEN_WIDTH - (i < 13 ? 456 : g.getFontMetrics().stringWidth(line))) / 2, 320 + i * 25);
+			g.drawString(line, (SCREEN_WIDTH - (i < 13 && i > 0 ? 456 : g.getFontMetrics().stringWidth(line))) / 2, 320 + i * 25);
 		}
 	}
 	
@@ -216,7 +216,7 @@ public class Game extends Canvas {
 	public void spawnEnemies() {
 		
 		// chance for an individual tile to spawn an enemy, increases over time
-		double spawnChance = 0.002  + turnNumber * 0.0002;
+		double spawnChance = 0.002  + turnNumber * 0.0004;
 		
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
 		double rangedChance = Math.min(turnNumber * 0.005, 0.5);
@@ -337,12 +337,9 @@ public class Game extends Canvas {
 					directionOfShot = 360 + directionOfShot;
 				}
 				
-				directionOfShot = directionOfShot / 360 * 8;
-				
-				directionOfShot = Math.round(directionOfShot) % 8;
-				
-				arrows[(int) directionOfShot].draw(g, robot.getX() - TileEntity.TILE_SIZE, robot.getY() - TileEntity.TILE_SIZE);
-				
+				directionOfShot = directionOfShot / 360 * 8;			
+				directionOfShot = Math.round(directionOfShot) % 8;				
+				arrows[(int) directionOfShot].draw(g, robot.getX() - TileEntity.TILE_SIZE, robot.getY() - TileEntity.TILE_SIZE);				
 				directionOfShot = directionOfShot * 360 / 8;
 				
 				if (!makingMove) {
@@ -406,7 +403,7 @@ public class Game extends Canvas {
 							
 							entities.add(new MortarEntity(this, "sprites/mortar/crosshair_1.png", mortarX, mortarY));
 							takeTurn();
-							robot.useEnergy(10);
+							robot.useEnergy(8);
 							robot.setDirection((int) directionOfShot);
 							
 							//g.fillRect(mortarX - 58, mortarY - 58, 180, 180);
@@ -534,19 +531,39 @@ public class Game extends Canvas {
 	private class MouseInputHandler implements MouseListener {
 
 		public void mousePressed(MouseEvent e) {
-			// if waiting for keypress to start game, do nothing
+			// changes instruction slides at start
 			if (waitingForKeyPress) {
 				
-				return;
-			} // if
+				// goes backwards in instructions on right-click
+				if ((char) e.getButton() == (char) MouseEvent.BUTTON3) {
+					introSlidesLeft += 1;
+					if (introSlidesLeft > 5) {
+						introSlidesLeft = 5;
+					} // if
+					return;
+					
+				// otherwise advances slides
+				} else {
+					introSlidesLeft -= 1;
+					if (introSlidesLeft > 0) {
+						return;
+					}
+				}
+				
+				
+							
+				waitingForKeyPress = false;
+				startGame();
 			
+			} else {		
 			keyPressed = (char) e.getButton();
+			}
 			
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 

@@ -11,7 +11,7 @@ So defend your facilities against these cheap knockoffs using your far superior 
 
 
 
-Press Any Key to Continue
+Right-Click to Go Back, Left-Click to Continue
 1/5
 %%
 Controls:
@@ -21,18 +21,19 @@ costs 2 energy                                        costs 1 energy
 your standard move                              stay in place to conserve power
 
 Left-Click to shoot your blaster            Right-Click to drop a mortar
-costs 4 energy                                        costs 10 energy
+costs 4 energy                                        costs 8 energy
 originates from robot                             can be dropped anywhere
 small bullet                                             3x3 explosion
 moves 2 tiles a turn                               takes 4 turns to land
 
 
-Press Any Key to Continue
+Right-Click to Go Back, Left-Click to Continue
 2/5
 %%
+Actions:
+
 Each action takes some energy
 Regain energy by defeating enemy BOTs
-
 
 
 Each action takes one turn
@@ -42,8 +43,7 @@ When you take your turn… so do the enemies
 
 
 
-
-Press Any Key to Continue
+Right-Click to Go Back, Left-Click to Continue
 3/5
 %%
 The enemies:
@@ -59,21 +59,21 @@ Ranged BOT
 
 
 
-Press Any Key to Continue
+Right-Click to Go Back, Left-Click to Continue
 4/5
 %%
-BOTs are fragile… 
-Your BOT can only take one hit
+Durability:
 
+BOTs are fragile… 
+Ranged BOTs die with one hit
+Melee BOTs are stronger, taking 2 hits to kill (or one mortar)
+
+In manufacturing, you focused on a sophisticated weapons setup
+And so, your BOT can only take one hit
 
 So be careful, and prove your products are the best!
 
 
 
-
-
-
-
-
-Press Any Key to START
+Right-Click to Go Back, Left-Click to START GAME!!
 5/5
