@@ -8,7 +8,7 @@ public class ShotEntity extends Entity {
 	
 	private boolean used = false; // true if shot hits something
 	private static double SHOTSPEED = 2 * TileEntity.TILE_SIZE;
-	private static double DIAGONAL_SHOTSPEED = 1.4 * TileEntity.TILE_SIZE;
+	private static double DIAGONAL_SHOTSPEED = 1.6 * TileEntity.TILE_SIZE;
 
 	/*
 	 * construct the shot input: game - the game in which the shot is being created
@@ -115,7 +115,7 @@ public class ShotEntity extends Entity {
 				game.notifyEnemyKilled();
 				
 				// award energy on a kill
-				game.awardEnergy();
+				game.awardEnergy(10);
 			} // if
 			
 			used = true;
@@ -133,6 +133,6 @@ public class ShotEntity extends Entity {
 				(int) (sprite.getHeight() / 2) );
 		
 		return rect;
-	}
+	} // getHitbox
 
-} // RobotEntity class
+} // ShotEntity

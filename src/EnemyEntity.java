@@ -17,9 +17,10 @@ public class EnemyEntity extends Entity {
 	 * construct a new alien input: game - the game in which the alien is being
 	 * created r - the image representing the alien x, y - initial location of alien
 	 */
-	public EnemyEntity(Game g, String r, int newX, int newY) {
+	public EnemyEntity(Game g, String r, int newX, int newY, int health) {
 		super(g, r, newX, newY, true); // calls the constructor in Entity
-
+		this.health = health;
+		
 		// Sets direction based on which edge of the screen the enemy is at
 		if (x == g.SCREEN_WIDTH - TileEntity.TILE_SIZE) {
 			direction = 270;
@@ -33,22 +34,14 @@ public class EnemyEntity extends Entity {
 
 	} // constructor
 
-	/*
-	 * move input: delta - time elapsed since last move (ms) purpose: move alien
-	 */
-	public void move(long delta) {
-		
-		// proceed with normal move
-		super.move(delta);
-	} // move
-
 	public void calculateMove() {
-		Point point = findPath(this, Game.robot);
+		Point point = findPath(this, Game.robot).get(0);
 
 		if (point != null) {
 			dx = point.x * 64 - this.x;
 			dy = point.y * 64 - this.y;
-		}
+		} // if
+		
 		if (dx > 0) {
 			direction = 90;
 		} else if (dx < 0) {
@@ -57,7 +50,7 @@ public class EnemyEntity extends Entity {
 			direction = 180;
 		} else if (dy < 0) {
 			direction = 0;
-		}
+		} // if
 
 		super.calculateMove();
 	} // calculate
@@ -113,7 +106,7 @@ public class EnemyEntity extends Entity {
 		return neighbors;
 	}
 
-	private Point findPath(Entity enemy, Entity robot) {
+	protected List<Point> findPath(Entity enemy, Entity robot) {
 		Point start = new Point(enemy.getX() / TileEntity.TILE_SIZE, enemy.getY() / TileEntity.TILE_SIZE, null);
 		Point end = new Point(robot.getX() / TileEntity.TILE_SIZE, robot.getY() / TileEntity.TILE_SIZE, null);
 		// System.out.println("[" + start.x + "][" + start.y + "]");
@@ -154,7 +147,7 @@ public class EnemyEntity extends Entity {
 			point = point.previous;
 		} // while
 
-		return path.get(0);
+		return path;
 
 	} // findPath
 
@@ -177,7 +170,7 @@ public class EnemyEntity extends Entity {
 				sprite.getWidth() / 2, sprite.getHeight() / 2);
 
 		return rect;
-	}
+	} // getHitbox
 
 	public static void setKilled(int killed) {
 		if (killed < 0) {
@@ -185,8 +178,8 @@ public class EnemyEntity extends Entity {
 			EnemyEntity.killed = 0;
 		} else {
 			EnemyEntity.killed = killed;
-		}
-	}
+		} // else
+	} // setKilled
 
 	public static void setActive(int active) {
 		if (active < 0) {
@@ -194,27 +187,27 @@ public class EnemyEntity extends Entity {
 			EnemyEntity.active = 0;
 		} else {
 			EnemyEntity.active = active;
-		}
-	}
+		} // else 
+	} // setActive
 
 	public static int getKilled() {
 		return killed;
-	}
+	} // getKilled
 
 	public static int getActive() {
 		return active;
-	}
+	} // getActive
 
 	public void setHealth(int health) {
 		this.health = health;
-	}
+	} // setHealth
 
 	public int getHealth() {
 		return health;
-	}
+	} // getHealth
 
 	public void addHealth(int healthChange) {
 		setHealth(getHealth() + healthChange);
-	}
+	} // addHealth
 
 } // EnemyEntity class

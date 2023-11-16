@@ -70,8 +70,9 @@ public class RobotEntity extends Entity {
 		} // if
 		
 		return getIsMoving();
-	}
+	} // tryToMove
 	
+	// sets the direction of the robot from the input degree value.
 	public void setDirection(int degree) {
 		if (degree > 180 ) {
 			direction = 270;
@@ -79,8 +80,8 @@ public class RobotEntity extends Entity {
 			direction = 90;
 		} else {
 			direction = degree;
-		}
-	}
+		} // else
+	} // setDirection
 	
 	@Override
 	public Rectangle getHitbox(int shiftx, int shifty) {
@@ -89,19 +90,20 @@ public class RobotEntity extends Entity {
 		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y +  sprite.getHeight() / 4 + shifty, sprite.getWidth() / 2, sprite.getHeight() / 2);
 		
 		return rect;
-	}
+	} // getHitbox
 	
 	public int getEnergy() {
 		return energy;
-	}
+	} // getEnergy
 	
+	// simplification for easier use of energy
 	public void useEnergy(int usedEnergy) {
 		setEnergy(getEnergy() - usedEnergy);
-	}
+	} // useEnergy
 	
 	public void setEnergy(int energy) {
 		energy = Math.max(energy, 0);
 		this.energy = Math.min(energy, MAX_ENERGY);
-	}
+	} // setEnergy
 
-} // RobotEntity class
+} // RobotEntity

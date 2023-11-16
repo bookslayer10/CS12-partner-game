@@ -63,7 +63,6 @@ public abstract class Entity {
 	 * after a certain amount of time has passed, update the location
 	 * changes sprite frame if it is animated
 	 */
-	
 	public void move(long delta) {
 		
 		// moves the sprite to its new x position
@@ -102,7 +101,7 @@ public abstract class Entity {
 		
 		goalTile = game.tiles.get(goalTileIndex);
 		
-	}
+	} // calculateMove
 	
 	// get and set velocities
 	public void setHorizontalMovement(double newDX) {
@@ -134,9 +133,10 @@ public abstract class Entity {
 		return (int) y;
 	} // getY
 	
+	// return if the entity is in motion
 	public boolean getIsMoving() {
 		return dx != 0 || dy != 0;
-	}
+	} // getIsMoving
 	
 	/*
 	 * Draw this entity to the graphics object provided at (x,y)
@@ -153,13 +153,14 @@ public abstract class Entity {
 		return getHitbox(shiftx, shifty).intersects(other.getHitbox(0, 0));
 	} // collidesWith
 	
+	// returns the hitbox of the entity, with the option to shift it around
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
 		rect.setBounds((int) x + shiftx, (int) y + shifty, sprite.getWidth(), sprite.getHeight());
 		
 		return rect;
-	}
+	} // getHitbox
 	
 	/*
 	 * collidedWith input: the entity with which this has collided purpose:

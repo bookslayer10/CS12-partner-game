@@ -28,16 +28,17 @@ public class Game extends Canvas {
 	private ArrayList<Entity> removeEntities = new ArrayList<Entity>(); // list of entities
 	// to remove this loop
 	protected static RobotEntity robot; // the robot
+	private double directionOfShot;
 	private Sprite battery; // shows remaining energy
 	private Color BATTERY = new Color(51, 55, 56);
 	private Color BACKGROUND = new Color(51, 55, 56, 127);
 	private int introSlidesLeft = 5;
 
+	private Sprite[] arrows = new Sprite[8];
 	public final int SCREEN_WIDTH = 1856;
 	public final int SCREEN_HEIGHT = 960;
 
 	private final char NONE = '0';
-	private final char MOUSE = '9';
 	
 	protected static int[][] grid;
 	protected static String[][] instructions;
@@ -86,6 +87,9 @@ public class Game extends Canvas {
 
 		// add mouse listener to this canvas
 		addMouseListener(new MouseInputHandler());
+		
+		// add mouse listener to this canvas
+		addMouseMotionListener(new MouseMotionHandler());
 
 		// request focus so key events are handled by this canvas
 		requestFocus();
@@ -94,19 +98,7 @@ public class Game extends Canvas {
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
 		
-		startGame();
-
-		// start the game
-		gameLoop();
-	} // constructor
-
-	/*
-	 * initEntities input: none output: none purpose: Initialise the starting state
-	 * of the ship and alien entities. Each entity will be added to the array of
-	 * entities in the game.
-	 */
-	private void initEntities() {
-		grid = FileInput.getMapContents("src/grid.txt");
+		grid = FileInput.getFileContents("src/grid.txt");
 		int st = 0; // index of next spawnable tile
 		
 		instructions = FileInput.getInstructions("src/instructions.txt");
@@ -125,12 +117,23 @@ public class Game extends Canvas {
 			} // for
 		} // outer for
 		
-		battery = (SpriteStore.get()).getSprite("sprites/battery.png");
-				
 		// create the robot and put in the middle of screen
-		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
-		entities.add(robot);
-	} // initEntities
+		
+		battery = (SpriteStore.get()).getSprite("sprites/battery.png");
+
+		
+		@SuppressWarnings("unused")
+		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
+		
+		for(int i = 0; i < 8; i++) {
+			arrows[i] = (SpriteStore.get()).getSprite("sprites/arrow/arrow_" + 45 * i + ".png");
+		}
+		
+		startGame();
+
+		// start the game
+		gameLoop();
+	} // constructor
 	
 	/*
 	 * Remove an entity from the game. It will no longer be moved or drawn.
@@ -189,8 +192,8 @@ public class Game extends Canvas {
 	} // notifyAlienKilled
 	
 	// award energy on a kill with a shot
-	public void awardEnergy() {
-		robot.useEnergy(-10);
+	public void awardEnergy(int energy) {
+		robot.useEnergy(-energy);
 	} // awardEnergy
 	
 	/* If there are no enemies in play, will spawn an enemy on a random valid 
@@ -201,16 +204,10 @@ public class Game extends Canvas {
 	public void spawnEnemies() {
 		
 		// chance for an individual tile to spawn an enemy, increases over time
-		double spawnChance = 0.05  + turnNumber * 0.0005;
+		double spawnChance = 0.02  + turnNumber * 0.0002;
 		
 		// chance for ranged enemies to spawn, increases over time, capped at 50%
-		double rangedChance = Math.min(turnNumber * 0.0004, 0.5);
-		
-		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
-		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
-		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
-		rangedChance = 0; 
-		// !!!!!!REMOVE WHEN RANGED ENEMIES ARE SUPPORTED!!!!!!
+		double rangedChance = Math.min(turnNumber * 0.005, 0.5);
 		
 		for (TileEntity tile: spawnTiles) {
 			if (Math.random() > 1 - spawnChance) {
@@ -315,93 +312,113 @@ public class Game extends Canvas {
 					g.drawString("Press any key to continue.",
 						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 10);
 				}
-													
-			} // if
+														
+			} else {
+				// 0 to 180 to -0
+				directionOfShot = Math.toDegrees(Math.atan2(	(double) mouseY - (robot.getY() + TileEntity.TILE_SIZE / 2),
+																	(double) mouseX - (robot.getX() + TileEntity.TILE_SIZE / 2)));
+				
+				directionOfShot += 90;
+				
+				// turn it into full 360
+				if(directionOfShot < 0) {
+					directionOfShot = 360 + directionOfShot;
+				}
+				
+				directionOfShot = directionOfShot / 360 * 8;
+				
+				directionOfShot = Math.round(directionOfShot) % 8;
+				
+				arrows[(int) directionOfShot].draw(g, robot.getX() - TileEntity.TILE_SIZE, robot.getY() - TileEntity.TILE_SIZE);
+				
+				directionOfShot = directionOfShot * 360 / 8;
+				
+				if (!makingMove) {
+					
+					// if you run out of power, you die
+					// only checks this when a turn is finished
+					if(robot.getEnergy() < 1 && !waitingForKeyPress) {
+						notifyDeath();
+					}
+					
+					switch (keyPressed) {
+					
+						case 'W':
+							if (robot.tryToMove(0)) {
+								takeTurn();
+								robot.useEnergy(2);
+							} // if
+							break;
+						case 'D':
+							if (robot.tryToMove(90)) {
+								takeTurn();
+								robot.useEnergy(2);
+							} // if
+							break;
+						case 'S':
+							if (robot.tryToMove(180)) {
+								takeTurn();
+								robot.useEnergy(2);
+							} // if
+							break;
+						case 'A':
+							if (robot.tryToMove(270)) {
+								takeTurn();
+								robot.useEnergy(2);
+							} // if
+							break;
+							
+						// robot waits one turn
+						case 'Q':
+							takeTurn();
+							robot.useEnergy(1);
+							break;
+							
+						// shoots shot on left click
+						case (char) MouseEvent.BUTTON1:
+							
+							entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
+							takeTurn();
+							robot.useEnergy(4);
+							robot.setDirection((int) directionOfShot);
+							break;
+							
+						// mortar fire on right click
+						case (char) MouseEvent.BUTTON3:
+							
+							int mortarX = mouseX / TileEntity.TILE_SIZE;
+							int mortarY = mouseY / TileEntity.TILE_SIZE;
+							
+							mortarX *= TileEntity.TILE_SIZE;
+							mortarY *= TileEntity.TILE_SIZE;
+							
+							entities.add(new MortarEntity(this, "sprites/shot/shot_0_0.png", mortarX, mortarY));
+							takeTurn();
+							robot.useEnergy(10);
+							robot.setDirection((int) directionOfShot);
+							
+							//g.fillRect(mortarX - 58, mortarY - 58, 180, 180);
+							
+							break;
+							
+						default:
+							keyPressed = NONE;
+					} // switch
+					
+				} // if (!makingMove
+				
+			} // else
 			
 			// Draw full battery then cover up missing energy
 			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
 			g.setColor(BATTERY);
 			double modifier = 320.0 / robot.MAX_ENERGY;
-	        g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
+	        	g.fillRect((int) (robot.getEnergy() * modifier) + 96, TileEntity.TILE_SIZE * 13 + 20, (int) (320 - robot.getEnergy() * modifier), 88);
 			
 			// clear graphics and flip buffer
 			g.dispose();
 			strategy.show();
-
-			if (!makingMove) {
-				
-				// if you run out of power, you die
-				// only checks this when a turn is finished
-				if(robot.getEnergy() < 1 && !waitingForKeyPress) {
-					notifyDeath();
-				}
-				
-				switch (keyPressed) {
-				
-					case 'W':
-						if (robot.tryToMove(0)) {
-							takeTurn();
-							robot.useEnergy(2);
-						} // if
-						break;
-					case 'D':
-						if (robot.tryToMove(90)) {
-							takeTurn();
-							robot.useEnergy(2);
-						} // if
-						break;
-					case 'S':
-						if (robot.tryToMove(180)) {
-							takeTurn();
-							robot.useEnergy(2);
-						} // if
-						break;
-					case 'A':
-						if (robot.tryToMove(270)) {
-							takeTurn();
-							robot.useEnergy(2);
-						} // if
-						break;
-						
-					// robot waits one turn
-					case 'Q':
-						takeTurn();
-						robot.useEnergy(1);
-						break;
-						
-					// shoots on click
-					case MOUSE:
-						
-						mouseX -= robot.getX() + TileEntity.TILE_SIZE / 2;
-						mouseY -= robot.getY() + TileEntity.TILE_SIZE / 2;
-						
-						// 0 to 180 to -0
-						double directionOfShot = Math.toDegrees(Math.atan2((double) mouseY, (double)mouseX));
-						
-						directionOfShot += 90;
-						
-						// turn it into full 360
-						if(directionOfShot < 0) {
-							directionOfShot = 360 + directionOfShot;
-						}
-						
-						directionOfShot = directionOfShot / 360 * 8;
-						
-						directionOfShot = Math.round(directionOfShot) % 8;
-						
-						directionOfShot = directionOfShot * 360 / 8;
-	
-						entities.add(new ShotEntity(this, "sprites/shot/shot_", robot.getX(), robot.getY(), (int) directionOfShot));
-						takeTurn();
-						robot.useEnergy(4);
-						robot.setDirection((int) directionOfShot);
-						break;
-					default:
-						keyPressed = NONE;
-				} // switch
-				
-			} // if (!makingMove
-
+			
 			// pause
 			try {
 				Thread.sleep(10);
@@ -419,6 +436,8 @@ public class Game extends Canvas {
 	private void startGame() {
 		// clear out any existing entities and initalize a new set
 		entities.clear();
+		robot = new RobotEntity(this, "sprites/robot/robot_", TileEntity.TILE_SIZE * 14, TileEntity.TILE_SIZE * 7);
+		entities.add(robot);
 		
 		EnemyEntity.setKilled(0);
 		EnemyEntity.setActive(0);
@@ -427,8 +446,8 @@ public class Game extends Canvas {
 		// blank out any keyboard settings that might exist
 		keyPressed = NONE;
 		
-		initEntities();
 		robot.setEnergy(robot.MAX_ENERGY);
+		message = "Press any key to continue.";
 	} // startGame
 
 	private void takeTurn() {
@@ -449,10 +468,14 @@ public class Game extends Canvas {
 			if (entity instanceof ShotEntity) {
 				entity.calculateMove();
 			}
+			
+			if (entity instanceof MortarEntity) {
+				entity.calculateMove();
+			}
 
 		} // for
 	}
-
+	
 	/*
 	 * inner class KeyInputHandler handles keyboard input from the user
 	 */
@@ -473,11 +496,7 @@ public class Game extends Canvas {
 			} // if
 
 			keyPressed = (char) e.getKeyCode();
-
-			// make sure not to activate mouse clicks when pressing 9
-			if (keyPressed == MOUSE) {
-				keyPressed = NONE;
-			}
+			
 		} // keyPressed
 
 		public void keyTyped(KeyEvent e) {
@@ -515,9 +534,8 @@ public class Game extends Canvas {
 				return;
 			} // if
 			
-			keyPressed = MOUSE;
-			mouseX = e.getX();
-			mouseY = e.getY();
+			keyPressed = (char) e.getButton();
+			
 		}
 
 		@Override
@@ -546,6 +564,22 @@ public class Game extends Canvas {
 
 	} // class KeyInputHandler
 
+	private class MouseMotionHandler implements MouseMotionListener {
+		
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			//mouseX = e.getX();
+			//mouseY = e.getY();
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			mouseX = e.getX();
+			mouseY = e.getY();
+		}
+		
+	}
+	
 	/**
 	 * Main Program
 	 */
