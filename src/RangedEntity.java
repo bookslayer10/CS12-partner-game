@@ -15,8 +15,8 @@ public class RangedEntity extends EnemyEntity{
 				dx = 0;
 				dy = 0;
 				
-				int shiftX = (int) (x / TileEntity.TILE_SIZE - Game.robot.x / TileEntity.TILE_SIZE);
-				int shiftY = (int) (y / TileEntity.TILE_SIZE - Game.robot.y / TileEntity.TILE_SIZE);
+				int shiftX = (int) ((Game.robot.x - x)/ TileEntity.TILE_SIZE);
+				int shiftY = (int) ((Game.robot.y - y)/ TileEntity.TILE_SIZE);
 				
 				if (shiftX > 0) {
 					direction = 90;
