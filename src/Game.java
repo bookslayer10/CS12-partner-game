@@ -31,8 +31,9 @@ public class Game extends Canvas {
 	private double directionOfShot;
 	private Sprite controls; // shows remaining energy
 	private Sprite battery; // shows remaining energy
-	private Color BATTERY = new Color(51, 55, 56);
-	private Color BACKGROUND = new Color(51, 55, 56, 127);
+	private final Color BATTERY = new Color(51, 55, 56);
+	private final Color BACKGROUND = new Color(51, 55, 56, 127);
+	public final Color LASER = new Color(188, 241, 247, 50);
 	private int introSlidesLeft = 5;
 
 	private Sprite[] arrows = new Sprite[8];

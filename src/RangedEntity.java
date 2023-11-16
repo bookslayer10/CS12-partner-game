@@ -13,7 +13,7 @@ public class RangedEntity extends EnemyEntity{
 		super.calculateMove();
 		
 		if (shooting != -1) {
-			shootLaser(shooting);
+			shootLaser(shooting, false);
 			shooting = -1;
 			dx = 0;
 			dy = 0;
@@ -42,33 +42,37 @@ public class RangedEntity extends EnemyEntity{
 					direction = 0;
 				} // else
 				shooting = direction;
-				
+				shootLaser(shooting, true);
 		} // if
 		
 	} // calculateMove
 	
-	private void shootLaser(int direction) {
+	private void shootLaser(int direction, boolean highlight) {
 		int magX;
 		int magY;
 		switch(direction) {
-		case 0:
-			magX = 0;
-			magY = -1;
-			break;
-		case 90:
-			magX = 1;
-			magY = 0;
-			break;
-		case 180:
-			magX = 0;
-			magY = 1;
-			break;
-		default:
-			magX = -1;
-			magY = 0;
-	} // switch
+			case 0:
+				magX = 0;
+				magY = -1;
+				break;
+			case 90:
+				magX = 1;
+				magY = 0;
+				break;
+			case 180:
+				magX = 0;
+				magY = 1;
+				break;
+			default:
+				magX = -1;
+				magY = 0;
+		} // switch
 		
+		if (highlight) {
+			game.addEntity(new HighlightEntity(game, "sprites/laser/laser_", (int) x + magX * TileEntity.TILE_SIZE, (int) y + magY * TileEntity.TILE_SIZE, direction, magX, magY));
+		} else {
 		game.addEntity(new LaserEntity(game, "sprites/laser/laser_", (int) x + magX * TileEntity.TILE_SIZE, (int) y + magY * TileEntity.TILE_SIZE, direction, magX, magY));
+		}
 	} // shootLaser
 	
 } // RangedEntity

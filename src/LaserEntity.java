@@ -5,10 +5,10 @@ import java.awt.Rectangle;
 
 public class LaserEntity extends Entity {
 	
-	private int magX;
-	private int magY;
-	private int limit;
-	private int countdown = 1;
+	protected int magX;
+	protected int magY;
+	protected int limit;
+	protected int countdown = 1;
 	
 	public LaserEntity(Game g, String r, int newX, int newY, int direction, int magX, int magY) {
 		super(g, r, newX, newY, true);
