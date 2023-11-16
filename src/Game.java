@@ -29,6 +29,7 @@ public class Game extends Canvas {
 	// to remove this loop
 	protected static RobotEntity robot; // the robot
 	private double directionOfShot;
+	private Sprite controls; // shows remaining energy
 	private Sprite battery; // shows remaining energy
 	private Color BATTERY = new Color(51, 55, 56);
 	private Color BACKGROUND = new Color(51, 55, 56, 127);
@@ -98,7 +99,7 @@ public class Game extends Canvas {
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
 		
-		grid = FileInput.getFileContents("src/grid.txt");
+		grid = FileInput.getMapContents("src/grid.txt");
 		int st = 0; // index of next spawnable tile
 		
 		instructions = FileInput.getInstructions("src/instructions.txt");
@@ -120,7 +121,7 @@ public class Game extends Canvas {
 		// create the robot and put in the middle of screen
 		
 		battery = (SpriteStore.get()).getSprite("sprites/battery.png");
-
+		controls = (SpriteStore.get()).getSprite("sprites/controls.png");
 		
 		@SuppressWarnings("unused")
 		ShotEntity testShot = new ShotEntity(this, "sprites/shot/shot_", 0, 0, 0);
@@ -392,7 +393,7 @@ public class Game extends Canvas {
 							mortarX *= TileEntity.TILE_SIZE;
 							mortarY *= TileEntity.TILE_SIZE;
 							
-							entities.add(new MortarEntity(this, "sprites/shot/shot_0_0.png", mortarX, mortarY));
+							entities.add(new MortarEntity(this, "sprites/mortar/crosshair_1.png", mortarX, mortarY));
 							takeTurn();
 							robot.useEnergy(10);
 							robot.setDirection((int) directionOfShot);
@@ -408,6 +409,8 @@ public class Game extends Canvas {
 				} // if (!makingMove
 				
 			} // else
+			
+			controls.draw(g, 23 * TileEntity.TILE_SIZE , TileEntity.TILE_SIZE * 13);
 			
 			// Draw full battery then cover up missing energy
 			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);

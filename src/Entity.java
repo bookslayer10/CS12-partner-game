@@ -18,7 +18,7 @@ public abstract class Entity {
 	
 	protected Game game;
 	protected Sprite sprite; // this entity's sprite
-	protected Sprite[][] sprites = new Sprite[4][4]; // array of animated sprites with each direction (up, right, down,
+	protected Sprite[][] sprites; // array of animated sprites with each direction (up, right, down,
 												   // left) being a array of 4 frames
 	protected boolean isAnimated;
 	
@@ -47,11 +47,9 @@ public abstract class Entity {
 		} // if
 		
 		else {
+			sprites = new Sprite[4][4];
 			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
-					sprites[i][j] = (SpriteStore.get())
-							.getSprite(r + i * 90 + "_" + j + ".png");
-				} // for
+				sprites[i] = loadSpriteArray(r + i * 90);
 			} // for
 			sprite = sprites[0][0];
 		} // else
@@ -124,6 +122,17 @@ public abstract class Entity {
 		this.sprite = sprite;
 	}
 
+	public Sprite[] loadSpriteArray(String r) {
+		Sprite[] sprites = new Sprite[4];
+		
+		for (int j = 0; j < 4; j++) {
+			sprites[j] = (SpriteStore.get())
+					.getSprite(r + "_" + j + ".png");
+		} // for
+		
+		return sprites;		
+	}
+	
 	// get position
 	public int getX() {
 		return (int) x;

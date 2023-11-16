@@ -1,14 +1,16 @@
+import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public class MortarEntity extends Entity {
 	
 	private static final int BLAST_DIAMETER = 170;
 	private boolean detonating = false;
-	private int countdown = 4;
+	private int countdown;
 	
 	
 	public MortarEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, false); // calls the constructor in Entity
+		countdown = 4;
 	}
 	
 	@Override
@@ -16,9 +18,15 @@ public class MortarEntity extends Entity {
 		countdown--;
 		
 		if(detonating) {
-			game.removeEntity(this);
-		} else if(countdown < 1) {
+			game.removeEntity(this);		
+		} else if(countdown <= 0) {
 			detonating = true;
+			sprites = new Sprite[1][4];
+			sprites[0] = loadSpriteArray("sprites/mortar/boom");
+			direction = 0;
+			isAnimated = true;
+		} else {
+			sprite = (SpriteStore.get()).getSprite("sprites/mortar/crosshair_" + (countdown - 1) + ".png");
 		} // else if
 	} // calculateMove
 	
@@ -32,6 +40,11 @@ public class MortarEntity extends Entity {
 		
 		return rect;
 	} // getHitbox
+	
+	@Override
+	public void draw(Graphics g) {
+		sprite.draw(g, (int) x - 64, (int) y - 64);
+	} // draw
 	
 	@Override
 	public void collidedWith(Entity other) {
