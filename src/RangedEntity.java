@@ -1,3 +1,8 @@
+/* RangedEntity.java
+ * An EnemyEntity that pathfinds towards the player until it has an uninterrupted line to shoot at it
+ * and then charges for one turn before shooting an instantaneous laser that hits all BOTs between the
+ * RangedEntity and the next obstacle (tile with collision on)
+ */
 
 public class RangedEntity extends EnemyEntity{
 	
@@ -57,6 +62,9 @@ public class RangedEntity extends EnemyEntity{
 		} // if
 		
 	} // calculateMove
+	
+	/* Upon death, removes the RangedEntity and Entities that originate from it (laser and highlight)
+	 */
 	
 	public void die() {
 		game.removeEntity(this);
