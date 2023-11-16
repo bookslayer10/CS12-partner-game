@@ -15,7 +15,7 @@ public class Game extends Canvas {
 	protected BufferStrategy strategy; // take advantage of accelerated graphics
 	private boolean waitingForKeyPress = true; // true if game held up until
 	// a key is pressed
-	private boolean makingMove = false;
+	protected boolean makingMove = false;
 	private char keyPressed;
 	private int mouseX;
 	private int mouseY;

@@ -65,7 +65,9 @@ public class LaserEntity extends Entity {
 		} // if
 		
 		if (other instanceof RobotEntity) {
-			game.notifyDeath();
+			if (game.makingMove == false ) {
+				game.notifyDeath();
+			} // if
 		} // if
 		
 	}
