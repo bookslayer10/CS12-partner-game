@@ -151,8 +151,7 @@ public class EnemyEntity extends Entity {
 
 	} // findPath
 
-	/*
-	 * collidedWith input: other - the entity with which the alien has collided
+	/* collidedWith input: other - the entity with which the alien has collided
 	 * purpose: notification that the alien has collided with something
 	 */
 	public void collidedWith(Entity other) {

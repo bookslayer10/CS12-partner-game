@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 public class FileInput {
 
+	/* Reads in a formatted text file into an int[][] indicating the tile type with an integer
+	 */
 	public static int[][] getMapContents(String fileName) {
 		int[][] content = new int[15][29];
 		try {
@@ -27,15 +29,20 @@ public class FileInput {
 
 	} // getMapContents
 	
+	/* Reads in a formatted text file with "%%" to indicate the breaks between separate slides of instructions
+	 * returns content with each subarray an as instruction slide split into an array of lines
+	 */
 	public static String[][] getInstructions(String fileName) {
 		String[][] content = new String[5][15];
 		try {
 			// Read the lines from the file and collect them into a list
 			String[] lines = Files.lines(Paths.get(fileName)).collect(Collectors.toList()).toArray(new String[0]);
 			
-			int i = 0;
-			int j = 0;
+			int i = 0; // which slide
+			int j = 0; // which line within the slide
 			for (String line: lines) {
+				
+				// switches to next slide upon reaching break indicator
 				if (line.equals("%%")) {
 					i++;
 					j = 0;
