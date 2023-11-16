@@ -7,11 +7,11 @@ public class MortarEntity extends Entity {
 	private boolean detonating = false;
 	private int countdown;
 	
-	
+	// MortarEntity constructor
 	public MortarEntity(Game g, String r, int newX, int newY) {
 		super(g, r, newX, newY, false); // calls the constructor in Entity
 		countdown = 4;
-	}
+	} // default constructor
 	
 	@Override
 	public void calculateMove() {

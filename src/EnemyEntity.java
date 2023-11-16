@@ -33,7 +33,9 @@ public class EnemyEntity extends Entity {
 		} // else
 
 	} // constructor
-
+	
+	// uses pathfinding to calculate its move each turn
+	@Override
 	public void calculateMove() {
 		Point point = findPath(this, Game.robot).get(0);
 
@@ -55,6 +57,7 @@ public class EnemyEntity extends Entity {
 		super.calculateMove();
 	} // calculate
 
+	// Point stores the x and y cordinates for the pathfinding algoritim
 	public static class Point {
 		private int x;
 		private int y;
@@ -80,15 +83,18 @@ public class EnemyEntity extends Entity {
 		} // offset
 
 	} // Point
-
+	
+	// checks if the given point corresponds to a walkable tile
 	private boolean isWalkable(Point point) {
 		if (point.y < 0 || point.y > Game.grid.length - 1)
 			return false;
 		if (point.x < 0 || point.x > Game.grid[0].length - 1)
 			return false;
 		return Game.grid[point.y][point.x] == 0;
-	}
-
+	} // isWalkable
+	
+	// find the points that represent the neighboring tiles
+	// they also need to be walkable to be valid
 	private List<Point> findNeighbours(Point point) {
 		List<Point> neighbors = new ArrayList<>();
 		Point up = point.offset(0, 1);
@@ -104,8 +110,9 @@ public class EnemyEntity extends Entity {
 		if (isWalkable(right))
 			neighbors.add(right);
 		return neighbors;
-	}
-
+	} // findNeighbours
+	
+	// find the list of points to navigate the enemy to the robot
 	protected List<Point> findPath(Entity enemy, Entity robot) {
 		Point start = new Point(enemy.getX() / TileEntity.TILE_SIZE, enemy.getY() / TileEntity.TILE_SIZE, null);
 		Point end = new Point(robot.getX() / TileEntity.TILE_SIZE, robot.getY() / TileEntity.TILE_SIZE, null);
@@ -162,6 +169,8 @@ public class EnemyEntity extends Entity {
 	} // collidedWith
 
 	@Override
+	// enemies have smaller hitboxes than they seem
+	// improves player experience through more lenient collision
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 

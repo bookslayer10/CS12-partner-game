@@ -122,6 +122,7 @@ public abstract class Entity {
 		this.sprite = sprite;
 	}
 
+	// loads the sprites used by the entity
 	public Sprite[] loadSpriteArray(String r) {
 		Sprite[] sprites = new Sprite[4];
 		
@@ -131,7 +132,7 @@ public abstract class Entity {
 		} // for
 		
 		return sprites;		
-	}
+	} // loadSpriteArray
 	
 	// get position
 	public int getX() {
@@ -154,12 +155,12 @@ public abstract class Entity {
 		sprite.draw(g, (int) x, (int) y);
 	} // draw
 
+	// overriden in other methods to enable special features
 	public void die() {
 		if (this != null) {
 			game.removeEntity(this);
 		}
-	}
-	
+	} // die
 	
 	/*
 	 * collidesWith input: the other entity to check collision against output: true
