@@ -48,23 +48,26 @@ public class MortarEntity extends Entity {
 	
 	@Override
 	public void collidedWith(Entity other) {
-		if (detonating) {
-			// if it has hit an alien, kill it!
-			if (other instanceof EnemyEntity) {
-				
-				((EnemyEntity) other).addHealth(-3);
-				
-				if(((EnemyEntity) other).getHealth() < 1) {
-					game.removeEntity(other);
-					game.notifyEnemyKilled();
-					game.awardEnergy(5);
-				} // if
-			} // if
-			
-			if (other instanceof RobotEntity) {
-				game.notifyDeath();
-			} // if
-			
+		if (!detonating) {
+			return;
 		} // if
+		
+		// if it has hit an alien, kill it!
+		if (other instanceof EnemyEntity) {
+			
+			((EnemyEntity) other).addHealth(-3);
+			
+			if(((EnemyEntity) other).getHealth() < 1) {
+				game.removeEntity(other);
+				game.notifyEnemyKilled();
+				game.awardEnergy(5);
+			} // if
+		} // if
+		
+		if (other instanceof RobotEntity) {
+			game.notifyDeath();
+		} // if
+			
+		
 	} // collidedWith
 } // MortarEntity

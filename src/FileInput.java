@@ -28,7 +28,7 @@ public class FileInput {
 	} // getMapContents
 	
 	public static String[][] getInstructions(String fileName) {
-		String[][] content = new String[5][15];
+		String[][] content = new String[5][17];
 		try {
 			// Read the lines from the file and collect them into a list
 			String[] lines = Files.lines(Paths.get(fileName)).collect(Collectors.toList()).toArray(new String[0]);

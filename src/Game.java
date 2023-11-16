@@ -146,20 +146,27 @@ public class Game extends Canvas {
 	
 	public void drawInstructions(Graphics2D g, int slide) {	
 		
-		g.setColor(BATTERY);
-		g.fillRect(500, 200, SCREEN_WIDTH - 1000, SCREEN_HEIGHT - 400);
+		int maxLineWidth = 0;
+		
+		
+		// sets the left side of all text based on the width of the widest line
+		for (int i = 0; i < instructions[5 - slide].length; i++) {
+			maxLineWidth = Math.max(maxLineWidth, g.getFontMetrics().stringWidth(instructions[5 - slide][i]));
+		}
 		
 		g.setColor(Color.white);
 		
 		for (int i = 0; i < instructions[5 - slide].length; i++) {
 			String line = instructions[5 - slide][i];
-			
-			
-			
+					
 			if (line == null) {
 				line = "";
 			}
-			g.drawString(line, (SCREEN_WIDTH - (i < 13 ? 456 : g.getFontMetrics().stringWidth(line))) / 2, 320 + i * 25);
+			
+			// centers header and footer, and lines up all other lines based on longest line in array
+			int lineWidth = i >= 13 || i == 0 ? g.getFontMetrics().stringWidth(line) : maxLineWidth;
+			
+			g.drawString(line, (SCREEN_WIDTH - lineWidth) / 2, 310 + i * 22);
 		}
 	}
 	
@@ -304,6 +311,10 @@ public class Game extends Canvas {
 				g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 				
 				if (introSlidesLeft > 0) {
+					
+					g.setColor(BATTERY);
+					g.fillRect(600, 200, SCREEN_WIDTH - 1200, SCREEN_HEIGHT - 400);
+					
 					drawInstructions(g, introSlidesLeft);
 				} else {
 					
