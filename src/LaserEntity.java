@@ -11,6 +11,7 @@ public class LaserEntity extends Entity {
 		super(g, r, newX, newY, true);
 		this.magX = magX;
 		this.magY = magY;
+		this.direction = direction;
 
 		for (limit = 0; ; limit++) {
 			int goalTileIndex = (((int) (y + magY * limit) / TileEntity.TILE_SIZE) * 29 + (int) (x + magX * limit) / TileEntity.TILE_SIZE);
