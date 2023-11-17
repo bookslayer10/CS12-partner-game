@@ -1,6 +1,12 @@
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+/* MortarEntity.java
+ * A global-range shot fired by the player
+ * Insta-kills enemies in a 3x3 area of effect centered on targeted tile
+ * Takes 4 turns to fall
+ */
+
 public class MortarEntity extends Entity {
 	
 	private static final int BLAST_DIAMETER = 130;

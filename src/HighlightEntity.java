@@ -1,8 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-/* 
- * HighlightEntity.Java
+/* HighlightEntity.Java
  * Is created by RangedEntity to show where it will shoot next turn
  * Uses laser properties (width, height, length) to show full area of effect
  * Stays on screen until laser is fired, or the RangedEntity dies
@@ -18,8 +17,7 @@ public class HighlightEntity extends LaserEntity{
 		super(g, r, newX, newY, direction, scaleX, scaleY);	
 	} // HighlightEntity
 
-	/* 
-	 * Overrides default draw to include every tile the laser hits - uses same method as LaserEntity.getHitbox
+	/* Overrides default draw to include every tile the laser hits - uses same method as LaserEntity.getHitbox
 	 * fields x and y are the top left corner of the first tile the laser will hit (right next to the RangedEntity that will fire it)
 	 * x: if scaleX is negative (shooting left), shifts the corner left by the laser's extra length
 	 * y: if scaleY is negative (shooting up), shifts the corner up by the laser's extra length 

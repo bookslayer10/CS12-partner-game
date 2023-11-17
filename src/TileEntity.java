@@ -1,5 +1,9 @@
 import java.awt.Rectangle;
 
+/* TileEntity.java
+ * All map tiles. Stores whether entities can move and/or spawn on them.
+ */
+
 public class TileEntity extends Entity {
 	private boolean collision;
 	private boolean spawnable;

@@ -3,6 +3,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
+/* FileInput.java
+ * Reads in required formatted files for use within the game
+ */
 public class FileInput {
 
 	/* Reads in a formatted text file into an int[][] indicating the tile type with an integer

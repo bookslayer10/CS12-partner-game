@@ -1,6 +1,7 @@
 /* Game.java
- * CS12 Game - another change
- * 
+ * Title: SUPERBOT
+ * Authors: Carmen Edora, Liam Evans, Liam Teschke
+ * Description: a robot-themed, tile-based, turn-based arena battler
  */
 
 import javax.swing.*;
