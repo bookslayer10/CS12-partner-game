@@ -362,8 +362,10 @@ public class Game extends Canvas {
 				} // if
 				
 				directionOfShot = directionOfShot / 360 * 8;			
-				directionOfShot = Math.round(directionOfShot) % 8;				
-				arrows[(int) directionOfShot].draw(g, robot.getX() - TileEntity.TILE_SIZE, robot.getY() - TileEntity.TILE_SIZE);				
+				directionOfShot = Math.round(directionOfShot) % 8;	
+				
+				arrows[(int) directionOfShot].draw(g, robot.getX() - TileEntity.TILE_SIZE, robot.getY() - TileEntity.TILE_SIZE);	
+				
 				directionOfShot = directionOfShot * 360 / 8;
 				
 				if (!makingMove) {
@@ -376,6 +378,7 @@ public class Game extends Canvas {
 					
 					switch (keyPressed) {
 					
+						// WASD movement
 						case 'W':
 							if (robot.tryToMove(0)) {
 								takeTurn();
@@ -428,23 +431,21 @@ public class Game extends Canvas {
 							entities.add(new MortarEntity(this, "sprites/mortar/crosshair_1.png", mortarX, mortarY));
 							takeTurn();
 							robot.useEnergy(16);
-							robot.setDirection((int) directionOfShot);
-							
-							//g.fillRect(mortarX - 58, mortarY - 58, 180, 180);
-							
+							robot.setDirection((int) directionOfShot);							
 							break;
 							
 						default:
 							keyPressed = NONE;
 					} // switch
 					
-				} // if (!makingMove
+				} // if (!makingMove)
 				
 			} // else
 			
+			// Draw controls on bottom-right
 			controls.draw(g, 23 * TileEntity.TILE_SIZE , TileEntity.TILE_SIZE * 13);
 			
-			// Draw full battery then cover up missing energy
+			// Draw full battery on bottom-left then cover up missing energy
 			battery.draw(g, 64, TileEntity.TILE_SIZE * 13);
 			g.setColor(BATTERY);
 			double modifier = 320.0 / robot.MAX_ENERGY;
@@ -464,8 +465,7 @@ public class Game extends Canvas {
 
 	} // gameLoop
 
-	/*
-	 * startGame input: none output: none purpose: start a fresh game, clear old
+	/* startGame input: none output: none purpose: start a fresh game, clear old
 	 * data
 	 */
 	private void startGame() {
