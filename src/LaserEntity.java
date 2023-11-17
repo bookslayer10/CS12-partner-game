@@ -84,21 +84,20 @@ public class LaserEntity extends Entity {
 	} // getHitbox
 	
 	public void collidedWith(Entity other) {
+		
+		// Damages other enemies, kills them if their health reaches 0
 		if (other instanceof EnemyEntity) {
-
-			// Damages other enemies, kills them if their health reaches 0
 			((EnemyEntity) other).addHealth(-1);			
 			if(((EnemyEntity) other).getHealth() < 1) {
-				game.removeEntity(other);
+				other.die();
 			} // if
 		} // if
 		
-		if (other instanceof RobotEntity) {
-			if (game.makingMove == false ) {
-				game.notifyDeath();
-			} // if
+		// Kills player if they end their turn within laser beam
+		if (other instanceof RobotEntity && !game.makingMove) {
+			other.die();
 		} // if
 		
-	}
+	} // collidedWith
 
 } // LaserEntity

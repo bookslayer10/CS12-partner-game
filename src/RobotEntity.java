@@ -1,8 +1,7 @@
 import java.awt.Rectangle;
 
 /* RobotEntity.java
- * March 27, 2006
- * Represents player's ship
+ * Represents player's BOT
  */
 public class RobotEntity extends Entity {
 
@@ -34,7 +33,7 @@ public class RobotEntity extends Entity {
 	 */
 	public void collidedWith(Entity other) {
 		if (other instanceof EnemyEntity) {
-			game.notifyDeath();
+			die();
 		} // if
 	} // collidedWith
 	
@@ -72,7 +71,7 @@ public class RobotEntity extends Entity {
 		return getIsMoving();
 	} // tryToMove
 	
-	// sets the direction of the robot from the input degree value.
+	// sets the direction of the robot based on input degree value.
 	public void setDirection(int degree) {
 		if (degree > 180 ) {
 			direction = 270;
@@ -82,12 +81,18 @@ public class RobotEntity extends Entity {
 			direction = degree;
 		} // else
 	} // setDirection
+	 
+	// Only kills player if they end their turn
+	public void die() {
+		game.notifyDeath();
+	} // die
 	
 	@Override
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
-		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y +  sprite.getHeight() / 4 + shifty, sprite.getWidth() / 2, sprite.getHeight() / 2);
+		rect.setBounds((int) x + sprite.getWidth() / 4 + shiftx, (int) y +  sprite.getHeight() / 4 + shifty, 
+				sprite.getWidth() / 2, sprite.getHeight() / 2);
 		
 		return rect;
 	} // getHitbox
@@ -96,7 +101,7 @@ public class RobotEntity extends Entity {
 		return energy;
 	} // getEnergy
 	
-	// simplification for easier use of energy
+	// reduces current energy by an int usedEnergy
 	public void useEnergy(int usedEnergy) {
 		setEnergy(getEnergy() - usedEnergy);
 	} // useEnergy

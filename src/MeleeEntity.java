@@ -1,3 +1,7 @@
+/* MeleeEntity.java
+ * An EnemyEntity that pathfinds towards the player and deals contact damage
+ * Spawns with 2 health, and shows when it is damaged by switching to a separate sprite
+ */
 
 public class MeleeEntity extends EnemyEntity {
 	
@@ -6,31 +10,22 @@ public class MeleeEntity extends EnemyEntity {
 		super(g, r, newX, newY, 2);
 	} // constructor
 	
-	// if the melee entity gets damaged during its turn, switch the sprite list to the broken sprites
+	// if the melee entity gets damaged during its turn, reloads sprite arrays with "broken" animations
 	public void move(long delta) {
 		
-		// only activates a single time
+		// only loads arrays once
 		if(getHealth() < 2 && !isDamaged) {
 			isDamaged = true;
-			
+						
 			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
-					sprites[i][j] = (SpriteStore.get())
-							.getSprite("sprites/broken_melee/broken_melee_" + i * 90 + "_" + j + ".png");
-				} // for
+				sprites[i] = loadSpriteArray("sprites/broken_melee/broken_melee_" + i * 90);
 			} // for
 			sprite = sprites[0][0];
+		
 		} // if
 		
 		// proceed with normal move
 		super.move(delta);
 	} // move
 	
-	// if melee entity runs into another melee entity, 
-	public void collidedWith(Entity other) {
-		if(other instanceof MeleeEntity) {
-			game.removeEntity(this);
-			game.notifyEnemyKilled();
-		}
-	} // collidedWith
 } // MeleeEntity

@@ -3,9 +3,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 
-/* AlienEntity.java
- * March 27, 2006
- * Represents one of the aliens
+/* EnemyEntity.java
+ * Enemy BOTs that chase the player and attempt to kill them in different ways
+ * EnemyEntities die upon running into each other
  */
 public class EnemyEntity extends Entity {
 
@@ -157,15 +157,18 @@ public class EnemyEntity extends Entity {
 		return path;
 
 	} // findPath
-
+	public void die() {
+		game.removeEntity(this);
+		game.notifyEnemyKilled();
+	} // die
+	
 	/* collidedWith input: other - the entity with which the alien has collided
 	 * purpose: notification that the alien has collided with something
 	 */
 	public void collidedWith(Entity other) {
-		if(other instanceof MeleeEntity) {
+		if(other instanceof EnemyEntity) {
 			this.die();
-			game.notifyEnemyKilled();
-		}
+		} // if
 	} // collidedWith
 
 	@Override

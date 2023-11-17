@@ -20,20 +20,20 @@ public abstract class Entity {
 	protected Sprite sprite; // this entity's sprite
 	protected Sprite[][] sprites; // array of animated sprites with each direction (up, right, down,
 												   // left) being a array of 4 frames
-	protected boolean isAnimated;
+	protected boolean isAnimated; // indicates that the sprites array should be used instead of static sprite
 	
-	protected double dx = 0; // horizontal speed (px/s) + -> right
-	protected double dy = 0; // vertical speed (px/s) + -> down
-	protected int direction;
-	protected double turnTargetX;
-	protected double turnTargetY;
+	protected double dx = 0; // instantaneous horizontal speed (px/s) + -> right
+	protected double dy = 0; // instantaneous vertical speed (px/s) + -> down
+	protected int direction; // which way the entity faces, in degrees where 0 is up, right is 90,
+							 // down is 180, left is 270, etc. set to 0 if sprite is directionless
+	protected double turnTargetX; // the x coordinate that Entity will move to within 1 turn
+	protected double turnTargetY; // the y coordinate that Entity will move to within 1 turn
 	
-	protected static final long TURN_LENGTH = 350;
+	protected static final long TURN_LENGTH = 350; // time (ms) for one turn
 	
-	protected TileEntity goalTile;
+	protected TileEntity goalTile; // where the entity will end up next turn, used for collision checking
 
-	/*
-	 * Constructor input: reference to the image for this entity, initial x and y
+	/* Constructor input: reference to the image for this entity, initial x and y
 	 * location to be drawn at
 	 */
 	public Entity(Game g, String r, int newX, int newY, boolean isAnimated) {
@@ -56,8 +56,7 @@ public abstract class Entity {
 		
 	} // constructor
 
-	/*
-	 * move input: delta - the amount of time passed in ms output: none purpose:
+	/* move input: delta - the amount of time passed in ms output: none purpose:
 	 * after a certain amount of time has passed, update the location
 	 * changes sprite frame if it is animated
 	 */
@@ -78,24 +77,29 @@ public abstract class Entity {
 		
 		if (isAnimated) {
 			int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
-			sprite = sprites[direction / 90][frameTime];
-			
+			sprite = sprites[direction / 90][frameTime];			
 		} // if
 	} // move
 	
-	// calculates the velocity of dx and dy based on target x and y
-	// makes move do something
+	/* Base method that calculates the velocity of dx and dy based on target x and y
+	 * and sets goalTile to the tile on which the Entity will be next turn
+	 * collision interactions are integrated within subclass
+	 */
 	public void calculateMove() {
 		turnTargetX = x + dx;
 		turnTargetY = y + dy;
 		
+		// finds index of goal tile by using integer division on the future coordinate and 
+		// scaling the y by map width to move past the entire map row of tiles
 		int goalTileIndex = (((int) (y + dy) / TileEntity.TILE_SIZE) * 29 + (int) (x + dx) / TileEntity.TILE_SIZE);
+		
+		// makes sure goalTile is within game.tiles array
 		if (goalTileIndex < 0) {
 			goalTileIndex = 0;
-		}
+		} // if
 		if (goalTileIndex > game.tiles.size() - 1) {
 			goalTileIndex = game.tiles.size() - 1;
-		}
+		} // if
 		
 		goalTile = game.tiles.get(goalTileIndex);
 		
