@@ -159,7 +159,8 @@ public class Game extends Canvas {
 		
 		g.setColor(Color.white);
 		
-		// centers text based on the widest line
+		// centers text based on the widest line of smaller font
+		g.setFont(instructionsFont);
 		int maxLineWidth = 0;		
 		for (String line : instructions[5 - slide]) {
 			maxLineWidth = Math.max(maxLineWidth, g.getFontMetrics().stringWidth(line));
@@ -187,9 +188,10 @@ public class Game extends Canvas {
 
 	/*
 	 * Notification that the player has died.
+	 * Changes message to display death message and score
 	 */
-
 	public void notifyDeath() {
+		
 		if (robot.getEnergy() < 1) {
 			message = "You have shut down. ";
 		} else {
@@ -269,18 +271,19 @@ public class Game extends Canvas {
 		while (gameRunning) {
 
 			// calc. time since last update, will be used to calculate
-			// entities movement
+			// entities' movement
 			long delta = System.currentTimeMillis() - lastLoopTime;
 			lastLoopTime = System.currentTimeMillis();
 
-			// get graphics context for the accelerated surface and make it black
+			// get graphics context for the accelerated surface
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
-			
-			
-			// set making move to false, only continue if an entity in the for loop sets it
-			// to true
+						
+			// making move defaults to false, where a new move will be accepted
 			makingMove = false;
+			
 			if(!waitingForKeyPress) {
+				
+				// if any entities are still moving, will not accept a new move
 				for (int i = 0; i < entities.size(); i++) {
 					Entity entity = (Entity) entities.get(i);
 					entity.move(delta);
@@ -289,10 +292,8 @@ public class Game extends Canvas {
 					}
 				} // for
 				
-				// brute force collisions, compare every entity
-				// against every other entity. If any collisions
-				// are detected notify both entities that it has
-				// occurred
+				// brute force collisions, compare every entity against every other entity. 
+				// If any collisions are detected notify both entities that it has occurred
 				for (int i = 0; i < entities.size(); i++) {
 					for (int j = i + 1; j < entities.size(); j++) {
 						Entity me = (Entity) entities.get(i);
@@ -315,8 +316,7 @@ public class Game extends Canvas {
 			for (int i = 0; i < entities.size(); i++) {
 				Entity entity = (Entity) entities.get(i);
 				entity.draw(g);
-			} // for
-			
+			} // for			
 			
 			// remove dead entities
 			entities.removeAll(removeEntities);
@@ -325,16 +325,16 @@ public class Game extends Canvas {
 			// if waiting for "any key press", draw message
 			if (waitingForKeyPress) {
 				
+				// Fills screen with transparent gray overlay
 				g.setColor(BACKGROUND);
 				g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-				g.setFont(instructionsFont);
 				
-				
+				// Shows current slide at beginning of game
 				if (introSlidesLeft > 0) {
 					drawInstructions(g, introSlidesLeft);
-				} else {
 					
-					
+				// If slides are not being used, instead draw the death message on a rectangle in center of screen
+				} else {					
 					g.setColor(BATTERY);
 					g.fillRect(100, 400, SCREEN_WIDTH - 200, SCREEN_HEIGHT - 800);
 					
@@ -343,19 +343,23 @@ public class Game extends Canvas {
 					g.drawString(message, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(message)) / 2, SCREEN_HEIGHT / 2 - 20);
 					g.drawString("Press any key to continue.",
 						(SCREEN_WIDTH - g.getFontMetrics().stringWidth("Press any key to continue.")) / 2, SCREEN_HEIGHT / 2 + 20);
-				}
-														
+				} // else
+			
+			// if not waitingForKeyPress, will accept a player move
 			} else {
+				
+				// Set directionOfShot (direction of mouse cursor relative to robot)
+				
 				// 0 to 180 to -0
-				directionOfShot = Math.toDegrees(Math.atan2(	(double) mouseY - (robot.getY() + TileEntity.TILE_SIZE / 2),
-																	(double) mouseX - (robot.getX() + TileEntity.TILE_SIZE / 2)));
+				directionOfShot = Math.toDegrees(Math.atan2((double) mouseY - (robot.getY() + TileEntity.TILE_SIZE / 2),
+															(double) mouseX - (robot.getX() + TileEntity.TILE_SIZE / 2)));
 				
 				directionOfShot += 90;
 				
 				// turn it into full 360
 				if(directionOfShot < 0) {
 					directionOfShot = 360 + directionOfShot;
-				}
+				} // if
 				
 				directionOfShot = directionOfShot / 360 * 8;			
 				directionOfShot = Math.round(directionOfShot) % 8;				
