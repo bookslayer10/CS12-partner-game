@@ -21,6 +21,7 @@ public abstract class Entity {
 	protected Sprite[][] sprites; // array of animated sprites with each direction (up, right, down,
 												   // left) being a array of 4 frames
 	protected boolean isAnimated; // indicates that the sprites array should be used instead of static sprite
+	protected int directions; // number of directional sprites the Entity can use
 	
 	protected double dx = 0; // instantaneous horizontal speed (px/s) + -> right
 	protected double dy = 0; // instantaneous vertical speed (px/s) + -> down
@@ -34,30 +35,35 @@ public abstract class Entity {
 	protected TileEntity goalTile; // where the entity will end up next turn, used for collision checking
 
 	/* Constructor input: reference to the image for this entity, initial x and y
-	 * location to be drawn at
+	 * location to be drawn at, whether or not to use animated sprite
 	 */
-	public Entity(Game g, String r, int newX, int newY, boolean isAnimated) {
+	public Entity(Game g, String r, int newX, int newY, boolean isAnimated, int directions) {
 		game = g;
 		x = newX;
 		y = newY;
+		direction = 0;
+		this.directions = directions;
 		this.isAnimated = isAnimated;
 		
+		// if not animated, uses static sprite of string r
 		if (!isAnimated) {
 			sprite = (SpriteStore.get()).getSprite(r);
-		} // if
-		
-		else {
-			sprites = new Sprite[4][4];
-			for (int i = 0; i < 4; i++) {
-				sprites[i] = loadSpriteArray(r + i * 90);
+				
+		// if animated, fills sprites with 4 frame animations based on how many directions the sprite accomodates
+		} else {
+			sprites = new Sprite[directions][4];
+			for (int i = 0; i < directions; i++) {
+				sprites[i] = loadSpriteArray(r + i * 360 / directions);
 			} // for
 			sprite = sprites[0][0];
 		} // else
 		
 	} // constructor
 
-	/* move input: delta - the amount of time passed in ms output: none purpose:
-	 * after a certain amount of time has passed, update the location
+	/* move 
+	 * input: delta - the amount of time passed in ms 
+	 * output: none 
+	 * purpose: after a certain amount of time has passed, update the location
 	 * changes sprite frame if it is animated
 	 */
 	public void move(long delta) {
@@ -69,6 +75,7 @@ public abstract class Entity {
 			dx = 0;
 		} // if
 		
+		// moves the sprite to its new y position
 		y += (delta * dy) / TURN_LENGTH;
 		if ((dy > 0 && y > turnTargetY) || (dy < 0 && y < turnTargetY)) {
 			y = turnTargetY;
@@ -77,7 +84,7 @@ public abstract class Entity {
 		
 		if (isAnimated) {
 			int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
-			sprite = sprites[direction / 90][frameTime];			
+			sprite = sprites[direction / (360 / directions)][frameTime];			
 		} // if
 	} // move
 	
@@ -124,9 +131,9 @@ public abstract class Entity {
 
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
-	}
+	} // setSprite
 
-	// loads the sprites used by the entity
+	// loads a 4 frame sprite animation into an array
 	public Sprite[] loadSpriteArray(String r) {
 		Sprite[] sprites = new Sprite[4];
 		
@@ -152,23 +159,22 @@ public abstract class Entity {
 		return dx != 0 || dy != 0;
 	} // getIsMoving
 	
-	/*
-	 * Draw this entity to the graphics object provided at (x,y)
+	/* Draw this entity to the graphics object provided at (x,y)
 	 */
 	public void draw(Graphics g) {
 		sprite.draw(g, (int) x, (int) y);
 	} // draw
 
-	// overriden in other methods to enable special features
+	// Overridden in other methods to enable special features
 	public void die() {
 		if (this != null) {
 			game.removeEntity(this);
 		}
 	} // die
 	
-	/*
-	 * collidesWith input: the other entity to check collision against output: true
-	 * if entities collide purpose: check if this entity collides with the other.
+	/* collidesWith 
+	 * input: the other entity to check collision against 
+	 * output: true if entities collide purpose: check if this entity collides with the other.
 	 */
 	public boolean collidesWith(Entity other, int shiftx, int shifty) {
 		return getHitbox(shiftx, shifty).intersects(other.getHitbox(0, 0));
@@ -183,10 +189,9 @@ public abstract class Entity {
 		return rect;
 	} // getHitbox
 	
-	/*
-	 * collidedWith input: the entity with which this has collided purpose:
-	 * notification that this entity collided with another Note: abstract methods
-	 * must be implemented by any class that extends this class
+	/* collidedWith 
+	 * input: the entity with which this has collided 
+	 * purpose: notification that this entity collided with another 
 	 */
 	public abstract void collidedWith(Entity other);
 

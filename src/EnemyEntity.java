@@ -18,7 +18,7 @@ public class EnemyEntity extends Entity {
 	 * created r - the image representing the alien x, y - initial location of alien
 	 */
 	public EnemyEntity(Game g, String r, int newX, int newY, int health) {
-		super(g, r, newX, newY, true); // calls the constructor in Entity
+		super(g, r, newX, newY, true, 4); // calls the constructor in Entity
 		this.health = health;
 		
 		// Sets direction based on which edge of the screen the enemy is at
@@ -159,7 +159,7 @@ public class EnemyEntity extends Entity {
 	} // findPath
 	public void die() {
 		game.removeEntity(this);
-		game.notifyEnemyKilled();
+		game.notifyEnemyDeath();
 	} // die
 	
 	/* collidedWith input: other - the entity with which the alien has collided

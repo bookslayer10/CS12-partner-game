@@ -12,7 +12,7 @@ public class RangedEntity extends EnemyEntity{
 	private HighlightEntity highlight; // telegraphs where RangedEntity will fire next turn
 	
 	public RangedEntity(Game g, String r, int newX, int newY) {
-		super(g, r, newX, newY, 1);
+		super(g, r, newX, newY, 1); // calls the constructor in EnemyEntity
 		shooting = -1; // -1 is sentinel value for when it is not shooting
 	} // RangedEntity
 	
@@ -73,10 +73,9 @@ public class RangedEntity extends EnemyEntity{
 	
 	// Upon death, removes the RangedEntity and Entities that originate from it (laser and highlight)	
 	public void die() {
-		game.removeEntity(this);
 		game.removeEntity(laser);
 		game.removeEntity(highlight);
-		game.notifyEnemyKilled();
+		super.die();
 	} // die
 	
 	/* Either shoots a laser or highlights the space where the laser is to be shot

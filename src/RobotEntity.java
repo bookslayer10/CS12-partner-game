@@ -15,7 +15,7 @@ public class RobotEntity extends Entity {
 	 * for the ship x, y - initial location of ship
 	 */
 	public RobotEntity(Game g, String r, int newX, int newY) {
-		super(g, r, newX, newY, true); // calls the constructor in Entity
+		super(g, r, newX, newY, true, 4); // calls the constructor in Entity
 		direction = 180;
 		energy = MAX_ENERGY;
 	} // constructor
@@ -82,7 +82,7 @@ public class RobotEntity extends Entity {
 		} // else
 	} // setDirection
 	 
-	// Only kills player if they end their turn
+	// kills player
 	public void die() {
 		game.notifyDeath();
 	} // die
@@ -104,6 +104,11 @@ public class RobotEntity extends Entity {
 	// reduces current energy by an int usedEnergy
 	public void useEnergy(int usedEnergy) {
 		setEnergy(getEnergy() - usedEnergy);
+	} // useEnergy
+	
+	// increases current energy by an int addedEnergy
+	public void addEnergy(int addedEnergy) {
+		setEnergy(getEnergy() + addedEnergy);
 	} // useEnergy
 	
 	public void setEnergy(int energy) {

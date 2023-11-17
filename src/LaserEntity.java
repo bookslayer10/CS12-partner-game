@@ -3,8 +3,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-/* 
- * LaserEntity.Java
+/* LaserEntity.Java
  * Is created by RangedEntity to kill player
  * Stays on screen until next turn, or the RangedEntity dies
  */
@@ -25,7 +24,7 @@ public class LaserEntity extends Entity {
 	 * also takes the direction relative to the RangedEntity from which it was fired
 	 */
 	public LaserEntity(Game g, String r, int newX, int newY, int direction, int scaleX, int scaleY) {
-		super(g, r, newX, newY, true);
+		super(g, r, newX, newY, true, 4); // calls the constructor in Entity
 		
 		this.direction = direction;
 		this.scaleX = scaleX;
@@ -65,8 +64,7 @@ public class LaserEntity extends Entity {
 		} // for
 	} // draw
 	
-	/* 
-	 * Overrides default rectangle hitbox to include every tile the laser hits
+	/* Overrides default rectangle hitbox to include every tile the laser hits
 	 * fields x and y are the top left corner of the first tile the laser hits (right next to the RangedEntity that fired it)
 	 * x: if scaleX is negative (shooting left), shifts the corner left by the laser's extra length
 	 * y: if scaleY is negative (shooting up), shifts the corner up by the laser's extra length 

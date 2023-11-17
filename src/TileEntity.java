@@ -6,7 +6,7 @@ public class TileEntity extends Entity {
 	public static final int TILE_SIZE = 64; // hor. vel. of ship (pixels per turn)
 	
 	public TileEntity(Game g, String r, int x, int y) {
-		super(g, r, x, y, false);
+		super(g, r, x, y, false, 0);
 		switch (r.substring(23, r.length() - 4)) {		
 			case "0":
 				spawnable = false;

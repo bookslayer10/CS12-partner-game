@@ -51,8 +51,7 @@ public class Game extends Canvas {
 	private String message = ""; // message to display while waiting
 	// for a key press
 	
-	/*
-	 * Construct our game and set it running.
+	/* Construct our game and set it running.
 	 */
 	public Game() {
 		// create a frame to contain game
@@ -138,21 +137,21 @@ public class Game extends Canvas {
 		gameLoop();
 	} // constructor
 	
-	/*
-	 * Add an entity to the game. It will be moved and drawn.
+	/* Add an entity to the game. It will be moved and drawn.
 	 */
 	public void addEntity(Entity entity) {
 		entities.add(entity);
 	} // addEntity
 	
-	/*
-	 * Remove an entity from the game. It will no longer be moved or drawn.
+	/*  Remove an entity from the game. It will no longer be moved or drawn.
 	 */
 	public void removeEntity(Entity entity) {
 		removeEntities.add(entity);
 	} // removeEntity
 	
-	
+	/* Uses a slide array within instructions array and draws formatted text boxes
+	 * stating background information and instructions at beginning of game
+	 */
 	public void drawInstructions(Graphics2D g, int slide) {	
 		
 		g.setColor(BATTERY);
@@ -160,8 +159,8 @@ public class Game extends Canvas {
 		
 		g.setColor(Color.white);
 		
-		int maxLineWidth = 0;
-		
+		// centers text based on the widest line
+		int maxLineWidth = 0;		
 		for (String line : instructions[5 - slide]) {
 			maxLineWidth = Math.max(maxLineWidth, g.getFontMetrics().stringWidth(line));
 		} // for
@@ -169,19 +168,19 @@ public class Game extends Canvas {
 		for (int i = 0; i < instructions[5 - slide].length; i++) {
 			String line = instructions[5 - slide][i];
 			
-				
+			// first line is header	
 			if (i == 0) {
 				g.setFont(headerFont);
 			} else {
 				g.setFont(instructionsFont);
 			} // else
-			
+
 			if (line == null) {
 				line = "";
 			}
 			
+			// draws line, centers header and footer, left-aligns otherwise
 			g.drawString(line, (SCREEN_WIDTH - (i < 13 && i > 0 ? maxLineWidth : g.getFontMetrics().stringWidth(line))) / 2, 320 + i * 25);
-			g.setFont(instructionsFont);
 		}
 	}
 	
@@ -210,18 +209,18 @@ public class Game extends Canvas {
 		waitingForKeyPress = true;
 	} // notifyDeath
 
-	/*
-	 * Notification than an alien has been killed
+	/* Notification that the player has killed an enemy
 	 */
 	public void notifyEnemyKilled() {
 		EnemyEntity.setKilled(EnemyEntity.getKilled() + 1);
-		EnemyEntity.setActive(EnemyEntity.getActive() - 1);
+		robot.addEnergy(12);
 	} // notifyAlienKilled
 	
-	// award energy on a kill with a shot
-	public void awardEnergy(int energy) {
-		robot.useEnergy(-energy);
-	} // awardEnergy
+	/* Notification than an alien has died
+	 */
+	public void notifyEnemyDeath() {
+		EnemyEntity.setActive(EnemyEntity.getActive() - 1);
+	} // notifyAlienDeath
 	
 	/* If there are no enemies in play, will spawn an enemy on a random valid 
 	 * tile. There is a chance to spawn an enemy of variable type on each tile 
@@ -568,41 +567,35 @@ public class Game extends Canvas {
 					introSlidesLeft -= 1;
 					if (introSlidesLeft > 0) {
 						return;
-					}
-				}
-				
-				
+					} // if
+				} // else
 							
 				waitingForKeyPress = false;
 				startGame();
 			
 			} else {		
 			keyPressed = (char) e.getButton();
-			}
+			} // else
 			
-		}
+		} // mousePressed
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
 
 		}
 
@@ -612,8 +605,7 @@ public class Game extends Canvas {
 		
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			//mouseX = e.getX();
-			//mouseY = e.getY();
+		
 		}
 
 		@Override
@@ -624,8 +616,7 @@ public class Game extends Canvas {
 		
 	}
 	
-	/**
-	 * Main Program
+	/* Main Program
 	 */
 	public static void main(String[] args) {
 		// instantiate this object

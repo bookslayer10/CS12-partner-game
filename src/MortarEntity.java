@@ -9,28 +9,30 @@ public class MortarEntity extends Entity {
 	
 	// MortarEntity constructor
 	public MortarEntity(Game g, String r, int newX, int newY) {
-		super(g, r, newX, newY, false); // calls the constructor in Entity
+		super(g, r, newX, newY, false, 1); // calls the constructor in Entity
 		countdown = 4;
-	} // default constructor
+	} // MortarEntity
 	
-	@Override
+	/* If MortarEntity has finished counting down, it will detonate
+	 * if it has already begun to detonate, it will finish and get removed
+	 * else, it will switch to the next largest crosshair indicator
+	 */
 	public void calculateMove() {
 		countdown--;
 		
 		if(detonating) {
 			this.die();		
 		} else if(countdown <= 0) {
-			detonating = true;
+			detonating = true;		
 			sprites = new Sprite[1][4];
 			sprites[0] = loadSpriteArray("sprites/mortar/boom");
-			direction = 0;
 			isAnimated = true;
 		} else {
 			sprite = (SpriteStore.get()).getSprite("sprites/mortar/crosshair_" + (countdown - 1) + ".png");
 		} // else if
 	} // calculateMove
 	
-	@Override
+	// Hitbox includes tiles within diameter (3x3 tile area)
 	public Rectangle getHitbox(int shiftx, int shifty) {
 		Rectangle rect = new Rectangle();
 		
@@ -49,20 +51,16 @@ public class MortarEntity extends Entity {
 	@Override
 	public void collidedWith(Entity other) {
 		if (detonating) {
-			// if it has hit an alien, kill it!
-			if (other instanceof EnemyEntity) {
-				
-				((EnemyEntity) other).addHealth(-3);
-				
-				if(((EnemyEntity) other).getHealth() < 1) {
-					other.die();
-					game.notifyEnemyKilled();
-					game.awardEnergy(12);
-				} // if
+			
+			// instantly kills enemies and rewards energy
+			if (other instanceof EnemyEntity) {				
+				other.die();		
+				game.notifyEnemyKilled();
 			} // if
 			
+			// kills player if they walk into the blast
 			if (other instanceof RobotEntity) {
-				game.notifyDeath();
+				other.die();
 			} // if
 			
 		} // if

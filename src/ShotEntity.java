@@ -1,49 +1,39 @@
 import java.awt.Rectangle;
 
 /* ShotEntity.java
- * March 27, 2006
- * Represents player's ship
+ * A bullet shot by the robot that hurts enemies for 1 health
+ * disappears upon colliding with an enemy or obstacle
  */
 public class ShotEntity extends Entity {
 	
 	private boolean used = false; // true if shot hits something
-	private static double SHOTSPEED = 2 * TileEntity.TILE_SIZE;
-	private static double DIAGONAL_SHOTSPEED = 1.6 * TileEntity.TILE_SIZE;
+	private static double SHOTSPEED = 2 * TileEntity.TILE_SIZE; // speed along straight lines (px/s)
+	private static double DIAGONAL_SHOTSPEED = 1.6 * TileEntity.TILE_SIZE; // speed along each direction contributing to
+																			// a diagonal (px/s)
 
-	/*
-	 * construct the shot input: game - the game in which the shot is being created
+	/* construct the shot and sets its speed
+	 * input: game - the game in which the shot is being created
 	 * ref - a string with the name of the image associated to the sprite for the
 	 * shot x, y - initial location of shot
+	 * direction - the direction the shot moves
 	 */
 	public ShotEntity(Game g, String r, int newX, int newY, int direction) {
-		super(g, r, newX, newY, true); // calls the constructor in Entity
-		
-		sprites = new Sprite[8][4];
-		
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 4; j++) {
-				sprites[i][j] = (SpriteStore.get())
-						.getSprite(r + i * 45 + "_" + j + ".png");
-			} // for
-		} // for
-		sprite = sprites[0][0];
-		
-		this.direction = direction;
+		super(g, r, newX, newY, true, 8); // calls the constructor in Entity
+		this.direction = direction;	
 	} // constructor
 
-	/*
-	 * move input: delta - time elapsed since last move (ms) purpose: move shot
+	/* move 
+	 * input: delta - time elapsed since last move (ms) purpose: move shot
 	 */
 	public void move(long delta) {
 		super.move(delta); // calls the move method in Entity
 	
-		int frameTime = (int) (System.currentTimeMillis() % 500) / 125;
-		sprite = sprites[direction / 45][frameTime];
-
+		// removes ShotEntity if it leaves screen
 		if (x < -100 || x > game.SCREEN_WIDTH + 100 || y < -100 || y > game.SCREEN_HEIGHT + 100) {
 			this.die();
 		} // if
 		
+		// removes ShotEntity if its current tile (NOT goal tile) is an obstacle
 		for (int i = 0; i < game.tiles.size(); i++) {
 			if (game.tiles.get(i).getCollision() && this.collidesWith(game.tiles.get(i), 0, 0)) {
 				this.die();
@@ -52,7 +42,7 @@ public class ShotEntity extends Entity {
 		
 	} // move
 	
-	
+	// Sets dx, dy based on shot direction
 	public void calculateMove() {
 		
 		switch (direction) {
@@ -114,8 +104,7 @@ public class ShotEntity extends Entity {
 				other.die();
 				game.notifyEnemyKilled();
 				
-				// award energy on a kill
-				game.awardEnergy(12);
+				
 			} // if
 			
 			used = true;

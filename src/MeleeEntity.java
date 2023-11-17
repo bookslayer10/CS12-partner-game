@@ -7,7 +7,7 @@ public class MeleeEntity extends EnemyEntity {
 	
 	boolean isDamaged = false;
 	public MeleeEntity(Game g, String r, int newX, int newY) {
-		super(g, r, newX, newY, 2);
+		super(g, r, newX, newY, 2); // calls the constructor in EnemyEntity
 	} // constructor
 	
 	// if the melee entity gets damaged during its turn, reloads sprite arrays with "broken" animations
