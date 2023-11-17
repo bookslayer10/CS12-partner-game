@@ -1,10 +1,10 @@
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
+import java.io.BufferedReader;
 
 /* FileInput.java
  * Reads in required formatted files for use within the game
@@ -16,23 +16,21 @@ public class FileInput {
 	public static int[][] getMapContents(String fileName) {
 		int[][] content = new int[15][29];
 		try {
-			// Read the lines from the file and collect them into a list
-			URL url = FileInput.class.getResource(fileName);
-			URI uri = null;
-			try {
-				uri = url.toURI();
-			} catch (URISyntaxException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			String[] lines = Files.lines(Paths.get(uri)).collect(Collectors.toList()).toArray(new String[0]);
-			// copy the lines from the list into a 1D array
-			for (int i = 0; i < lines.length; i++) {
-				String[] line = lines[i].split("\s+");
+
+			//Variable declarations:
+			//----------------------
+			InputStream input = FileInput.class.getClassLoader().getResourceAsStream(fileName);//load file in editor
+			BufferedReader in = new BufferedReader(new InputStreamReader(input));//to read text within file
+			
+			in.mark(Short.MAX_VALUE);//see API
+
+			for (int i = 0; i < content.length; i++) {
+				String[] line = in.readLine().split("\s+");
 				for (int j = 0; j < line.length; j++) {
 					content[i][j] = Integer.parseInt(line[j]);
 				} // for
 			} // for
+			in.close();
 
 		} catch (IOException e) {
 			System.out.println("File Read Error");
@@ -49,21 +47,44 @@ public class FileInput {
 	public static String[][] getInstructions(String fileName) {
 		String[][] content = new String[5][15];
 		try {
-			// Read the lines from the file and collect them into a list
-			String[] lines = Files.lines(Paths.get(fileName)).collect(Collectors.toList()).toArray(new String[0]);
+//			// Read the lines from the file and collect them into a list
+//			String[] lines = Files.lines(Paths.get(fileName)).collect(Collectors.toList()).toArray(new String[0]);
+//			
+			
+			
+			//Variable declarations:
+			//----------------------
+			String[] lines = new String[79];
+			InputStream input = FileInput.class.getClassLoader().getResourceAsStream(fileName);//load file in editor
+			BufferedReader in = new BufferedReader(new InputStreamReader(input));//to read text within file
+			
+			in.mark(Short.MAX_VALUE);//see API
+
+			for (int i = 0; i < content.length; i++) {
+				lines[i] = in.readLine();
+				if (lines[i] == null) {
+					lines[i] = "";
+				}
+			} // for
+			in.close();
 			
 			int i = 0; // which slide
 			int j = 0; // which line within the slide
 			for (String line: lines) {
 				
-				// switches to next slide upon reaching break indicator
+				if (line == null) {
+					line = "";
+				}
+				
+				// switches to next slide upon reaching break indicator		
 				if (line.equals("%%")) {
 					i++;
 					j = 0;
 				} else {
-					content[i][j++] = line;
+					content[i][j] = line;
+					j++;
 				} // else			
-			}
+			} // for
 
 		} catch (IOException e) {
 			System.out.println("File Read Error");
