@@ -1,0 +1,79 @@
+Welcome to SUPERBOT!
+
+You are a manufacturer of Battle-Optimized Technology (BOT)!
+Your products are top-of-the-line!
+They’re so good, in fact, that your competitors want your secrets.
+They really want your secrets.
+They want them so much that they constantly invade your facilities to get them!
+But their products are bad.
+So defend your facilities against these cheap knockoffs using your far superior BOT!
+
+
+
+
+Right-Click to Go Back, Left-Click to Continue
+1/5
+%%
+Controls:
+
+- WASD to move -                           - Q to wait -
+  costs 2 energy                             costs no energy
+  your standard move                         stay in place to conserve power
+
+- Left-Click to shoot your blaster -       - Right-Click to drop a mortar -
+  costs 4 energy                             costs 16 energy
+  originates from robot                      can be dropped anywhere
+  small bullet                               3x3 explosion
+  moves 2 tiles a turn                       takes 4 turns to land
+
+
+Right-Click to Go Back, Left-Click to Continue
+2/5
+%%
+Actions:
+
+Most actions use energy
+Regain energy by defeating enemy BOTs
+
+
+Each action takes one turn
+When you take your turn… so do the enemies
+
+
+
+
+
+Right-Click to Go Back, Left-Click to Continue
+3/5
+%%
+Enemies:
+
+- Melee BOT -
+  Has pizza saws for hands
+ Chases after you with undepletable vigor (until you shoot it)
+
+- Ranged BOT -
+  Armed with cool lasers
+  Scuttles around with its long legs until it gets a clear shot
+
+
+
+
+Right-Click to Go Back, Left-Click to Continue
+4/5
+%%
+Durability:
+
+BOTs are fragile… 
+Ranged BOTs die with one hit
+Melee BOTs are stronger, taking 2 hits to kill (or one mortar)
+
+In manufacturing, you focused on a sophisticated weapons setup
+And so, your BOT can only take one hit
+
+So be careful, and prove your products are the best!
+
+
+
+Right-Click to Go Back, Left-Click to START GAME!!
+5/5

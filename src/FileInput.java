@@ -1,4 +1,7 @@
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
@@ -14,7 +17,15 @@ public class FileInput {
 		int[][] content = new int[15][29];
 		try {
 			// Read the lines from the file and collect them into a list
-			String[] lines = Files.lines(Paths.get(fileName)).collect(Collectors.toList()).toArray(new String[0]);
+			URL url = FileInput.class.getResource(fileName);
+			URI uri = null;
+			try {
+				uri = url.toURI();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String[] lines = Files.lines(Paths.get(uri)).collect(Collectors.toList()).toArray(new String[0]);
 			// copy the lines from the list into a 1D array
 			for (int i = 0; i < lines.length; i++) {
 				String[] line = lines[i].split("\s+");

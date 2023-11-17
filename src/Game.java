@@ -102,10 +102,10 @@ public class Game extends Canvas {
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
 		
-		grid = FileInput.getMapContents("src/grid.txt");
+		grid = FileInput.getMapContents("grid.txt");
 		int st = 0; // index of next spawnable tile
 		
-		instructions = FileInput.getInstructions("src/instructions.txt");
+		instructions = FileInput.getInstructions("instructions.txt");
 		
 		// create a grid of map tiles
 		for (int row = 0; row < 15; row++) {
