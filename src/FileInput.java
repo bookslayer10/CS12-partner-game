@@ -60,7 +60,7 @@ public class FileInput {
 			
 			in.mark(Short.MAX_VALUE);//see API
 
-			for (int i = 0; i < content.length; i++) {
+			for (int i = 0; i < lines.length; i++) {
 				lines[i] = in.readLine();
 				if (lines[i] == null) {
 					lines[i] = "";
@@ -81,8 +81,8 @@ public class FileInput {
 					i++;
 					j = 0;
 				} else {
-					content[i][j] = line;
-					j++;
+					content[i][j++] = line;
+					
 				} // else			
 			} // for
 
